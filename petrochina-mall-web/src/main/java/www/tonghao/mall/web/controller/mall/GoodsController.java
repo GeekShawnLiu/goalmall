@@ -92,7 +92,7 @@ public class GoodsController {
 	/**
 	 * 品目商品列表
 	 * @param mc_id 商品平台品目ID 
-	 * @param tds 树层级标识 0:末级 否则非末级
+	 * @param tds 树层级标识 0:末级 否则非末级111
 	 * @return
 	 */
 	@ApiOperation(value="品目商品列表")
