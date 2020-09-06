@@ -193,24 +193,26 @@ public class SupplierProductsController {
 				//第三方供应商新增商品  协议价=售价
 				product.setProtocolPrice(price);
 				log.info("price:"+product.getPrice());
-				if (price != null) {
-					//对比平台品目通用资源配置价格
-					PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(product.getCatalogId());
-					if (platformCatalog != null && platformCatalog.getNormalPrice() != null) {
-						if (price.compareTo(platformCatalog.getNormalPrice()) == 1) {
-							return ResultUtil.resultMessage(0, "协议价不能高于平台品目通用资源配置价格");
-						}
-					}
-				}
+				//2020-09-07 注释掉商品保存价格限制
+//				if (price != null) {
+//					//对比平台品目通用资源配置价格
+//					PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(product.getCatalogId());
+//					if (platformCatalog != null && platformCatalog.getNormalPrice() != null) {
+//						if (price.compareTo(platformCatalog.getNormalPrice()) == 1) {
+//							return ResultUtil.resultMessage(0, "协议价不能高于平台品目通用资源配置价格");
+//						}
+//					}
+//				}
 				HashMap<String, Object> map = productsService.saveOrUpdate(product);
 				int status = 0;
 				status = (int) map.get("status");
 				String msg = (String) map.get("message");
 				log.info("商品保存结束-"+ map.toString() +"-end------------------------------------");
-				if (status > 0) {
-					//异步执行商品聚合
-					productsService.asynPolymerization(product.getId());
-				}
+				//注释掉商品聚合
+//				if (status > 0) {
+//					//异步执行商品聚合
+//					productsService.asynPolymerization(product.getId());
+//				}
 				return ResultUtil.resultMessage(status, msg);
 			}
 		}
