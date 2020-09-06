@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.JobOrdersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.JobOrders">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="orders_state" jdbcType="VARCHAR" property="ordersState" />
+    <result column="address_id" jdbcType="BIGINT" property="addressId" />
+    <result column="area_id" jdbcType="BIGINT" property="areaId" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="items_price" jdbcType="DECIMAL" property="itemsPrice" />
+    <result column="freight" jdbcType="DECIMAL" property="freight" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="invoice_type" jdbcType="VARCHAR" property="invoiceType" />
+    <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
+    <result column="invoice_tax_code" jdbcType="VARCHAR" property="invoiceTaxCode" />
+    <result column="invoice_phone" jdbcType="VARCHAR" property="invoicePhone" />
+    <result column="invoice_bank" jdbcType="VARCHAR" property="invoiceBank" />
+    <result column="invoice_bank_account" jdbcType="VARCHAR" property="invoiceBankAccount" />
+    <result column="plan_id" jdbcType="BIGINT" property="planId" />
+    <result column="plan_sn" jdbcType="VARCHAR" property="planSn" />
+    <result column="invoice_id" jdbcType="BIGINT" property="invoiceId" />
+    <result column="master_id" jdbcType="BIGINT" property="masterId" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="emall_sn" jdbcType="VARCHAR" property="emallSn" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="completed_at" jdbcType="VARCHAR" property="completedAt" />
+    <result column="purchaser_name" jdbcType="VARCHAR" property="purchaserName" />
+    <result column="purchaser_region_code" jdbcType="VARCHAR" property="purchaserRegionCode" />
+    <result column="payway" jdbcType="VARCHAR" property="payway" />
+    <result column="pay_id" jdbcType="VARCHAR" property="payId" />
+    <result column="paid_amount" jdbcType="DECIMAL" property="paidAmount" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="accept_status" jdbcType="INTEGER" property="acceptStatus" />
+    <result column="contract_status" jdbcType="INTEGER" property="contractStatus" />
+    <result column="plan_amount" jdbcType="DECIMAL" property="planAmount" />
+    <result column="plan_balance" jdbcType="DECIMAL" property="planBalance" />
+    <result column="plan_uuid" jdbcType="VARCHAR" property="planUuid" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="contract_url" jdbcType="VARCHAR" property="contractUrl" />
+    <result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+    <result column="track" jdbcType="LONGVARCHAR" property="track" />
+    <result column="bill_status" jdbcType="INTEGER" property="billStatus" />
+    <result column="protocol_total" jdbcType="DECIMAL" property="protocolTotal" />
+    <result column="receipt_at" jdbcType="VARCHAR" property="receiptAt" />
+    <result column="is_receipt" jdbcType="INTEGER" property="isReceipt" />
+    <result column="is_cancel" jdbcType="INTEGER" property="isCancel" />
+  </resultMap>
+  
+</mapper>

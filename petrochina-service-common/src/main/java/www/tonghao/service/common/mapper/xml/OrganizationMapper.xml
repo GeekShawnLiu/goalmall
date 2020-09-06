@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.OrganizationMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Organization">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="tree_ids" jdbcType="VARCHAR" property="treeIds" />
+    <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+    <result column="legal_id_number" jdbcType="VARCHAR" property="legalIdNumber" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="office_space" jdbcType="VARCHAR" property="officeSpace" />
+    <result column="dep_telephone" jdbcType="VARCHAR" property="depTelephone" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="dep_fax" jdbcType="VARCHAR" property="depFax" />
+    <result column="dep_website" jdbcType="VARCHAR" property="depWebsite" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="is_assign" jdbcType="VARCHAR" property="isAssign" />
+    <result column="industry_category" jdbcType="BIGINT" property="industryCategory" />
+    <result column="dep_properties" jdbcType="BIGINT" property="depProperties" />
+    <result column="is_parent" jdbcType="VARCHAR" property="isParent" />
+    <result column="type" jdbcType="BIGINT" property="type" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="area_ids" jdbcType="VARCHAR" property="areaIds" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="logo_path" jdbcType="VARCHAR" property="logoPath" />
+  </resultMap>
+  
+  <select id="getChildrenById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM organization WHERE FIND_IN_SET(id,queryChildrenOrganization(#{id}))
+  </select>
+  
+   <select id="getOrganizationById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM organization where 1=1 and id=#{id}
+  </select>
+  
+  <select id="getOrgLevel" parameterType="Map" resultMap="BaseResultMap">
+      SELECT * FROM organization where 1=1 and tree_depth=1
+      <if test="name !=null and name !=''">
+		AND name like CONCAT(CONCAT('%',#{name}),'%')
+	  </if>
+	  <if test="type !=null and type !=''">
+		AND type =  #{type}
+	  </if>
+  </select>
+  
+  <select id="getParentById" parameterType="long" resultMap="BaseResultMap">
+    select * from organization where FIND_IN_SET(id,getOrganizationList(#{id}))
+  </select>
+</mapper>

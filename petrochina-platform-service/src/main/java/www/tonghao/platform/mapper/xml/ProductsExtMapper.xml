@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.ProductsExtMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.ProductsExt">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+  </resultMap>
+  
+  <!-- 根据商品查询商品拓展数据 -->
+  <select id="findByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	select *
+	from products_ext tb where tb.product_id = #{productId}
+  </select>
+</mapper>

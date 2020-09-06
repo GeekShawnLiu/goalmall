@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.CartMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.Cart">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.Cart" extends="BaseResultMap">
+  	<association column="user_id"  property="user" select="www.tonghao.service.common.mapper.UsersMapper.findById" />
+	<collection column="id" property="cartItems" javaType="ArrayList" ofType="www.tonghao.mall.entity.CartItems"  
+	select="www.tonghao.mall.mapper.CartItemsMapper.findListByCartId"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.user_id
+  </sql>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List"/> from cart tb where tb.id = #{id}
+  </select>
+  
+  <select id="getUserCart" parameterType="java.lang.Long" resultMap="ExtResultMap">
+	select <include refid="Base_Column_List"/> from cart tb where tb.user_id = #{userId}
+  </select>
+  
+  <select id="getCartCount" parameterType="java.lang.Long" resultType="Integer">
+	SELECT
+		COUNT(ci.id)
+	FROM
+		cart c
+	LEFT JOIN cart_items ci ON ci.cart_id = c.id
+	where c.user_id = #{userId}
+  </select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SupplierProtocolCatalogMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.SupplierProtocolCatalog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="catalogs_id" jdbcType="BIGINT" property="catalogsId" />
+    <result column="supper_anent_id" jdbcType="BIGINT" property="supperAnentId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="catalogs_name" jdbcType="VARCHAR" property="catalogsName" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="protocol_id" jdbcType="BIGINT" property="protocolId" />
+  </resultMap>
+  
+ <select id="getSupplierProtocolCatalogBySupplierId" parameterType="Long" resultMap="BaseResultMap" >
+    select * from supplier_protocol_catalog where 1=1 and type=1 and supper_anent_id=#{supplierId}
+  </select>
+  	
+  <select id="findListByCatalogId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from supplier_protocol_catalog where 1=1 and catalogs_id = #{catalogId}
+  </select>
+  
+  <select id="findListBySupplierId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from supplier_protocol_catalog where 1=1 and supplier_id = #{supplierId}
+  </select>
+  
+  <select id="findList" parameterType="Map" resultMap="BaseResultMap">
+  	select * from supplier_protocol_catalog where 1=1
+  	<if test="catalogId!=null">
+  		and catalogs_id = #{catalogId}
+  	</if>
+  	<if test="supplierId!=null">
+  		and supplier_id = #{supplierId}
+  	</if>
+  	<if test="protocolId!=null">
+  		and protocol_id = #{protocolId}
+  	</if>
+  </select>
+  
+  <!-- 查询定点供应商 -->
+  <select id="findFixSupplier" parameterType="Map" resultType="www.tonghao.service.common.entity.Suppliers">
+	  SELECT
+		s.id as id,
+		s.`name` as name,
+		s.register_address as registerAddress,
+		s.contacts_mobile as contactsMobile,
+		s.contacts_name as contactsName
+	 FROM `supplier_protocol_catalog` spc 
+		LEFT JOIN protocol p ON spc.protocol_id = p.id
+		LEFT JOIN suppliers s ON spc.supplier_id = s.id
+	WHERE spc.type=1 
+		AND spc.catalogs_id = #{catalogsId}
+		AND s.is_delete = 0
+		AND s.`status` = 1
+		AND p.types = 4
+		AND p.`status` = 2
+		AND p.is_delete = 0
+		<if test="supplierName != null and supplierName != ''">
+			AND s.`name` LIKE CONCAT('%',#{supplierName},'%') 
+		</if>
+		<![CDATA[and p.end_time >= #{endTime}]]>
+		GROUP BY s.id
+  </select>
+</mapper>

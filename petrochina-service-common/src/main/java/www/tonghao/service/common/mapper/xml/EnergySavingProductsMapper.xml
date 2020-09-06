@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.EnergySavingProductsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.EnergySavingProducts">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="str_id" jdbcType="VARCHAR" property="strId" />
+    <result column="cell_id" jdbcType="VARCHAR" property="cellId" />
+    <result column="cell_id_right" jdbcType="VARCHAR" property="cellIdRight" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="cert_no" jdbcType="VARCHAR" property="certNo" />
+    <result column="deadline" jdbcType="INTEGER" property="deadline" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+     <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="function_type" jdbcType="VARCHAR" property="functionType" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="period_no" jdbcType="INTEGER" property="periodNo" />
+    <result column="model_str" jdbcType="VARCHAR" property="modelStr" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <association column="id" property="configInfos" select="www.tonghao.service.common.mapper.ConfigInfosMapper.findByEnergySavingProductId"/>
+  </resultMap>
+  
+  <select id="find" parameterType="Map" resultMap="BaseResultMap">
+	select *
+	from energy_saving_products where 1=1
+	<if test="itemName != null and itemName != ''">
+		and item_name LIKE CONCAT('%',#{itemName},'%') 
+	</if>
+	<if test="brand != null and brand != ''">
+		and brand LIKE CONCAT('%',#{brand},'%') 
+	</if>
+	<if test="certNo != null and certNo != ''">
+		and cert_no LIKE CONCAT('%',#{certNo},'%') 
+	</if>
+	<if test="model != null and model != ''">
+		and model LIKE CONCAT('%',#{model},'%') 
+	</if>
+	<if test="manufacturer != null and manufacturer != ''">
+		and manufacturer LIKE CONCAT('%',#{manufacturer},'%') 
+	</if>
+	<if test="period">
+		and period LIKE CONCAT('%',#{period},'%') 
+	</if>
+	<if test="categoryId != null">
+		and category_id = #{categoryId}
+	</if>
+  </select>
+</mapper>

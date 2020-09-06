@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.UsersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Users">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="encrypted_password" jdbcType="VARCHAR" property="encryptedPassword" />
+    <result column="sign_in_count" jdbcType="INTEGER" property="signInCount" />
+    <result column="current_sign_in_at" jdbcType="TIMESTAMP" property="currentSignInAt" />
+    <result column="last_sign_in_at" jdbcType="TIMESTAMP" property="lastSignInAt" />
+    <result column="current_sign_in_ip" jdbcType="VARCHAR" property="currentSignInIp" />
+    <result column="last_sign_in_ip" jdbcType="VARCHAR" property="lastSignInIp" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="founder_id" jdbcType="BIGINT" property="founderId" />
+    <result column="dep_id" jdbcType="BIGINT" property="depId" />
+    <result column="dep_name" jdbcType="VARCHAR" property="depName" />
+    <result column="data_power" jdbcType="VARCHAR" property="dataPower" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="type_id" jdbcType="BIGINT" property="typeId" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+     <result column="suning_account" jdbcType="VARCHAR" property="suningAccount" />
+     <result column="code" jdbcType="VARCHAR" property="code" />
+     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+     <result column="head_portrait_path" jdbcType="VARCHAR" property="headPortraitPath" />
+     <result column="department" jdbcType="VARCHAR" property="department" />
+     <result column="openid" jdbcType="VARCHAR" property="openid" />
+     <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  
+  <!-- 通用查询结果列-->
+  <sql id="Base_Column_List">
+  			tb.id,
+			tb.created_at,
+			tb.updated_at,
+			tb.login_name,
+			tb.encrypted_password,
+			tb.sign_in_count,
+			tb.current_sign_in_at,
+			tb.last_sign_in_at,
+			tb.current_sign_in_ip,
+			tb.last_sign_in_ip,
+			tb.real_name,
+			tb.is_delete,
+			tb.founder_id,
+			tb.dep_id,
+			tb.dep_name,
+			tb.data_power,
+			tb.type,
+			tb.type_id,
+			tb.tel,
+			tb.mobile,
+			tb.fax,
+			tb.email,
+			tb.suning_account,
+			tb.code,
+			tb.id_card,
+			tb.nick_name,
+			tb.head_portrait_path,
+			tb.department,
+			tb.openid,
+			tb.remark
+  </sql>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />,o.name as 'org.name',o.`code` as 'org.code' 
+  	from users AS tb LEFT JOIN organization as o ON tb.dep_id = o.id where tb.id = #{id}
+  </select>
+  
+  <select id="findByLoginName" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from users as tb where tb.login_name = #{loginName} and tb.type = #{type} and tb.is_delete = 0
+  </select>
+  <select id="findDeptIdByType" parameterType="int" resultType="java.lang.Long">
+  	select DISTINCT(dep_id) from users as tb where tb.type = #{type}
+  </select>
+  
+  <select id="findByMobile" parameterType="String" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from users as tb where tb.is_delete = 0 and tb.mobile = #{mobile}
+  </select>
+  
+  <update id="updatePassword">
+  	update users set encrypted_password = #{encryptedPassword} where id = #{id}
+  </update>
+  
+  <select id="selectByTypeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from users tb where tb.type_id = #{typeId}
+  </select>
+  
+  <!-- 查询供应商入驻用户信息 -->
+  <select id="selectAuditSupplierByTypeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from users tb where tb.type= 4 and tb.type_id = #{typeId} limit 1
+  </select>
+  
+  <!-- 用户名/手机号  登录查询 -->
+  <select id="findByLogin" resultMap="BaseResultMap">
+  	SELECT
+		*
+	FROM
+		users
+	WHERE
+		is_delete = 0
+	AND type = #{type}
+	AND (login_name = #{loginName} OR mobile = #{loginName})
+  </select>
+</mapper>

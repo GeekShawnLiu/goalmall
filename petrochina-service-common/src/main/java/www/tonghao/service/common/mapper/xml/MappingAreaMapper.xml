@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.MappingAreaMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.MappingArea">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="area_id" jdbcType="BIGINT" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="mapping_code" jdbcType="VARCHAR" property="mappingCode" />
+    <result column="emall_code" jdbcType="VARCHAR" property="emallCode" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectByMappingArea" resultType="www.tonghao.service.common.entity.MappingArea" parameterType="Map">
+     SELECT
+     m.id,
+	m.emall_code as emallCode,
+	m.area_name as areaName,
+	a.tree_names treeNames,
+	m.area_id as areaId,
+	m.created_at as createdAt,
+	s.`name` as supplierName
+FROM
+	mapping_area m
+LEFT JOIN areas a ON m.area_id = a.id
+LEFT JOIN suppliers s ON s. CODE = m.emall_code
+where 1=1
+<if test="supplierName!=null and supplierName!=''">
+ and s.`name` like CONCAT('%',#{supplierName},'%') 
+</if>
+<if test="areaName!=null and areaName!=''">
+ and m.area_name like CONCAT('%',#{areaName},'%') 
+</if>
+ORDER BY
+	m.emall_code
+  
+  </select>
+</mapper>

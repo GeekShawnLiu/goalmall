@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ConfigInfosMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ConfigInfos">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="cpu_hs" jdbcType="INTEGER" property="cpuHs" />
+    <result column="yp_zrl" jdbcType="INTEGER" property="ypZrl" />
+    <result column="nc_zrl" jdbcType="INTEGER" property="ncZrl" />
+    <result column="cpu_zp" jdbcType="REAL" property="cpuZp" />
+    <result column="xc_pl" jdbcType="VARCHAR" property="xcPl" />
+    <result column="xc_wk" jdbcType="VARCHAR" property="xcWk" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="period_no" jdbcType="INTEGER" property="periodNo" />
+    <result column="energy_saving_product_id" jdbcType="INTEGER" property="energySavingProductId" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  
+  <select id="findByEnergySavingProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	select *
+	from config_infos tb where tb.energy_saving_product_id = #{energySavingProductId}
+  </select>
+</mapper>

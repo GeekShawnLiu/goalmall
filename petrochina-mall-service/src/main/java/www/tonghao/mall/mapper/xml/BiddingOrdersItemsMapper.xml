@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.BiddingOrdersItemsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.BiddingOrdersItems">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="update_at" jdbcType="VARCHAR" property="updateAt" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="suppliers_id" jdbcType="BIGINT" property="suppliersId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="type_num" jdbcType="INTEGER" property="typeNum" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+  </resultMap>
+  <select id="getByOrderId" parameterType="long" resultMap="BaseResultMap">
+  		select * from bidding_orders_items where order_id=#{orderId}
+  </select>
+  
+  <select id="selectItems" parameterType="long" resultType="long">
+  SELECT DISTINCT product_id from bidding_orders_items where order_id=#{orderId}
+  </select>
+  
+  </mapper>

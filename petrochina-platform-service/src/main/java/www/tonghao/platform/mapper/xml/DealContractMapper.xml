@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.DealContractMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.DealContract">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="contract_uuid" jdbcType="VARCHAR" property="contractUuid" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
+    <result column="plan_amount" jdbcType="DECIMAL" property="planAmount" />
+    <result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="project_sub" jdbcType="VARCHAR" property="projectSub" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="supplier_bank_account" jdbcType="VARCHAR" property="supplierBankAccount" />
+    <result column="supplier_bank" jdbcType="VARCHAR" property="supplierBank" />
+    <result column="supply_date" jdbcType="VARCHAR" property="supplyDate" />
+    <result column="delivery_place" jdbcType="VARCHAR" property="deliveryPlace" />
+    <result column="delivery_mode" jdbcType="VARCHAR" property="deliveryMode" />
+    <result column="agent_code" jdbcType="VARCHAR" property="agentCode" />
+    <result column="agent_name" jdbcType="VARCHAR" property="agentName" />
+    <result column="unit_code" jdbcType="VARCHAR" property="unitCode" />
+    <result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+    <result column="org_kind" jdbcType="VARCHAR" property="orgKind" />
+    <result column="buy_kind" jdbcType="VARCHAR" property="buyKind" />
+    <result column="is_end" jdbcType="BIT" property="isEnd" />
+    <result column="total_sum" jdbcType="DECIMAL" property="totalSum" />
+    <result column="budget_in" jdbcType="DECIMAL" property="budgetIn" />
+    <result column="budget_finance" jdbcType="DECIMAL" property="budgetFinance" />
+    <result column="budget_self" jdbcType="DECIMAL" property="budgetSelf" />
+    <result column="bdg_year" jdbcType="INTEGER" property="bdgYear" />
+    <result column="input_date" jdbcType="VARCHAR" property="inputDate" />
+    <result column="down_date" jdbcType="VARCHAR" property="downDate" />
+    <result column="atta_url" jdbcType="VARCHAR" property="attaUrl" />
+    <result column="biz_type" jdbcType="VARCHAR" property="bizType" />
+    <result column="biz_relation_id" jdbcType="BIGINT" property="bizRelationId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="tpl_id" jdbcType="BIGINT" property="tplId" />
+    <result column="payway" jdbcType="VARCHAR" property="payway" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" /> 
+    <result column="dep_name" jdbcType="VARCHAR" property="depName" />
+    <result column="dep_id" jdbcType="BIGINT" property="depId" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="is_check" jdbcType="INTEGER" property="isCheck" />
+    <result column="quote_type" jdbcType="INTEGER" property="quoteType" />
+    <result column="pay_service_month" jdbcType="INTEGER" property="payServiceMonth" />
+    <result column="pay_contract_rate" jdbcType="INTEGER" property="payContractRate" />
+    <result column="service_time" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="take_over_days" jdbcType="INTEGER" property="takeOverDays" />
+    <result column="pay_check_rate" jdbcType="INTEGER" property="payCheckRate" />
+    <result column="service_promise" jdbcType="VARCHAR" property="servicePromise" />
+    <result column="service_require" jdbcType="VARCHAR" property="serviceRequire" />
+    <result column="main_card_number" jdbcType="VARCHAR" property="mainCardNumber" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="holder" jdbcType="VARCHAR" property="holder" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="identity_card" jdbcType="VARCHAR" property="identityCard" />
+    <result column="license_plate_num" jdbcType="VARCHAR" property="licensePlateNum" />
+    <result column="frame_num" jdbcType="VARCHAR" property="frameNum" />
+    <result column="factory_plate_model" jdbcType="VARCHAR" property="factoryPlateModel" />
+    <result column="engine_number" jdbcType="VARCHAR" property="engineNumber" />
+    <result column="first_register_date" jdbcType="VARCHAR" property="firstRegisterDate" />
+    <result column="start_date" jdbcType="VARCHAR" property="startDate" />
+    <result column="end_date" jdbcType="VARCHAR" property="endDate" />
+    <result column="hours_total_fee" jdbcType="DECIMAL" property="hoursTotalFee" />
+    <result column="material_total_fee" jdbcType="DECIMAL" property="materialTotalFee" />
+    <result column="guarantee_period" jdbcType="INTEGER" property="guaranteePeriod" />
+    <result column="review_grade" jdbcType="VARCHAR" property="reviewGrade" />
+    <result column="receipt_url" jdbcType="VARCHAR" property="receiptUrl" />
+    <collection column="id" property="dealContractDetails" javaType="ArrayList" ofType="www.tonghao.platform.entity.DealContractDetails" select="www.tonghao.platform.mapper.DealContractDetailsMapper.getByContractId"/>
+    <collection column="contract_uuid" property="pays" javaType="ArrayList" ofType="www.tonghao.platform.entity.Pays" select="www.tonghao.platform.mapper.PaysMapper.getByContractId"/>
+    
+  </resultMap>
+  
+  <resultMap type="www.tonghao.platform.entity.DealContract" id="ExaResultMap" extends="BaseResultMap">
+  <association property="dealContractTpl" jdbcType="BIGINT" column="tpl_id" select="www.tonghao.platform.mapper.DealContractTplMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  
+   <select id="findCountByPlanCode" parameterType="java.lang.String" resultType="int">
+  	select count(plan_code) from deal_contract where plan_code = #{planCode}
+  </select>
+  
+  <select id="find" parameterType="map" resultMap="ExaResultMap">
+  select * from deal_contract where 1=1 
+  <if test="userId != null">
+  	and user_id=#{userId}
+  </if>
+   <if test="supplierId != null">
+  	and supplier_id=#{supplierId}
+  </if>
+  <if test="name != null and name !='' ">
+  	and name like '%${name}%'
+  </if>
+   <if test="projectName != null and projectName !='' ">
+  	and project_name like '%${projectName}%'
+  </if>
+  <if test="status != null ">
+  	and status=#{status}
+  </if>
+  order by created_at DESC
+  </select>
+  
+  <select id="getById" parameterType="long" resultMap="ExaResultMap">
+  select * from deal_contract where id=#{id}
+  
+  </select>
+  
+  <update id="updateStatus" parameterType="map">
+  update deal_contract set status=#{status} where id =#{id}
+  
+  </update>
+</mapper>

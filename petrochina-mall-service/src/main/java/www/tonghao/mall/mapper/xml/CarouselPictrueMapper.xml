@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.CarouselPictrueMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.CarouselPictrue">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="size" jdbcType="BIGINT" property="size" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="rank" jdbcType="BIGINT" property="rank" />
+  </resultMap>
+  
+  <select id="selectList" parameterType="www.tonghao.mall.entity.CarouselPictrue" resultMap="BaseResultMap">
+	SELECT
+		t1.id, 
+		t1.name, 
+		t1.path, 
+		t1.size, 
+		t1.created_at, 
+		t1.type, 
+		t1.activity_id,
+		t1.rank,
+		t2.name as activityName
+	FROM
+		carousel_pictrue t1
+	LEFT JOIN activity t2 ON t2.id = t1.activity_id
+	where
+		t1.is_delete = 0
+	<if test="name !=null and name !=''">
+		and t1.name like CONCAT ('%',#{name},'%')
+	</if>
+	<if test="activityName !=null and activityName !=''">
+		and t2.name like CONCAT ('%',#{activityName},'%')
+	</if>
+	<if test="type !=null">
+		and t1.type = #{type}
+	</if>
+  </select>
+  
+  <!-- 查询首页轮播图 -->
+  <select id="selectIndexPictrueByMap" parameterType="Map" resultMap="BaseResultMap">
+	SELECT
+		t1.id, 
+		t1.name, 
+		t1.path, 
+		t1.size, 
+		t1.created_at, 
+		t1.type, 
+		t1.activity_id
+	FROM
+		carousel_pictrue t1
+	where
+		t1.is_delete = 0 and t1.type = #{type} and t1.activity_id is null
+	<if test="userId !=null">
+		UNION
+		SELECT
+			t1.id,
+			t1. NAME,
+			t1.path,
+			t1.size,
+			t1.created_at,
+			t1.type,
+			t1.activity_id
+		FROM
+			carousel_pictrue t1
+		LEFT JOIN activity t2 ON t2.id = t1.activity_id
+		LEFT JOIN activity_org ao ON t2.id = ao.activity_id
+		WHERE
+			t1.is_delete = 0 AND t2.is_delete = 0 AND t2.is_offline = 0 
+		AND t1.type = #{type}
+		AND NOW() &lt;= t2.end_at
+		AND NOW() &gt;= t2.online_at
+		AND ao.org_id IN (
+			SELECT
+				dep_id
+			FROM
+				users
+			WHERE
+				id = #{userId}
+		) 
+	</if>
+  </select>
+  
+  <select id="selectMaxRank"  resultType="Long">
+  	SELECT MAX(rank) FROM carousel_pictrue where is_delete = 0
+  </select>
+  
+  <select id="selectActivityPictrue" resultMap="BaseResultMap">
+  	select a.id as activity_id
+  	<if test="type == 4">
+  		, pc_img_path as path
+  	</if>
+  	<if test="type == 5">
+  		, h5_img_path as path
+  	</if>
+  	<if test="type == 6">
+  		, applets_img_path as path
+  	</if>
+  	 from activity a LEFT JOIN activity_org ao ON a.id = ao.activity_id
+  	where ao.org_id = #{orgId}
+  	AND a.is_delete = 0 and a.is_offline = 0 
+  	AND NOW() &lt;= a.end_at
+	AND NOW() &gt;= a.online_at
+  </select>
+</mapper>

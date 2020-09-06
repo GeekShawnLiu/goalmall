@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProtocolAgentMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProtocolAgent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="agent_name" jdbcType="VARCHAR" property="agentName" />
+    <result column="catalogsId" jdbcType="BIGINT" property="catalogsid" />
+    <result column="areaId" jdbcType="BIGINT" property="areaid" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="protocol_id" jdbcType="BIGINT" property="protocolId" />
+    <result column="areaIds" jdbcType="VARCHAR" property="areaIds" />
+    <result column="areaNames" jdbcType="VARCHAR" property="areaNames" />
+    <result column="protocol_agent_id" jdbcType="BIGINT" property="protocolAgentId" />
+    <result column="supplier_protocol_id" jdbcType="BIGINT" property="supplierProtocolId" />
+    <result column="supplier_agent_id" jdbcType="BIGINT" property="supplierAgentId" />
+  </resultMap>
+  
+  <select id="findSupplierAgentListByEntity" parameterType="www.tonghao.service.common.entity.ProtocolAgent" resultMap="BaseResultMap">
+  	select pa.*
+			,s.register_address as 'agentSupplier.registerAddress'
+			,s.registration_time as 'agentSupplier.registrationTime'
+			,s.submission_time as 'agentSupplier.submissionTime'
+			,s.latest_review_time as 'agentSupplier.latestReviewTime'
+			,s.storage_time as 'agentSupplier.storageTime'
+			,s.native_name as 'agentSupplier.nativeName'
+			,s.nature as 'agentSupplier.nature' 
+			,s.status as 'agentSupplier.status' 
+			,en.`name` as 'agentSupplier.enterpriseNature.name' from supplier_protocol as sp 
+				INNER JOIN protocol as p ON sp.protocol_id = p.id 
+				INNER JOIN protocol_agent as pa ON sp.id = pa.supplier_protocol_id
+				INNER JOIN suppliers as s ON s.id = pa.supplier_agent_id
+				LEFT JOIN enterprise_nature as en ON en.id = s.nature
+				WHERE sp.`status` = 1 and p.is_delete = 0 and p.`status` = 2
+				<![CDATA[and NOW()>=p.start_time and NOW()<=p.end_time and sp.supplier_id = #{supplierAgentId}]]>
+				<if test="agentName!=null and agentName!=''">
+					and pa.agent_name like '%${agentName}%'
+				</if>
+				<if test="queryfilter!=null and queryfilter.size>0">
+					<if test="queryfilter['protocolType']!=null and queryfilter['protocolType']!=''">
+						and p.types = #{queryfilter.protocolType}
+					</if>
+					<if test="queryfilter['nature']!=null and queryfilter['nature']!=''">
+						and en.`name` like '%${queryfilter.nature}%'
+					</if>
+					<if test="queryfilter['startDate']!=null and queryfilter['startDate']!=''">
+						<![CDATA[and s.register_date >= #{queryfilter.startDate}]]> 
+					</if>
+					<if test="queryfilter['endDate']!=null and queryfilter['endDate']!=''">
+						<![CDATA[and s.register_date >= #{queryfilter.endDate}]]>
+					</if>
+				</if>
+				GROUP BY pa.supplier_agent_id
+  </select>
+</mapper>

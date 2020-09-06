@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ShopUpdateCatalogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ShopUpdateCatalogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="supplier_update_id" jdbcType="BIGINT" property="supplierUpdateId" />
+    <result column="catalogs_id" jdbcType="BIGINT" property="catalogsId" />
+    <result column="catalogs_name" jdbcType="BIGINT" property="catalogsName" />
+  </resultMap>
+  
+  <select id="selectByUpdateId" parameterType="Long" resultMap="BaseResultMap">
+  	select suc.id, suc.supplier_update_id, suc.catalogs_id, pc.name as catalogs_name from shop_update_catalogs suc left join platform_catalogs pc on pc.id = suc.catalogs_id
+  	where supplier_update_id = #{supplierUpdateId}
+  </select>
+</mapper>

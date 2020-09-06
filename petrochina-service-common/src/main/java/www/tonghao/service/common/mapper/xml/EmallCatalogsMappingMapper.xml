@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.EmallCatalogsMappingMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.EmallCatalogsMapping">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="emall_id" jdbcType="BIGINT" property="emallId" />
+    <result column="emall_code" jdbcType="VARCHAR" property="emallCode" />
+    <result column="emall_name" jdbcType="VARCHAR" property="emallName" />
+    <result column="emall_catalogs_id" jdbcType="VARCHAR" property="emallCatalogsId" />
+    <result column="emall_catalogs_name" jdbcType="VARCHAR" property="emallCatalogsName" />
+    <result column="catalogs_id" jdbcType="BIGINT" property="catalogsId" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <association column="emall_id" property="supplier" select="www.tonghao.service.common.mapper.SuppliersMapper.selectByPrimaryKey"/>
+    <association column="catalogs_id" property="platformCatalogs" select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"/>
+  </resultMap>
+  
+  <select id="getEmallCatalogs" parameterType="Map" resultMap="BaseResultMap">
+    select * from emall_catalogs where 1=1
+    <if test="supplierName!=null and supplierName!=''">
+      and emall_name like CONCAT('%',#{supplierName},'%') 
+    </if>
+    <if test="catalogsName!=null and catalogsName!=''">
+      and emall_catalogs_name like CONCAT('%',#{catalogsName},'%')
+    </if>
+     order by emall_code 
+  </select>
+  
+</mapper>

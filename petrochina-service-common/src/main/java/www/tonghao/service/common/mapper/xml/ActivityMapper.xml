@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Activity">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_at" jdbcType="VARCHAR" property="startAt" />
+    <result column="end_at" jdbcType="VARCHAR" property="endAt" />
+    <result column="online_at" jdbcType="VARCHAR" property="onlineAt" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="pc_img_path" jdbcType="VARCHAR" property="pcImgPath" />
+    <result column="pc_img_name" jdbcType="VARCHAR" property="pcImgName" />
+    <result column="h5_img_path" jdbcType="VARCHAR" property="h5ImgPath" />
+    <result column="h5_img_name" jdbcType="VARCHAR" property="h5ImgName" />
+    <result column="applets_img_path" jdbcType="VARCHAR" property="appletsImgPath" />
+    <result column="applets_img_name" jdbcType="VARCHAR" property="appletsImgName" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="img_path" jdbcType="VARCHAR" property="imgPath" />
+    <result column="img_name" jdbcType="VARCHAR" property="imgName" />
+    <result column="is_offline" jdbcType="INTEGER" property="isOffline" />
+    <result column="kind" jdbcType="INTEGER" property="kind" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="ResultMap" type="www.tonghao.service.common.entity.Activity">
+  	<collection column="id" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ActivityOrg" property="activityOrgList" select="www.tonghao.service.common.mapper.ActivityOrgMapper.selectByActivityId" />
+  	<collection column="id" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ActivityProduct" property="activityProductList" select="www.tonghao.service.common.mapper.ActivityProductMapper.selectByActivityId" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="ActivityAndOrgMap" type="www.tonghao.service.common.entity.Activity">
+  	<collection column="id" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ActivityOrg" property="activityOrgList" select="www.tonghao.service.common.mapper.ActivityOrgMapper.selectOrgByActivityId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	id, 
+  	name, 
+  	start_at, 
+  	end_at,
+  	online_at, 
+  	type,
+	pc_img_path,
+	pc_img_name,
+	h5_img_path,
+	h5_img_name,
+	applets_img_path,
+	applets_img_name,
+  	is_delete, 
+  	created_at, 
+  	updated_at,
+  	img_path,
+  	img_name,
+  	is_offline,
+  	kind
+  </sql>
+  
+  <select id="selectById" parameterType="Long" resultMap="ResultMap">
+  	select 
+		<include refid="Base_Column_List"/>
+  	from 
+  		activity 
+  	where 
+  		id = #{id}
+  </select>
+  
+  <!-- 查询机构下的活动 -->
+  <select id="selectActivityByOrg" parameterType="Long" resultMap="ResultMap">
+  	SELECT
+		DISTINCT t1.id,
+		t1.NAME
+	FROM
+		activity t1
+	LEFT JOIN activity_org t2 ON t2.activity_id = t1.id
+	WHERE
+		t1.is_delete = 0
+		and t1.type = 1
+		and t1.is_offline = 0
+		and t1.end_at &gt; NOW()
+		<if test="orgIds !=null">
+			<foreach collection="orgIds" item="orgId" index="index"  open="and t2.org_id in(" close=")" separator=",">
+		 		#{orgId}
+			</foreach>
+		</if>
+  </select>
+  
+  <!-- 查询已上线活动列表 -->
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    SELECT DISTINCT
+		t1.*
+	FROM
+		activity t1
+	LEFT JOIN activity_org t2 ON t2.activity_id = t1.id
+	WHERE
+		t1.is_delete = 0 and t1.is_offline = 0 
+	AND t1.kind = #{kind}
+	AND t1.type = #{type}
+	AND t2.org_id IN (
+		SELECT
+			dep_id
+		FROM
+			users
+		WHERE
+			id = #{userId}
+	)
+	AND NOW() &lt;= t1.end_at
+	AND NOW() &gt;= t1.online_at
+	ORDER BY t1.start_at ASC
+  </select>
+
+  <select id="selectActivityByIntegralId" parameterType="Long" resultType="www.tonghao.service.common.entity.Activity">
+	SELECT
+		DISTINCT t1.id,
+		t1.name
+	FROM
+		activity t1
+	RIGHT JOIN integral t2 ON t2.activity_id = t1.id
+	where t1.is_delete = 0 and t2.id = #{integralId}
+  </select>
+
+  <select id="vaIsStart" resultType="Integer">
+	SELECT count(t1.id)
+	FROM
+		activity t1
+	LEFT JOIN activity_org t2 ON t2.activity_id = t1.id
+	WHERE
+		t1.is_delete = 0 and t1.is_offline = 0
+	AND t2.org_id IN (
+		SELECT
+			dep_id
+		FROM
+			users
+		WHERE
+			id = #{userId}
+	)
+	AND NOW() &gt;= t1.start_at
+	AND NOW() &lt;= t1.end_at
+	AND NOW() &gt;= t1.online_at
+	AND t1.id = #{id}
+  </select>
+  
+  <!-- 活动管理列表 -->
+  <select id="selectAvtivityList" parameterType="java.util.Map" resultMap="ActivityAndOrgMap">
+  	SELECT
+		*
+	FROM
+		activity
+	WHERE
+		is_delete = 0
+	<if test="name !=null and name !=''">
+		and name like CONCAT ('%',#{name},'%')
+	</if>
+	<if test="type !=nul">
+		and type = #{type}
+	</if>
+	<if test="ids !=null">
+		<foreach collection="ids" item="id" index="index"  open="and id in(" close=")" separator=",">
+	 		#{id}
+		</foreach>
+	</if>
+	<if test="activityState !=null">
+		<!-- 未开始 -->
+		<if test="activityState == 1">
+			and now() &lt; start_at
+		</if>
+		<!-- 进行中 -->
+		<if test="activityState == 2">
+			and now() &gt;= start_at
+			and now() &lt;= end_at
+			<!-- and now() &gt;= online_at -->
+		</if>
+		<!-- 已结束 -->
+		<if test="activityState == 3">
+			and now() &gt;= end_at 
+		</if>
+	</if>
+	<if test="onlineState !=null">
+		<if test="onlineState == 1">
+			and now() &lt; online_at
+			and is_offline = 0
+		</if>
+		<if test="onlineState == 2">
+			and now() &gt; online_at
+			and is_offline = 0
+		</if>
+		<if test="onlineState == 3">
+			and is_offline = 1
+		</if>
+	</if>
+	order by online_at
+  </select>
+  
+  <select id="selectActivityByUser" parameterType="Long" resultMap="BaseResultMap">
+  	SELECT
+		a.*
+	FROM
+		integral_user iu
+	LEFT JOIN activity a ON a.id = iu.activity_id
+	WHERE
+		iu.user_id = #{userId}
+	AND a.is_offline = 0
+	AND a.is_delete = 0
+	AND a.type = 1
+	AND a.kind = 0
+	AND NOW() >= a.online_at
+	AND (
+		NOW() BETWEEN a.start_at
+		AND a.end_at
+	)
+  </select>
+  
+  <select id="selectByKind" resultMap="BaseResultMap">
+  	select * from activity where is_delete = 0 and is_offline = 0 and kind = #{kind} and type = #{type}
+  	<if test="id != null">
+  		and id != #{id}
+  	</if>
+  </select>
+  
+  
+  <select id="selectByOrder" parameterType="Long" resultMap="BaseResultMap">
+  	SELECT
+		a.*
+	FROM
+		activity a
+	RIGHT JOIN order_items oi ON oi.activity_id = a.id
+	WHERE
+		a.is_delete = 0
+	AND oi.order_id = #{orderId}
+  </select>
+</mapper>

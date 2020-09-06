@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.Orders">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="orders_state" jdbcType="VARCHAR" property="ordersState" />
+    <result column="address_id" jdbcType="BIGINT" property="addressId" />
+    <result column="area_id" jdbcType="BIGINT" property="areaId" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="items_price" jdbcType="DECIMAL" property="itemsPrice" />
+    <result column="freight" jdbcType="DECIMAL" property="freight" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="invoice_type" jdbcType="VARCHAR" property="invoiceType" />
+    <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
+    <result column="invoice_tax_code" jdbcType="VARCHAR" property="invoiceTaxCode" />
+    <result column="invoice_phone" jdbcType="VARCHAR" property="invoicePhone" />
+    <result column="invoice_bank" jdbcType="VARCHAR" property="invoiceBank" />
+    <result column="invoice_bank_account" jdbcType="VARCHAR" property="invoiceBankAccount" />
+    <result column="plan_id" jdbcType="BIGINT" property="planId" />
+    <result column="plan_sn" jdbcType="VARCHAR" property="planSn" />
+    <result column="invoice_id" jdbcType="BIGINT" property="invoiceId" />
+    <result column="master_id" jdbcType="BIGINT" property="masterId" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="emall_sn" jdbcType="VARCHAR" property="emallSn" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="completed_at" jdbcType="VARCHAR" property="completedAt" />
+    <result column="purchaser_name" jdbcType="VARCHAR" property="purchaserName" />
+    <result column="purchaser_region_code" jdbcType="VARCHAR" property="purchaserRegionCode" />
+    <result column="payway" jdbcType="VARCHAR" property="payway" />
+    <result column="pay_id" jdbcType="VARCHAR" property="payId" />
+    <result column="paid_amount" jdbcType="DECIMAL" property="paidAmount" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="accept_status" jdbcType="INTEGER" property="acceptStatus" />
+    <result column="contract_status" jdbcType="INTEGER" property="contractStatus" />
+    <result column="plan_amount" jdbcType="DECIMAL" property="planAmount" />
+    <result column="plan_balance" jdbcType="DECIMAL" property="planBalance" />
+    <result column="plan_uuid" jdbcType="VARCHAR" property="planUuid" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="contract_url" jdbcType="VARCHAR" property="contractUrl" />
+    <result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+    <result column="track" jdbcType="LONGVARCHAR" property="track" />
+    <result column="bill_status" jdbcType="INTEGER" property="billStatus" />
+    <result column="protocol_total" jdbcType="DECIMAL" property="protocolTotal" />
+    <result column="pay_integral" jdbcType="DECIMAL" property="payIntegral" />
+    <result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="logistics_name" jdbcType="VARCHAR" property="logisticsName" />
+    <result column="logistics_sn" jdbcType="VARCHAR" property="logisticsSn" />
+    <result column="receipt_at" jdbcType="VARCHAR" property="receiptAt" />
+    <result column="is_receipt" jdbcType="INTEGER" property="isReceipt" />
+    <result column="is_cancel" jdbcType="INTEGER" property="isCancel" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.Orders" extends="BaseResultMap">
+  	<association column="master_id" property="master" select="www.tonghao.mall.mapper.OrderMasterMapper.findById"/>
+  	<association column="supplier_id" property="supplier" select="www.tonghao.service.common.mapper.SuppliersMapper.getSuppliersById"/>
+	<association column="user_id" property="user" select="www.tonghao.service.common.mapper.UsersMapper.findById"/>
+  	<collection column="id" property="items" javaType="ArrayList" 
+  		ofType="www.tonghao.mall.entity.OrderItems" select="www.tonghao.mall.mapper.OrderItemsMapper.findListByOrderId"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.user_id,
+  	tb.title,
+  	tb.sn,
+  	tb.orders_state,
+  	tb.address_id,
+  	tb.area_id,
+  	tb.consignee_name,
+  	tb.addr,
+  	tb.zip_code,
+  	tb.mobile,
+  	tb.phone,
+  	tb.email,
+  	tb.remark,
+  	tb.items_price,
+  	tb.freight,
+  	tb.total,
+  	tb.supplier_id,
+  	tb.invoice_type,
+  	tb.invoice_title,
+  	tb.invoice_tax_code,
+  	tb.invoice_phone,
+  	tb.invoice_bank,
+  	tb.invoice_bank_account,
+  	tb.plan_id,
+  	tb.plan_sn,
+  	tb.invoice_id,
+  	tb.master_id,
+  	tb.supplier_name,
+  	tb.emall_sn,
+  	tb.is_delete,
+  	tb.parent_id,
+  	tb.completed_at,
+  	tb.purchaser_name,
+  	tb.purchaser_region_code,
+  	tb.payway,
+  	tb.pay_id,
+  	tb.paid_amount,
+  	tb.order_type,
+  	tb.accept_status,
+  	tb.contract_status,
+  	tb.plan_amount,
+  	tb.plan_balance,
+  	tb.plan_uuid,
+  	tb.contract_id,
+  	tb.contract_url,
+  	tb.project_code,
+  	tb.protocol_total,
+  	tb.pay_integral,
+  	tb.pay_money,
+  	tb.order_source,
+  	tb.logistics_name,
+  	tb.logistics_sn,
+  	tb.receipt_at,
+  	tb.is_receipt,
+  	tb.is_cancel
+  </sql>
+  <select id="findListByEntity" parameterType="www.tonghao.mall.entity.Orders" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List" /> from orders as tb 
+  	<where>
+  		<if test="userId!=null">
+  			and tb.user_id = #{userId} 
+  		</if>
+  		<if test="supplierId!=null">
+  			and tb.supplier_id = #{supplierId} 
+  		</if>
+  		<if test="isDelete!=null">
+  			and tb.is_delete = #{isDelete} 
+  		</if>
+  		<if test="ordersState!=null">
+  			and tb.orders_state = #{ordersState} 
+  		</if>
+  		<if test="sn!=null and sn!=''">
+  			and tb.sn like '%${sn}%' 
+  		</if>
+  		<if test="emallSn!=null and emallSn!=''">
+  			and tb.emall_sn like '%${emallSn}%' 
+  		</if>
+  		<if test="consigneeName!=null and consigneeName!=''">
+  			and tb.consignee_name like '%${consigneeName}%' 
+  		</if>
+  		<if test="ordersState!=null">
+  			and tb.orders_state=#{ordersState}
+  		</if>
+  		<if test="supplierName!=null and supplierName!=''">
+  		   and tb.supplier_name like '%${supplierName}%' 
+  		</if>
+  		<if test="queryfilter!=null and queryfilter.size>0">
+  			<if test="queryfilter['dateRangeStart']!=null">
+  				and tb.created_at >= #{queryfilter.dateRangeStart}
+  			</if>
+  			<if test="queryfilter['dateRangeEnd']!=null">
+  				<![CDATA[ and tb.created_at < #{queryfilter.dateRangeEnd} ]]>
+  			</if>
+  			<if test="queryfilter['queryDateStart']!=null">
+  				and tb.created_at >= #{queryfilter.queryDateStart}
+  			</if>
+  			<if test="queryfilter['queryDateEnd']!=null">
+    			<![CDATA[ and tb.created_at < #{queryfilter.queryDateEnd} ]]>
+  			</if>
+  			<if test="queryfilter['productName']!=null and queryfilter['productName']!=''">
+  				<![CDATA[ and (select count(1) from order_items as tb2 where tb2.order_id = tb.id and tb2.name like '%${queryfilter.productName}%')>0]]> 
+            </if>
+  			<if test="queryfilter['startTime']!=null and queryfilter['endTime']!=null and queryfilter['startTime']!='' and queryfilter['endTime']!=''">
+  				and tb.created_at  between #{queryfilter.startTime} and #{queryfilter.endTime} 
+  			</if>
+  		</if>
+  		<if test="mobile != null and mobile != ''">
+  			and tb.mobile like CONCAT('%',#{mobile},'%')
+  		</if>
+  		<if test="userName != null and userName != '' ">
+  			and tb.user_id in (
+  				select u.id from users u where u.is_delete = 0 and u.type = 1 and u.real_name like CONCAT('%',#{userName},'%')
+  				<if test="userMobile != null and userMobile != ''">
+  					and u.mobile like CONCAT('%',#{userMobile},'%')
+  				</if>
+  			)
+  		</if>
+  		and tb.parent_id is null
+  	</where> 
+  	order by tb.created_at desc
+  </select>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List" />,tb.track from orders as tb where tb.id = #{id}
+  </select>
+  
+  <select id="findBySn" parameterType="java.lang.String" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List" />,tb.track from orders as tb where tb.sn = #{sn}
+  </select>
+  
+  <select id="findBaseById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from orders as tb where tb.id = #{id}
+  </select>
+  
+  <select id="countMallTotal" resultType="BigDecimal">
+  select SUM(total) from orders where orders_state='completed' and is_delete=0
+  </select>
+  
+  <select id="getOrdersByDistinct" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  select DISTINCT user_id,purchaser_name from orders where supplier_id=#{supplierId} and orders_state='completed' and is_delete=0
+  </select>
+  
+  <select id="findValidListByStatus" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from orders as tb where tb.orders_state = #{orderStatus}
+  </select>
+  
+  <resultMap id="ChildResultMap" type="www.tonghao.mall.entity.Orders">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sn" jdbcType="VARCHAR" property="parentSn" />
+    <result column="orders_state" jdbcType="VARCHAR" property="ordersState" />
+    <result column="emall_sn" jdbcType="VARCHAR" property="childSn" />
+    <result column="parent_emall_sn" jdbcType="VARCHAR" property="parentEmallSn" />
+    <result column="real_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="order_mobile" jdbcType="VARCHAR" property="mobile" />
+    <collection column="{parentSn=sn,childSn=emall_sn}" property="items" javaType="java.util.List" 
+  		ofType="www.tonghao.mall.entity.OrderItems" select="www.tonghao.mall.mapper.OrderItemsMapper.findChildOrderItem"/>
+  </resultMap>
+  
+  <select id="selectChildOrderByMap" parameterType="java.util.Map" resultMap="ChildResultMap">
+  	SELECT
+		oc.id,
+		oc.parent_id,
+		oc.orders_state,
+		o.sn,
+		o.emall_sn as parent_emall_sn,
+		oc.emall_sn,
+		u.real_name,
+		u.mobile as user_mobile,
+		o.consignee_name,
+		o.order_source,
+		u.login_name,
+		o.mobile as order_mobile
+	FROM
+		orders oc
+	LEFT JOIN orders o ON oc.parent_id = o.id
+	LEFT JOIN users u ON u.id = o.user_id
+	WHERE
+		o.is_delete = 0
+	AND oc.parent_id IS NOT NULL
+	<if test="parentSn != null and parentSn != ''">
+		and o.sn LIKE CONCAT('%',#{parentSn},'%') 
+	</if>
+	<if test="parentEmallSn != null and parentEmallSn != ''">
+		and o.emall_sn LIKE CONCAT('%',#{parentEmallSn},'%') 
+	</if>
+	<if test="childSn != null and childSn != ''">
+		and oc.emall_sn LIKE CONCAT('%',#{childSn},'%') 
+	</if>
+	<if test="userName != null and userName != ''">
+		and u.real_name LIKE CONCAT('%',#{userName},'%') 
+	</if>
+	<if test="userMobile != null and userMobile != ''">
+		and u.mobile LIKE CONCAT('%',#{userMobile},'%') 
+	</if>
+	<if test="orderId != null">
+		and o.id = #{orderId}
+	</if>
+	<if test="userId != null">
+		and o.user_id = #{userId}
+	</if>
+	<if test="childOrderId != null">
+		and oc.id = #{childOrderId}
+	</if>
+	<if test="loginName != null and loginName != ''">
+		and u.login_name LIKE CONCAT('%',#{loginName},'%') 
+	</if>
+	<if test="receiveName != null and receiveName != ''">
+		and o.consignee_name LIKE CONCAT('%',#{receiveName},'%') 
+	</if>
+	<if test="receiveMobile != null and receiveMobile != ''">
+		and o.mobile LIKE CONCAT('%',#{receiveMobile},'%') 
+	</if>
+	order by oc.created_at desc
+  </select>
+  
+  <select id="selectChildOrder" parameterType="Long" resultMap="BaseResultMap">
+  	select * from orders where is_delete = 0 and parent_id = #{id}
+  </select>
+  
+  <resultMap id="orderStatisticalMap" type="www.tonghao.mall.entity.Orders" extends="BaseResultMap">
+	<result column="real_name" jdbcType="VARCHAR" property="userName" />
+	<result column="profit" jdbcType="VARCHAR" property="profit" />
+	<result column="childOrderEmallSns" jdbcType="VARCHAR" property="childOrderEmallSns" />
+	<result column="activity_name" jdbcType="VARCHAR" property="activityNames" />
+	<result column="balanceIntegral" jdbcType="VARCHAR" property="balanceIntegral" />
+  </resultMap>
+  
+  <select id="orderStatisticalList" parameterType="Map" resultMap="orderStatisticalMap">
+  	SELECT DISTINCT
+		o.id,
+		o.purchaser_name,
+		u.real_name,
+		o.sn,
+		o.supplier_name,
+		o.emall_sn,
+		o.created_at,
+		o.completed_at,
+		o.orders_state,
+		o.protocol_total,
+		o.total,
+		o.total - o.protocol_total AS profit,
+		o.pay_id,
+		o.pay_integral,
+		o.pay_money,
+		o.freight,
+		o.consignee_name,
+		o.addr,
+		o.mobile,
+		o.user_id,
+		IF (iu_tmp.balance IS NULL, 0.00, iu_tmp.balance) AS balanceIntegral,
+	 	child_order.childOrderEmallSns AS childOrderEmallSns,
+	 	ic_tmp.activity_name AS activity_name
+	FROM
+		orders o
+	LEFT JOIN users u ON u.id = o.user_id
+	LEFT JOIN (
+		SELECT
+			iu.id,
+			iu.user_id,
+			sum(iu.balance) AS balance
+		FROM
+			integral_user iu
+		LEFT JOIN activity ac ON ac.id = iu.activity_id
+		WHERE
+			ac.is_offline = 0
+		AND NOW() &gt;= ac.start_at
+		AND NOW() &lt;= ac.end_at
+		AND NOW() &gt;= ac.online_at
+		GROUP BY
+			iu.user_id
+	) iu_tmp ON iu_tmp.user_id = o.user_id
+	LEFT JOIN (
+		SELECT
+			co.parent_id,
+			GROUP_CONCAT(co.emall_sn) AS childOrderEmallSns
+		FROM
+			orders co
+		WHERE
+			co.parent_id IS NOT NULL
+		GROUP BY
+			co.parent_id
+	) child_order ON child_order.parent_id = o.id
+	LEFT JOIN (
+		SELECT
+			ic.order_id,
+			GROUP_CONCAT(ic. NAME) AS activity_name
+		FROM
+			(
+				SELECT DISTINCT
+					oi.order_id,
+					a. NAME
+				FROM
+					order_items oi
+				LEFT JOIN activity a ON a.id = oi.activity_id
+				WHERE
+					a.is_delete = 0
+			) ic
+		GROUP BY
+			ic.order_id
+	) ic_tmp ON ic_tmp.order_id = o.id
+	WHERE
+		o.parent_id IS NULL
+	<if test="createStartAt != null and createStartAt != ''">
+		and o.created_at &gt;= #{createStartAt}
+	</if>
+	<if test="createEndAt != null and createEndAt != ''">
+		and o.created_at &lt;= #{createEndAt}
+	</if>
+	<if test="purchaserName != null and purchaserName != ''">
+		and o.purchaser_name like CONCAT('%',#{purchaserName},'%') 
+	</if>
+	<if test="userName != null and userName != ''">
+		and u.real_name like CONCAT('%',#{userName},'%') 
+	</if>
+	<if test="supplierName != null and supplierName != ''">
+		and o.supplier_name like CONCAT('%',#{supplierName},'%') 
+	</if>
+	<if test="ordersState != null and ordersState != ''">
+		and o.orders_state = #{ordersState}
+	</if>
+	<if test="completedStartAt != null and completedStartAt != ''">
+		and o.completed_at &gt;= #{completedStartAt}
+	</if>
+	<if test="completedEndAt != null and completedEndAt != ''">
+		and o.completed_at &lt;= #{completedEndAt}
+	</if>
+	<if test="sn != null and sn != ''">
+		and o.sn like CONCAT('%',#{sn},'%')
+	</if>
+	<if test="emallSn != null and emallSn != ''">
+		and o.emall_sn like CONCAT('%',#{emallSn},'%')
+	</if>
+	<if test="activityName != null and activityName != ''">
+		and ic_tmp.activity_name like CONCAT('%',#{activityName},'%')
+	</if>
+	<if test="payId != null">
+		and o.pay_id = #{payId}
+	</if>
+	ORDER BY
+		o.created_at DESC,
+		o.id DESC
+  </select>
+  
+  <select id="orderStatisticalOne" parameterType="Long" resultMap="orderStatisticalMap">
+	 SELECT DISTINCT
+		o.id,
+		o.purchaser_name,
+		u.real_name,
+		o.sn,
+		o.supplier_name,
+		o.emall_sn,
+		o.created_at,
+		o.completed_at,
+		o.orders_state,
+		o.protocol_total,
+		o.total,
+		o.total - o.protocol_total AS profit,
+		o.pay_id,
+		o.pay_integral,
+		o.pay_money,
+		o.freight,
+		o.consignee_name,
+		o.addr,
+		o.mobile,
+		o.user_id,
+		IF (iu_tmp.balance IS NULL, 0.00, iu_tmp.balance) AS balanceIntegral,
+	 	child_order.childOrderEmallSns AS childOrderEmallSns,
+	 	ic_tmp.activity_name AS activity_name
+	FROM
+		orders o
+	LEFT JOIN users u ON u.id = o.user_id
+	LEFT JOIN (
+		SELECT
+			iu.id,
+			iu.user_id,
+			sum(iu.balance) AS balance
+		FROM
+			integral_user iu
+		LEFT JOIN activity ac ON ac.id = iu.activity_id
+		WHERE
+			ac.is_offline = 0
+		AND NOW() &gt;= ac.start_at
+		AND NOW() &lt;= ac.end_at
+		AND NOW() &gt;= ac.online_at
+		GROUP BY
+			iu.user_id
+	) iu_tmp ON iu_tmp.user_id = o.user_id
+	LEFT JOIN (
+		SELECT
+			co.parent_id,
+			GROUP_CONCAT(co.emall_sn) AS childOrderEmallSns
+		FROM
+			orders co
+		WHERE
+			co.parent_id IS NOT NULL
+		GROUP BY
+			co.parent_id
+	) child_order ON child_order.parent_id = o.id
+	LEFT JOIN (
+		SELECT
+			ic.order_id,
+			GROUP_CONCAT(ic. NAME) AS activity_name
+		FROM
+			(
+				SELECT DISTINCT
+					oi.order_id,
+					a. NAME
+				FROM
+					order_items oi
+				LEFT JOIN activity a ON a.id = oi.activity_id
+				WHERE
+					a.is_delete = 0
+			) ic
+		GROUP BY
+			ic.order_id
+	) ic_tmp ON ic_tmp.order_id = o.id
+	WHERE
+		o.parent_id IS NULL
+	and o.id = #{id}
+  </select>
+</mapper>

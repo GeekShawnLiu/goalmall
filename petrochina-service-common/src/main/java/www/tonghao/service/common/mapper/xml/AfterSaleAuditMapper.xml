@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.AfterSaleAuditMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.AfterSaleAudit">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="after_sale_id" jdbcType="BIGINT" property="afterSaleId" />
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <id column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+  </resultMap>
+  
+  <select id="selectByCreatedAtMax" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from after_sale_audit where after_sale_id = #{afterSaleId} order by created_at desc limit 1
+  </select>
+</mapper>

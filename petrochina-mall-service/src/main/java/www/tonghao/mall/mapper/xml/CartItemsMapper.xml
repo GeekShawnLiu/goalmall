@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.CartItemsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.CartItems">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="cart_id" jdbcType="BIGINT" property="cartId" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="is_checked" jdbcType="TINYINT" property="isChecked" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.CartItems" extends="BaseResultMap">
+	<association column="product_id"  property="product" select="www.tonghao.service.common.mapper.ProductsMapper.getById" />
+	<association column="supplier_id"  property="supplier" select="www.tonghao.service.common.mapper.SuppliersMapper.selectByPrimaryKey" />
+	<association column="activity_id"  property="activity" select="www.tonghao.service.common.mapper.ActivityMapper.selectByPrimaryKey" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.num,
+  	tb.product_id,
+  	tb.cart_id,
+  	tb.supplier_id,
+  	tb.is_checked,
+  	tb.activity_id
+  </sql>
+  
+  <select id="findListByCartId" parameterType="java.lang.Long" resultMap="ExtResultMap">
+	select <include refid="Base_Column_List" />
+	 from cart_items tb where tb.cart_id = #{id}
+	 order BY tb.supplier_id
+  </select>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+	select <include refid="Base_Column_List" />
+	 from cart_items tb where tb.id = #{id}
+   </select>
+   
+   
+	<select id="findListByUserId" parameterType="Map" resultMap="ExtResultMap">
+		SELECT
+			ci.*
+		FROM
+			cart c
+		LEFT JOIN cart_items ci ON c.id = ci.cart_id
+		left join products p on p.id = ci.product_id
+		WHERE c.user_id = #{userId}
+		<if test="isChecked != null">
+			AND ci.is_checked = #{isChecked}
+		</if>
+		ORDER BY p.status, -ci.activity_id DESC, ci.created_at DESC
+	</select>
+	
+	<select id="findCartIntegral" parameterType="Long" resultType="www.tonghao.service.common.entity.Activity">
+		SELECT
+			ac.id,
+			ac. NAME,
+			sp.sum_price AS consumptionIntegral,
+			iu.balance - sp.sum_price AS integralBalance,
+			sp.sum_price AS activityTotal
+		FROM
+			(
+				SELECT
+					ci.activity_id AS activity_id,
+					SUM(p.price * ci.num) AS sum_price
+				FROM
+					cart c
+				LEFT JOIN cart_items ci ON c.id = ci.cart_id
+				LEFT JOIN products p ON p.id = ci.product_id
+				WHERE
+					is_checked = 1
+				AND c.user_id = #{userId}
+				GROUP BY
+					ci.activity_id
+			) sp
+		LEFT JOIN activity ac ON sp.activity_id = ac.id
+		LEFT JOIN (
+			SELECT
+				activity_id,
+				user_id,
+				SUM(balance) AS balance
+			FROM
+				integral_user
+			WHERE
+				user_id = #{userId}
+			GROUP BY
+				activity_id,
+				user_id
+		) iu ON sp.activity_id = iu.activity_id
+	</select>
+	
+	
+	<resultMap id="checkResultMap" type="www.tonghao.mall.entity.CartItems" extends="BaseResultMap">
+		<association column="product_id"  property="product" select="www.tonghao.service.common.mapper.ProductsMapper.getById" />
+		<association column="supplier_id"  property="supplier" select="www.tonghao.service.common.mapper.SuppliersMapper.selectByPrimaryKey" />
+	</resultMap>
+  
+	<select id="selectCheckItemsByUser" parameterType="Long" resultMap="checkResultMap">
+		SELECT
+			ci.*
+		FROM
+			cart c
+		LEFT JOIN cart_items ci ON c.id = ci.cart_id
+		WHERE c.user_id = #{userId}
+		AND ci.is_checked = 1
+	</select>
+	
+</mapper>

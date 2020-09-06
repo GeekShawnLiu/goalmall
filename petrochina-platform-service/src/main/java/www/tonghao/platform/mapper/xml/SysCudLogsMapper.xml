@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.SysCudLogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.SysCudLogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="operate_logs_id" jdbcType="BIGINT" property="operateLogsId" />
+    <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+    <result column="table_comment" jdbcType="VARCHAR" property="tableComment" />
+    <result column="entity_class" jdbcType="VARCHAR" property="entityClass" />
+    <result column="data_content" jdbcType="LONGVARCHAR" property="dataContent" />
+  </resultMap>
+</mapper>

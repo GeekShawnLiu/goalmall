@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.AcceptOrderMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.AcceptOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_id" jdbcType="VARCHAR" property="contractId" />
+    <result column="acceptance_date" jdbcType="VARCHAR" property="acceptanceDate" />
+    <result column="acceptance_type" jdbcType="VARCHAR" property="acceptanceType" />
+    <result column="acceptance_stage" jdbcType="VARCHAR" property="acceptanceStage" />
+    <result column="is_open" jdbcType="INTEGER" property="isOpen" />
+    <result column="supplier_opinion" jdbcType="VARCHAR" property="supplierOpinion" />
+    <result column="unit_opinion" jdbcType="VARCHAR" property="unitOpinion" />
+    <result column="acceptance_opinion" jdbcType="VARCHAR" property="acceptanceOpinion" />
+    <result column="acceptance_team" jdbcType="VARCHAR" property="acceptanceTeam" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+</mapper>

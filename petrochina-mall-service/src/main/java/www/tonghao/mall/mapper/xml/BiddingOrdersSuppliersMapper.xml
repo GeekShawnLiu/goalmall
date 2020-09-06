@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.BiddingOrdersSuppliersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.BiddingOrdersSuppliers">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="service_price" jdbcType="DOUBLE" property="servicePrice" />
+    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="cycle" jdbcType="VARCHAR" property="cycle" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="items_id" jdbcType="BIGINT" property="itemsId" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="update_at" jdbcType="VARCHAR" property="updateAt" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="cert" jdbcType="VARCHAR" property="cert" />
+    <result column="suppliers_id" jdbcType="BIGINT" property="suppliersId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="b_status" jdbcType="INTEGER" property="bStatus" />
+  </resultMap>
+  <select id="getSuppliersByOrderId"  parameterType= "Long" resultMap="BaseResultMap">
+  SELECT * FROM bidding_orders_suppliers where order_id=#{orderId}
+	  order by total_price asc,cycle asc,create_at asc
+  </select>
+  <select id="findDeal"  parameterType="Long" resultMap="BaseResultMap">
+  SELECT * FROM bidding_orders_suppliers where b_status=1
+  </select>
+  
+  <select id="selectSupplier" parameterType="Long" resultMap="BaseResultMap">
+  select * from bidding_orders_suppliers where items_id=#{itemsId} and suppliers_id=#{suppliersId}
+  </select>
+  
+  <delete id="deleteSuppliers" parameterType="map">
+  	delete FROM bidding_orders_suppliers where suppliers_id=#{suppliersId} and order_id=#{orderId}
+  </delete>
+  
+    <select id="getSupplierByOrderId"  parameterType= "Long" resultMap="BaseResultMap">
+  SELECT  DISTINCT name,suppliers_id,cycle,total_price,create_at,linkman,tel,b_status,order_id
+   FROM bidding_orders_suppliers where order_id=#{orderId}
+	  order by total_price asc,cycle asc,create_at asc
+  </select>
+  
+  <select id="selectCountBySuppliers" parameterType= "Long" resultType="Integer">
+  SELECT COUNT(DISTINCT suppliers_id) from bidding_orders_suppliers where order_id=#{orderId}
+  
+  </select>
+  
+  <select id="selectOrderIds" parameterType= "Long" resultType="Long">
+   SELECT DISTINCT order_id from bidding_orders_suppliers where suppliers_id=#{supplierId} 
+  </select>
+  
+  <select id="findOrder" parameterType= "map" resultType="Integer">
+  select count(0) from bidding_orders_suppliers where suppliers_id=#{suppliersId} and order_id=#{orderId}
+  </select>
+  </mapper>

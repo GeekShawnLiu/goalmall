@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ParameterItemMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ParameterItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="stand_param_id" jdbcType="VARCHAR" property="standParamId" />
+    <result column="position" jdbcType="REAL" property="position" />
+    <result column="stand_value_id" jdbcType="VARCHAR" property="standValueId" />
+    <result column="parameter_id" jdbcType="BIGINT" property="parameterId" />
+  </resultMap>
+  
+  <!-- 根据大数据平台参数id获取参数值 -->
+  <select id="getByStandParamId" parameterType="String" resultMap="BaseResultMap">
+  		SELECT * FROM `parameter_item` WHERE stand_param_id = #{standParamId} ORDER BY position
+  </select>
+  <delete id="deleteParameterItemByParameterId" parameterType="Long">
+      delete from parameter_item where parameter_id=#{parameterId}
+  </delete>
+  
+  <select id="getByStandValueIds"  resultMap="BaseResultMap">
+  	select tb.id,tb.name,tb.stand_param_id,tb.stand_value_id,tb.parameter_id from parameter_item as tb
+  	where tb.stand_value_id in 
+  	<foreach collection="standValueIds" item="item" open="(" close=")" separator=",">
+  		#{item}
+  	</foreach>
+  </select>
+  
+  <select id="getByParameterIds"  resultType="java.lang.Long">
+  	select tb.id from parameter_item as tb
+  	where tb.parameter_id in 
+  	<foreach collection="parameterIds" item="item" open="(" close=")" separator=",">
+  		#{item}
+  	</foreach>
+  </select>
+  
+  
+</mapper>

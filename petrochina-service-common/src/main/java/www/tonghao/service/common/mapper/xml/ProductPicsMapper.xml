@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductPicsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductPics">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="large" jdbcType="VARCHAR" property="large" />
+    <result column="medium" jdbcType="VARCHAR" property="medium" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+  </resultMap>
+  
+  <!-- 查询产品图片 -->
+  <select id="getByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT 
+			p.* 
+		FROM product_pics p 
+		WHERE p.product_id = #{productId}
+		ORDER BY priority
+  </select>
+</mapper>

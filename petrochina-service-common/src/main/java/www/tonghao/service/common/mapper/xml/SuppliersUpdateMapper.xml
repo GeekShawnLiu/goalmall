@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SuppliersUpdateMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.SuppliersUpdate">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+    <result column="legal_id_number" jdbcType="VARCHAR" property="legalIdNumber" />
+    <result column="legal_id_card" jdbcType="VARCHAR" property="legalIdCard" />
+    <result column="contacts_name" jdbcType="VARCHAR" property="contactsName" />
+    <result column="contacts_phone" jdbcType="VARCHAR" property="contactsPhone" />
+    <result column="contacts_mobile" jdbcType="VARCHAR" property="contactsMobile" />
+    <result column="contacts_fax" jdbcType="VARCHAR" property="contactsFax" />
+    <result column="register_date" jdbcType="VARCHAR" property="registerDate" />
+    <result column="company_website" jdbcType="VARCHAR" property="companyWebsite" />
+    <result column="register_address" jdbcType="VARCHAR" property="registerAddress" />
+    <result column="register_zip_code" jdbcType="VARCHAR" property="registerZipCode" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
+    <result column="licence_img" jdbcType="VARCHAR" property="licenceImg" />
+    <result column="registered_capital" jdbcType="DECIMAL" property="registeredCapital" />
+    <result column="currency_type" jdbcType="VARCHAR" property="currencyType" />
+    <result column="nature" jdbcType="BIGINT" property="nature" />
+    <result column="licence_validity_end" jdbcType="VARCHAR" property="licenceValidityEnd" />
+    <result column="taxpayer_qualification" jdbcType="VARCHAR" property="taxpayerQualification" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="user_login_name" jdbcType="VARCHAR" property="userLoginName" />
+    <result column="user_real_name" jdbcType="VARCHAR" property="userRealName" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="shop_logo" jdbcType="VARCHAR" property="shopLogo" />
+    <result column="customer_service_email" jdbcType="VARCHAR" property="customerServiceEmail" />
+    <result column="customer_service_phone" jdbcType="VARCHAR" property="customerServicePhone" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+    <result column="business_scope" jdbcType="VARCHAR" property="businessScope" />
+    <result column="submit_at" jdbcType="VARCHAR" property="submitAt" />
+    <result column="audit_at" jdbcType="VARCHAR" property="auditAt" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="licence_validity" jdbcType="VARCHAR" property="licenceValidity" />
+  </resultMap>
+  
+  <select id="findList" parameterType="Map" resultMap="BaseResultMap">
+  	select * from suppliers_update where is_delete = 0
+  	<if test="supplierId != null">
+  		and supplier_id = #{supplierId}
+  	</if>
+  	order by submit_at desc
+  </select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.FloorMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.Floor">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="font_color" jdbcType="VARCHAR" property="fontColor" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="floor_catalog" jdbcType="VARCHAR" property="floorCatalog" />
+    
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.Floor" extends="BaseResultMap">
+  	<collection column="id" property="floorBrands" javaType="ArrayList" 
+  		ofType="www.tonghao.mall.entity.FloorBrand" select="www.tonghao.mall.mapper.FloorBrandMapper.selectByFloorId"/>
+  	<collection column="id" property="floorPlatformCatalogs" javaType="ArrayList" 
+  		ofType="www.tonghao.mall.entity.FloorPlatformCatalog" select="www.tonghao.mall.mapper.FloorPlatformCatalogMapper.selectByFloorId"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.name,
+  	tb.sort,
+  	tb.font_color,
+  	tb.icon_url,
+  	tb.floor_catalog
+  </sql>
+  
+  <select id = "findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+  	select <include refid = "Base_Column_List" /> from floor as tb where tb.id = #{id}
+  </select>
+</mapper>

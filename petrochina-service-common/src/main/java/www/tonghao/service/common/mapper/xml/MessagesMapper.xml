@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.MessagesMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Messages">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="msg_code" jdbcType="VARCHAR" property="msgCode" />
+    <result column="msg_type" jdbcType="INTEGER" property="msgType" />
+    <result column="msg_status" jdbcType="INTEGER" property="msgStatus" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="update_at" jdbcType="VARCHAR" property="updateAt" />
+  </resultMap>
+  
+</mapper>

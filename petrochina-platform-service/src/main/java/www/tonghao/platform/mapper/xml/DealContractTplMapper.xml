@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.DealContractTplMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.DealContractTpl">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="isDelete" jdbcType="INTEGER" property="is_delete" />
+  </resultMap>
+  
+  <select id="find" resultMap="BaseResultMap">
+    select * from  deal_contract_tpl 
+  </select>
+</mapper>

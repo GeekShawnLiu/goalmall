@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.FloorPlatformCatalogMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.FloorPlatformCatalog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="platform_catalog_id" jdbcType="BIGINT" property="platformCatalogId" />
+    <result column="platform_catalog_name" jdbcType="VARCHAR" property="platformCatalogName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="floor_id" jdbcType="BIGINT" property="floorId" />
+    <result column="catalog_type" jdbcType="VARCHAR" property="catalogType" />
+  </resultMap>
+   <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.platform_catalog_id,
+  	tb.platform_catalog_name,
+  	tb.sort,
+  	tb.floor_id,
+  	tb.catalog_type
+  </sql>
+  
+  <select id="selectByFloorId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	select <include refid = "Base_Column_List" /> from floor_platform_catalog as tb where tb.floor_id= #{floorId}
+  </select>
+  
+  <delete id="deleteByFloorId" parameterType="java.lang.Long">
+  	delete from floor_platform_catalog where floor_id= #{floorId} 
+  </delete>
+  
+  <select id="findMallByFloorId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid = "Base_Column_List" /> from floor_platform_catalog as tb 
+  	INNER JOIN platform_catalogs as pc ON tb.platform_catalog_id = pc.id 
+  	INNER JOIN mall_catalogs as mc ON pc.mall_catalog_id = mc.id where tb.floor_id = #{floorId}
+  	ORDER BY pc.priority
+  </select>
+</mapper>

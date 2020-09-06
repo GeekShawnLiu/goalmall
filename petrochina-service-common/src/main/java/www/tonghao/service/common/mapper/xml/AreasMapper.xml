@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.AreasMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Areas">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="published" jdbcType="BIT" property="published" />
+    <result column="tree_ids" jdbcType="VARCHAR" property="treeIds" />
+    <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+    <result column="position" jdbcType="REAL" property="position" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_parent" jdbcType="VARCHAR" property="isParent" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.service.common.entity.Areas" extends="BaseResultMap">
+  	<association column="parent_id" property="parent" select="www.tonghao.service.common.mapper.AreasMapper.findById"/>
+  </resultMap>
+  
+  <!-- 通用查询结果列-->
+  <sql id="Base_Column_List">
+		tb.id,
+		tb.name,
+		tb.parent_id,
+		tb.parent_ids,
+		tb.tree_depth,
+		tb.published,
+		tb.tree_ids,
+		tb.tree_names,
+		tb.position,
+		tb.is_parent
+  </sql>
+  
+  <select id="getChildrenById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM areas WHERE FIND_IN_SET(id,queryChildrenArea(#{id})) ORDER BY tree_depth,position
+  </select>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+		SELECT <include refid="Base_Column_List"/> 
+		FROM `areas` tb 
+		where tb.id = #{id}
+  </select>
+  
+  <select id="findListByEntity" parameterType="www.tonghao.service.common.entity.Areas" resultMap="ExtResultMap">
+  	SELECT <include refid="Base_Column_List"/>  from `areas` as tb  
+  	<where>
+  		<if test="id!=null">
+			and tb.id = #{id}
+		</if>
+		<if test="treeDepth!=null">
+			and tb.tree_depth = #{treeDepth}
+		</if>
+		<if test="published!=null">
+			and tb.published = #{published}
+		</if>
+		<if test="queryfilter!=null">
+			<if test="queryfilter['pid']!=null">
+				and tb.parent_id = #{queryfilter.pid}
+			</if>
+		</if>
+	</where>
+  </select>
+  
+  <select id="likeNameOrTreeIds" parameterType="www.tonghao.service.common.entity.Areas" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List"/>  from `areas` as tb  
+  	<where>
+		<if test="name!=null">
+			and tb.name like CONCAT('%',#{name},'%')
+		</if>
+		<if test="treeIds != null">
+			and tb.tree_ids like CONCAT('',#{treeIds},'%')
+		</if>
+		<if test="parentId != null">
+			and tb.parent_id = #{parentId}
+		</if>
+		LIMIT 1
+	</where>
+	
+  </select>
+</mapper>

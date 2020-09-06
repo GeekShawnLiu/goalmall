@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.CatalogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Catalogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="descs" jdbcType="VARCHAR" property="descs" />
+    <result column="usable" jdbcType="INTEGER" property="usable" />
+    <result column="tree_ids" jdbcType="VARCHAR" property="treeIds" />
+    <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="is_parent" jdbcType="VARCHAR" property="isParent" />
+  </resultMap>
+  <select id="getChildrenById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM catalogs WHERE FIND_IN_SET(id,queryChildrenCatalogs(#{id}));
+  </select>
+  
+  <select id="getParentById" parameterType="long" resultMap="BaseResultMap">
+    select * from catalogs where FIND_IN_SET(id,getCatalogsList(#{id}))
+  </select>
+</mapper>

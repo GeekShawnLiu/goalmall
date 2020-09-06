@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.DealContractPersonMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.DealContractPerson">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="identity_card" jdbcType="VARCHAR" property="identityCard" />
+    <result column="contract_detail_id" jdbcType="BIGINT" property="contractDetailId" />
+  </resultMap>
+</mapper>

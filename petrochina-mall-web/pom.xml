@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>www.tonghao</groupId>
+    <artifactId>petrochina</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>www.tonghao.mall.web</groupId>
+  <artifactId>petrochina-mall-web</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>petrochina-mall-web</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+     <dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+	 </dependency>
+    <dependency>
+      <groupId>www.tonghao.mall.service</groupId>
+	  <artifactId>petrochina-mall-service</artifactId>
+	  <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Finchley.SR1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+ 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+     <resources>
+    	<resource>
+                 <directory>src/main/lib</directory>
+                 <targetPath>BOOT-INF/lib/</targetPath>
+                 <includes>
+                     <include>**/*.jar</include>
+                 </includes>
+           </resource>
+           
+           
+            <resource>
+	            <directory>src/main/resources</directory>
+	            <includes>
+	                <include>**/*.properties</include>
+	                <include>**/*.xml</include>
+	            </includes>
+	            <filtering>false</filtering>
+	        </resource>
+	        <resource>
+	            <directory>src/main/java</directory>
+	            <includes>
+	                <include>**/*.xml</include>
+	            </includes>
+	            <filtering>false</filtering>
+	        </resource>
+            
+            
+    	</resources>
+	</build>
+	<!-- <profiles>
+    	<profile>
+            <id>test</id>
+            <properties>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+			<id>dev</id>
+			<properties>
+				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+    	</profile>
+    	<profile>
+			<id>pro</id>
+			<properties>
+				<spring.profiles.active>pro</spring.profiles.active>
+			</properties>
+    	</profile>
+    </profiles> -->
+</project>

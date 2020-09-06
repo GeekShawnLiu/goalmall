@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api_config>
+    <common>
+       <small_mapping>
+           <mall name="得力" code="dl"/>
+       </small_mapping>
+		<emall_mapping>
+			<mall name="史泰博" code="stb"/>
+			<mall name="得力" code="dl"/>
+			<mall name="京东" code="jd"/>
+		</emall_mapping>
+	</common>
+	<!-- <stb>
+	    <config key="grant_type" value="guocai" comment="该值固定为authorization_code"/>
+		<config key="client_id" value="9000008295" comment="即对接账号(由史泰博人员提供)"/>
+		<config key="client_secret" value="9000008295" comment="即对接账号的密码 (由史泰博人员提供)"/>
+		<config key="state" value="available" comment="状态参数，由调用方自定义，颁发授权后会原封不动返回"/>
+		<config key="scope" value="abc" comment="权限参数，API组名串，多个组名时，用“，”分隔。目前支持参数：暂无"/>
+	    <config key="redirect_uri" value="http://www.xxxx.com" comment="应用的回调地址，必须和应用的callback地址匹配。(由第三方人员提供，需提前告知史泰博人员)"/>
+	    <config key="code" value="g9j91BA4GeAkj4oPT4v6" comment="史泰博的Authorization Code"/>
+	    <access_token_url comment="获取token" value="http://omstest.staplescn.com/staplesAPI/api/access_token" />
+	    <getPageNum comment="获取商品池" value="http://omstest.staplescn.com/staplesAPI/api/goods/getPageNum" />
+	    <getSku comment="获取池内商品编号接口" value="http://omstest.staplescn.com/staplesAPI/api/goods/product/getSku" />
+	    <getDetail comment="获取商品详细信息接口" value="http://omstest.staplescn.com/staplesAPI/api/goodsModel/product/getDetail" />
+	    <skuState comment="获取商品上下架状态接口" value="http://omstest.staplescn.com/staplesAPI/api/goods/product/skuState" />
+	    <skuImage comment="获取所有图片信息" value="http://omstest.staplescn.com/staplesAPI/api/goods/product/skuImage" />
+	    <getPrice comment="批量查询协议价价格" value="http://omstest.staplescn.com/staplesAPI/api/goods/product/getPrice"/>
+	    <getStockById comment="批量获取库存接口(建议商品列表页使用)" value="http://omstest.staplescn.com/staplesAPI/api/goods/product/getStockByIdNum"/>
+	    <submitOrder comment="统一下单接口" value="http://omstest.staplescn.com/staplesAPI/api/order/submit"/>
+		<confirmOrder comment="确认预占库存订单接口" value="http://omstest.staplescn.com/staplesAPI/api/order/confirmOrder"/>
+		<cancelOrder comment="取消未确认订单接口" value="http://omstest.staplescn.com/staplesAPI/api/order/cancelPreOrder"/>
+		<selectOrder comment="查询订单接口" value="http://omstest.staplescn.com/staplesAPI/api/order/selectOrder"/>
+		<orderTrack comment="查询配送信息接口" value="http://omstest.staplescn.com/staplesAPI/api/order/getlogistics"/>
+		<invoiceSubmit comment="申请开票接口" value="http://omstest.staplescn.com/staplesAPI/api/invoice/submit"/>
+		<invoiceSelect comment="查询发票信息接口" value="http://omstest.staplescn.com/staplesAPI/api/invoice/select"/>
+		<invoiceChecking comment="发票提交验证结果接口" value="http://omstest.staplescn.com/staplesAPI/api/invoice/checking"/>
+		<submitReturn comment="退货单提交接口" value="http://omstest.staplescn.com/staplesAPI/api/order/return/submit"/>
+		<selectReturn comment="退货单查询接口" value="http://omstest.staplescn.com/staplesAPI/api/order/return/select"/> 
+		<getMessage comment="消息接口" value="http://omstest.staplescn.com/staplesAPI/api/message/get"/>
+	    <delMessage comment="删除消息" value="http://omstest.staplescn.com/staplesAPI/api/message/del"/>
+	</stb> --> 
+	<jd>
+		<config key="grant_type" value="access_token" comment="该值固定为access_token"/>
+		<config key="client_id" value="PXBg7duySFhxikk3kF7S" comment="即对接账号(由京东人员提供)"/>
+		<config key="client_secret" value="YbFzPHZSYGm5pJmVxSLZ" comment="即对接账号的密码 (由京东人员提供)"/>
+		<config key="username" value="中油惠服采购01" comment="京东的用户名"/>
+		<config key="password" value="1b2cd230cfd8288ae68b2f8c33f276f4" comment="京东的用户密码,MD5加密 jdcsmm"/>
+		<!-- <config key="scope" value="" comment="申请权限（目前推荐为空。为以后扩展用）"/> -->
+		<access_token_url comment="获取token" value="https://bizapi.jd.com/oauth2/accessToken" />
+		<refresh_token_url comment="刷新token" value="https://bizapi.jd.com/oauth2/refreshToken" />
+		<!-- 商品API接口 -->
+		<getPageNum comment="获取商品池编号接口" value= "https://bizapi.jd.com/api/product/getPageNum" />
+		<getSkuByPage comment="获取池内商品编号接口-品类商品池（兼容老接口）" value="https://bizapi.jd.com/api/product/getSkuByPage" />
+		<getDetail comment="获取商品详细信息接口" value="https://bizapi.jd.com/api/product/getDetail" />
+		<skuState comment="获取商品上下架状态接口" value="https://bizapi.jd.com/api/product/skuState" />
+		<skuImage comment="获取所有图片信息" value="https://bizapi.jd.com/api/product/skuImage" />
+		<getFreight comment="运费查询接口" value="https://bizapi.jd.com/api/order/getFreight"/>
+		<!-- 地址API接口 -->
+		<getProvince comment="获取一级地址" value="https://bizapi.jd.com/api/area/getProvince"/>
+		<getCity comment="获取二级地址" value="https://bizapi.jd.com/api/area/getCity"/>
+		<getCounty comment="获取三级地址" value="https://bizapi.jd.com/api/area/getCounty"/>
+		<getTown comment="获取四级地址" value="https://bizapi.jd.com/api/area/getTown"/>
+		<!-- 价格API接口 -->
+		<getPrice comment="批量查询协议价价格" value="https://bizapi.jd.com/api/price/getSellPrice"/>
+		<getNewStockById comment="批量获取库存接口（建议订单详情页、下单使用)" value="https://bizapi.jd.com/api/stock/getNewStockById"/>
+		<!-- 库存API接口 -->
+		<getStockById comment="批量获取库存接口(建议商品列表页使用)" value="https://bizapi.jd.com/api/stock/getStockById"/>
+		<!-- 订单API接口 -->
+		<submitOrder comment="统一下单接口" value="https://bizapi.jd.com/api/order/submitOrder"/>
+		<confirmOrder comment="确认预占库存订单接口" value="https://bizapi.jd.com/api/order/confirmOrder"/>
+		<cancelOrder comment="取消未确认订单接口" value="https://bizapi.jd.com/api/order/cancel"/>
+		<selectJdOrderIdByThirdOrder comment="订单反查接口" value="https://bizapi.jd.com/api/order/selectJdOrderIdByThirdOrder"/>
+		<selectJdOrder commoent="查询京东订单信息接口" value="https://bizapi.jd.com/api/order/selectJdOrder"/>
+		<orderTrack commoent="查询配送信息接口" value="https://bizapi.jd.com/api/order/orderTrack"/>
+		<getInvoiceList commoent="获取电子发票信息" value="https://bizapi.jd.com/api/invoice/getInvoiceList"/>
+		<getAvailableNumberComp commoent="校验某订单中某商品是否可以提交售后服务" value="https://bizapi.jd.com/api/afterSale/getAvailableNumberComp"/>
+		<getCustomerExpectComp commoent="根据订单号、商品编号查询支持的服务类型" value="https://bizapi.jd.com/api/afterSale/getCustomerExpectComp"/>
+		<getMessage commoent="获取消息" value="https://bizapi.jd.com/api/message/get"/>
+		<delMessage commoent="删除消息" value="https://bizapi.jd.com/api/message/del"/>
+		<getImage comment="地址前缀"    value="http://img13.360buyimg.com/n0/"/>
+		<getCheck comment="商品是否可售" value="https://bizapi.jd.com/api/product/check"/>
+	    <getCategorys comment="查询分类信息接口" value="https://bizapi.jd.com/api/product/getCategorys"/>
+		<!-- 售后API接口 -->
+		<getAvailableNumberComp comment="查询可售后商品接口" value="https://bizapi.jd.com/api/afterSale/getAvailableNumberComp"/>
+		<getCustomerExpectComp comment="查询商品售后类型接口" value="https://bizapi.jd.com/api/afterSale/getCustomerExpectComp"/>
+		<getWareReturnJdComp comment="查询商品逆向配送接口" value="https://bizapi.jd.com/api/afterSale/getWareReturnJdComp"/>
+		<createAfsApply comment="申请售后接口" value="https://bizapi.jd.com/api/afterSale/createAfsApply"/>
+		<updateSendSku comment="填写发运信息接口" value="https://bizapi.jd.com/api/afterSale/updateSendSku"/>
+		<getServiceListPage comment="查询服务单概要接口" value="https://bizapi.jd.com/api/afterSale/getServiceListPage"/>
+		<getServiceDetailInfo comment="查询服务单明细接口" value="https://bizapi.jd.com/api/afterSale/getServiceDetailInfo"/>
+		<auditCancel comment="取消服务单接口" value="https://bizapi.jd.com/api/afterSale/auditCancel"/>
+		<checkArea comment="校验商品可售区域限制" value="https://bizapi.jd.com/api/product/checkAreaLimit"/>
+	</jd>
+	<stb>
+	    <config key="grant_type" value="guocai" comment="该值固定为authorization_code"/>
+		  <config key="client_id" value="9000002123" comment="即对接账号(由史泰博人员提供)"/>
+		  <config key="client_secret" value="9000002123" comment="即对接账号的密码 (由史泰博人员提供)"/>
+	    <config key="redirect_uri" value="http://www.xxxx.com" comment="应用的回调地址，必须和应用的callback地址匹配。(由第三方人员提供，需提前告知史泰博人员)"/>
+	    <config key="code" value="g9j91BA4GeAkj4oPT4v6" comment="史泰博的Authorization Code"/>
+	    <access_token_url comment="获取token" value="http://omsstaples03.staplescn.com/staplesAPI/api/access_token" />
+	    <getPageNum comment="获取商品池" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/getPageNum" />
+	    <getSku comment="获取池内商品编号接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/product/getSku" />
+	    <getDetail comment="获取商品详细信息接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/goodsModel/product/getDetail" />
+	    <skuState comment="获取商品上下架状态接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/product/skuState" />
+	    <skuImage comment="获取所有图片信息" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/product/skuImage" />
+	    <getPrice comment="批量查询协议价价格" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/product/getPrice"/>
+	    <getStockById comment="批量获取库存接口(建议商品列表页使用)" value="http://omsstaples03.staplescn.com/staplesAPI/api/goods/product/getStockByIdNum"/>
+	    <submitOrder comment="统一下单接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/submit"/>
+			<confirmOrder comment="确认预占库存订单接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/confirmOrder"/>
+			<cancelOrder comment="取消未确认订单接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/cancelPreOrder"/>
+			<selectOrder comment="查询订单接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/selectOrder"/>
+			<orderTrack comment="查询配送信息接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/getlogistics"/>
+			<invoiceSubmit comment="申请开票接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/invoice/submit"/>
+			<invoiceSelect comment="查询发票信息接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/invoice/select"/>
+			<invoiceChecking comment="发票提交验证结果接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/invoice/checking"/>
+			<submitReturn comment="退货单提交接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/return/submit"/>
+			<selectReturn comment="退货单查询接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/order/return/select"/> 
+			<getMessage comment="消息接口" value="http://omsstaples03.staplescn.com/staplesAPI/api/message/get"/>
+	    <delMessage comment="删除消息" value="http://omsstaples03.staplescn.com/staplesAPI/api/message/del"/>
+	</stb>
+	<standard>
+	   <dl>
+	   		<config key="username" value="CNPC2C"/>
+			<config key="password" value="d822d280092965dbcc5c752ce7c889b8"/>	
+			<access_token_url comment="获取token" value="http://testb2binner.nbdeli.com/REST/Yggc/api/auth2/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/skus" />
+			<product_detail_url comment="商品详情接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/detail" />
+			<product_state_url comment="上下架状态接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/shelf_states" />
+			<product_image_url comment="图片接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/images" />
+			<product_ratings_url comment="商品好评度接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/ratings" />
+			<product_price_url comment="价格接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/prices" />
+			<area_provinces_url comment="获取一级地址" value="http://testb2binner.nbdeli.com/REST/Yggc/api/area/provinces" />
+			<area_cities_url comment="获取二级地址" value="http://testb2binner.nbdeli.com/REST/Yggc/api/area/cities" />
+			<area_county_url comment="获取三级地址" value="http://testb2binner.nbdeli.com/REST/Yggc/api/area/getCounty" />
+			<product_stocks_url comment="库存接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/stocks" />
+			<order_submit_url comment="订单接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/submit" />
+			<order_confirm_url comment="确认订单接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/confirm" />
+			<order_cancel_url comment="取消订单接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/select" />
+			<order_return_url comment="退换货接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/return" />
+			<order_after_service_url comment="退换货查询接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/after_service" />
+			<order_track_url comment="物流接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/track" />
+			<get_invoice_list comment="电子发票接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/delMessagePool" />
+			<checkr comment="对账接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/order/checkr" />
+			<product_certificates_url comment="节能环保接口" value="http://testb2binner.nbdeli.com/REST/Yggc/api/product/certificates" />
+		</dl>
+	
+	
+	</standard>
+	
+</api_config>

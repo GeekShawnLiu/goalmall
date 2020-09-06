@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.PlanItemMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.PlanItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="num" jdbcType="FLOAT" property="num" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="budget_in" jdbcType="DECIMAL" property="budgetIn" />
+    <result column="budget_finance" jdbcType="DECIMAL" property="budgetFinance" />
+    <result column="budget_self" jdbcType="DECIMAL" property="budgetSelf" />
+    <result column="import_categor_name" jdbcType="VARCHAR" property="importCategorName" />
+    <result column="import_categor_code" jdbcType="VARCHAR" property="importCategorCode" />
+    <result column="import_product_name" jdbcType="VARCHAR" property="importProductName" />
+    <result column="plan_rev_id" jdbcType="VARCHAR" property="planRevId" />
+    <result column="plan_id" jdbcType="BIGINT" property="planId" />
+    <result column="used_budget_in" jdbcType="DECIMAL" property="usedBudgetIn" />
+    <result column="used_budget_finance" jdbcType="DECIMAL" property="usedBudgetFinance" />
+    <result column="used_budget_self" jdbcType="DECIMAL" property="usedBudgetSelf" />
+    <result column="budget_total" jdbcType="DECIMAL" property="budgetTotal" />
+    <result column="used_budget" jdbcType="DECIMAL" property="usedBudget" />
+  </resultMap>
+  
+ 	<select id="getItemById" parameterType="long" resultMap="BaseResultMap">
+ 		select * from plan_item where plan_id=#{planId}
+ 	</select>
+ 	
+ 	<select id="findCategoryByPlanID" parameterType="long"  resultMap="BaseResultMap">
+ 	   select * from plan_item where plan_id=#{planId}
+ 	</select>
+ 
+</mapper>

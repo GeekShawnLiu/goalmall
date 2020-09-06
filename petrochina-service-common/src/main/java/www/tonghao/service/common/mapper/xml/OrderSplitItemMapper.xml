@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.OrderSplitItemMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.OrderSplitItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="child_order_id" jdbcType="BIGINT" property="childOrderId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="order_emall_sn" jdbcType="VARCHAR" property="orderEmallSn" />
+    <result column="child_emall_sn" jdbcType="VARCHAR" property="childEmallSn" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  
+  
+  
+</mapper>

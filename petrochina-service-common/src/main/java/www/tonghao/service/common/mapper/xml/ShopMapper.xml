@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ShopMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Shop">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="log" jdbcType="VARCHAR" property="log" />
+    <result column="customer_service_email" jdbcType="VARCHAR" property="customerServiceEmail" />
+    <result column="customer_service_phone" jdbcType="VARCHAR" property="customerServicePhone" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectByid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select * from shop where supplier_id = #{supplierId}
+  </select>
+</mapper>

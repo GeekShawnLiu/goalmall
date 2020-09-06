@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.AfterSaleRefundLogMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.AfterSaleRefundLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="after_sale_id" jdbcType="BIGINT" property="afterSaleId" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+  </resultMap>
+</mapper>

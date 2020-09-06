@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SeqMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Seq">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="max" jdbcType="BIGINT" property="max" />
+    <result column="length" jdbcType="INTEGER" property="length" />
+    <result column="next" jdbcType="INTEGER" property="next" />
+    <result column="rules" jdbcType="VARCHAR" property="rules" />
+  </resultMap>
+  
+  <select id="getSeqValue" parameterType="java.lang.String" resultType="java.lang.String" flushCache="true">
+  	SELECT next_val(#{seqName})
+  </select>
+  
+  <select id="countByName" parameterType="java.lang.String" resultType="int" flushCache="true">
+  	select count(1) from seq where name = #{name}
+  </select>
+</mapper>

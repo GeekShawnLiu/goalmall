@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.AfterSaleMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.AfterSale">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="refund" jdbcType="DECIMAL" property="refund" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="certificate_img" jdbcType="VARCHAR" property="certificateImg" />
+    <result column="after_sale_sn" jdbcType="VARCHAR" property="afterSaleSn" />
+    <result column="orders_sn" jdbcType="VARCHAR" property="ordersSn" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_num" jdbcType="INTEGER" property="productNum" />
+    <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="order_itmes_id" jdbcType="BIGINT" property="orderItmesId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="supplier_address" jdbcType="VARCHAR" property="supplierAddress" />
+    <result column="purchaser_express_num" jdbcType="VARCHAR" property="purchaserExpressNum" />
+    <result column="purchaser_express_name" jdbcType="VARCHAR" property="purchaserExpressName" />
+    <result column="supplier_express_num" jdbcType="VARCHAR" property="supplierExpressNum" />
+    <result column="supplier_express_name" jdbcType="VARCHAR" property="supplierExpressName" />
+    <result column="after_sale_img" jdbcType="VARCHAR" property="afterSaleImg" />
+    <result column="no_refund_type" jdbcType="INTEGER" property="noRefundType" />
+    <result column="no_refund_reason" jdbcType="VARCHAR" property="noRefundReason" />
+    <result column="after_sale_img_name" jdbcType="VARCHAR" property="afterSaleImgName" />
+    <result column="certificate_img_name" jdbcType="VARCHAR" property="certificateImgName" />
+    <result column="is_resubmit" jdbcType="INTEGER" property="isResubmit" />
+  </resultMap>
+  
+  <select id="selectAfterSaleSnByToDay" resultType="www.tonghao.service.common.entity.AfterSale">
+  	SELECT
+		t1.after_sale_sn,
+		t1.today,
+		MAX(t1.toDayMaxSn) as toDayMaxSn
+	FROM
+		(
+			SELECT
+				after_sale_sn,
+				SUBSTRING(after_sale_sn,1,8) as today,
+				SUBSTRING(after_sale_sn,9) as toDayMaxSn
+			FROM
+				after_sale
+		) t1
+	WHERE
+		t1.today = DATE_FORMAT(now(),'%Y%m%d')
+  </select>
+</mapper>

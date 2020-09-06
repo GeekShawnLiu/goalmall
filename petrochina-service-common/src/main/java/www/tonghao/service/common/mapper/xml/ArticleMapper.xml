@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ArticleMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Article">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="publish_at" jdbcType="VARCHAR" property="publishAt" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="abstract" jdbcType="VARCHAR" property="abstract" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="article_type_id" jdbcType="BIGINT" property="articleTypeId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+    <result column="turnover" jdbcType="DECIMAL" property="turnover" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="business_status" jdbcType="INTEGER" property="businessStatus" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="fix_type" jdbcType="INTEGER" property="fixType" />
+    <result column="img_path_pc" jdbcType="VARCHAR" property="imgPathPc" />
+    <result column="img_path_h5" jdbcType="VARCHAR" property="imgPathH5" />
+    <result column="img_path_wx" jdbcType="VARCHAR" property="imgPathWx" />
+    <association property="articleType" jdbcType="BIGINT" column="article_type_id" select="www.tonghao.service.common.mapper.ArticleTypeMapper.selectByPrimaryKey"></association>
+    <collection column="id" property="articleFile" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ArticleFile" select="www.tonghao.service.common.mapper.ArticleFileMapper.getByArticleId"/>
+  </resultMap>
+  
+   <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Article" extends="BaseResultMap" >
+	<association column="org_id" property="organization" select="www.tonghao.service.common.mapper.OrganizationMapper.selectByPrimaryKey"/>
+	<association property="platformCatalogs" jdbcType="BIGINT" column="catalog_id" select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <select id="find" parameterType="Map" resultMap="BaseResultMap">
+      SELECT * FROM article where 1=1
+      <if test="title != null and title != ''">
+      	AND title LIKE CONCAT('%',#{title},'%') 
+      </if>
+      <if test="status != null and status !=''">
+      	AND status = #{status}
+      </if>
+      <if test="articleTypeId != null">
+        AND article_type_id = #{articleTypeId}
+      </if>
+      <if test="businessStatus != null">
+        AND business_status = #{businessStatus}
+      </if>
+      <if test="businessType != null">
+        AND business_type = #{businessType}
+      </if>
+      order by created_at DESC
+  </select>
+  
+  <select id="getById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM article where 1=1 and id=#{id}
+  </select>
+  
+  <select id="findNotify" parameterType="Map" resultMap="BaseResultMap">
+      SELECT *  FROM article ar
+      where 1=1
+	  <if test="articleTypeId != null">
+	    and ar.article_type_id = #{articleTypeId}
+	  </if>
+	   <if test="status != null">
+	    and ar.status = #{status}
+	  </if>
+      order by ar.created_at DESC 
+    
+  </select>
+  
+   <select id="findArticle" parameterType="Map" resultMap="RelationResultMap">
+	SELECT
+	*
+	FROM
+	article a
+	where 1=1 
+  			<if test="businessType != null">
+  				and a.business_type =#{businessType}
+  			</if>
+
+  			<if test="businessStatus != null ">
+  		     and a.business_status = #{businessStatus}
+  		</if>
+  		<if test="fixType != null ">
+  		     and a.fix_type = #{fixType}
+  		</if>
+	order by a.created_at DESC  
+  </select>
+  
+  <select id="findContent" parameterType="Map" resultMap="BaseResultMap">
+      SELECT * FROM article where 1=1
+      <if test="content != null and content != ''">
+      	AND content LIKE CONCAT('%',#{content},'%') 
+      </if>
+       <if test="content != null and content != ''">
+      	or title LIKE CONCAT('%',#{content},'%') 
+      </if>
+      order by created_at DESC
+  </select>
+  
+  <select id="getArticle" parameterType="Map" resultType="www.tonghao.service.common.entity.Article">
+  select * from article where 1=1
+  <if test="businessId !=null">
+  and business_id = #{businessId}
+  </if>
+  <if test="businessStatus != null ">
+  and business_status = #{businessStatus}
+  </if>
+  <if test="businessType != null">
+  and business_type = #{businessType}
+  </if>
+  </select>
+ 
+</mapper>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SuppliersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Suppliers">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="contacts_name" jdbcType="VARCHAR" property="contactsName" />
+    <result column="register_date" jdbcType="VARCHAR" property="registerDate" />
+    <result column="company_website" jdbcType="VARCHAR" property="companyWebsite" />
+    <result column="register_address" jdbcType="VARCHAR" property="registerAddress" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="licence_validity" jdbcType="VARCHAR" property="licenceValidity" />
+    <result column="licence_img" jdbcType="VARCHAR" property="licenceImg" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="opening_bank" jdbcType="VARCHAR" property="openingBank" />
+    <result column="credit_code" jdbcType="VARCHAR" property="creditCode" />
+    <result column="registered_capital" jdbcType="DECIMAL" property="registeredCapital" />
+    <result column="legal_id_number" jdbcType="VARCHAR" property="legalIdNumber" />
+    <result column="legal_id_card" jdbcType="VARCHAR" property="legalIdCard" />
+    <result column="legal_id_card_validity" jdbcType="VARCHAR" property="legalIdCardValidity" />
+    <result column="register_zip_code" jdbcType="VARCHAR" property="registerZipCode" />
+    <result column="production_business_address" jdbcType="VARCHAR" property="productionBusinessAddress" />
+    <result column="contacts_fax" jdbcType="VARCHAR" property="contactsFax" />
+    <result column="contacts_phone" jdbcType="VARCHAR" property="contactsPhone" />
+    <result column="contacts_mobile" jdbcType="VARCHAR" property="contactsMobile" />
+    <result column="contacts_email" jdbcType="VARCHAR" property="contactsEmail" />
+    <result column="nature" jdbcType="BIGINT" property="nature" />
+    <result column="registration_time" jdbcType="VARCHAR" property="registrationTime" />
+    <result column="submission_time" jdbcType="VARCHAR" property="submissionTime" />
+    <result column="latest_review_time" jdbcType="VARCHAR" property="latestReviewTime" />
+    <result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="service_content" jdbcType="VARCHAR" property="serviceContent" />
+    <result column="other_qualification" jdbcType="VARCHAR" property="otherQualification" />
+    <result column="business_scope" jdbcType="VARCHAR" property="businessScope" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="native_name" jdbcType="VARCHAR" property="nativeName" />
+    <result column="native_openbank" jdbcType="VARCHAR" property="nativeOpenbank" />
+    <result column="native_openbank_account" jdbcType="VARCHAR" property="nativeOpenbankAccount" />
+    <result column="credit_code_file" jdbcType="VARCHAR" property="creditCodeFile" />
+    <result column="industry_category" jdbcType="INTEGER" property="industryCategory" />
+    <result column="areas" jdbcType="VARCHAR" property="areas" />
+    <result column="supplier_scale" jdbcType="INTEGER" property="supplierScale" />
+    <result column="is_freeze" jdbcType="INTEGER" property="isFreeze" />
+    <result column="label_type" jdbcType="INTEGER" property="labelType" />
+    
+    <result column="register_address_id" jdbcType="BIGINT" property="registerAddressId" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="currency_type" jdbcType="VARCHAR" property="currencyType" />
+    <result column="licence_validity_end" jdbcType="VARCHAR" property="licenceValidityEnd" />
+    <result column="taxpayer_qualification" jdbcType="VARCHAR" property="taxpayerQualification" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="freight" jdbcType="DECIMAL" property="freight" />
+    <result column="is_price" jdbcType="INTEGER" property="isPrice" />
+    <result column="is_fill_bank" jdbcType="INTEGER" property="isFillBank" />
+  </resultMap>
+  
+  <resultMap type="www.tonghao.service.common.entity.Suppliers" id="ExtResultMap" extends="BaseResultMap">
+  	<association property="shop" column="id" select="www.tonghao.service.common.mapper.ShopMapper.selectByid"></association>
+  	<association property="users" column="id" select="www.tonghao.service.common.mapper.UsersMapper.selectAuditSupplierByTypeId"></association>
+  	<association property="supplierAudit" column="id" select="www.tonghao.service.common.mapper.SupplierAuditMapper.selectMaxCreateAt"></association>
+  </resultMap>
+  
+  <select id="getSuppliersAll" parameterType="Map" resultMap="BaseResultMap">
+    select s.* from suppliers s where 1=1 and s.is_delete=0 
+     <if test="name!=null and name!=''">
+        and s.name like CONCAT('%',#{name},'%') 
+     </if>
+     <if test="id!=null and id!=''">
+        and s.id=#{id}
+     </if>
+     <if test="status!=null and status!=''">
+        and s.status=#{status}
+     </if>
+     <if test="isFreeze!=null and isFreeze!=''">
+        and s.is_freeze=#{isFreeze}
+     </if>
+     <if test="nickName!=null and nickName!=''">
+        and s.nick_name like CONCAT('%',#{nickName},'%') 
+     </if>
+     <if test="contactsMobile!=null and contactsMobile!=''">
+        and s.contacts_mobile = #{contactsMobile}
+     </if>
+     <if test="labelType != null">
+        and s.label_type = #{labelType}
+     </if>
+    order by s.created_at
+  </select>
+  
+   <select id="getSuppliersById" parameterType="long" resultMap="BaseResultMap">
+    select * from suppliers where 1=1 and id=#{id}
+  </select>
+  <select id="getSupplierIds" resultMap="BaseResultMap">
+  select * from suppliers where 1=1 and id in
+  <foreach collection="ids" item="id" 
+            open="(" close=")" separator=",">
+            #{id}
+   </foreach>
+  </select>
+  
+  <!-- 获取协议电商 -->
+  <select id="getMallSuppliers" resultMap="BaseResultMap">
+    SELECT DISTINCT
+		sp.supplier_id as id,
+		s.NAME as name
+	FROM
+		protocol p
+	INNER JOIN supplier_protocol sp ON p.id = sp.protocol_id
+	INNER JOIN suppliers s ON s.id = sp.supplier_id
+	WHERE
+		1 = 1
+	AND p.is_delete = 0
+  </select>
+  
+  <select id="findListByEntity" parameterType="www.tonghao.service.common.entity.Suppliers" resultMap="BaseResultMap">
+  	select * from suppliers as s 
+  	
+  	<if test="queryfilter!=null and queryfilter['orgId'] != null">
+		left join org_supplier os on os.supplier_id = s.id
+	</if>
+  	<where>
+  	1 = 1
+  	
+  	<if test="name!=null">
+  			and s.name LIKE CONCAT('%',#{name},'%') 
+  		</if>
+  		<if test="nickName!=null">
+  			and s.nick_name LIKE CONCAT('%',#{nickName},'%') 
+  		</if>
+  		<if test="status!=null">
+  			and s.status = #{status}
+  		</if>
+  		<if test="queryfilter!=null">
+	  		<if test="queryfilter['isDelete']!=null">
+	  			and s.is_delete = #{queryfilter.isDelete}
+	  		</if>
+  			<if test="queryfilter['protocolAllow']!=null and queryfilter['protocolAllow']">
+  				
+  				and (
+					select count(1) from supplier_protocol as sp INNER JOIN protocol as p ON sp.protocol_id = p.id 
+					where sp.`status` = 1 and p.is_delete = 0 and p.`status` = 2
+					<![CDATA[and NOW()>=p.start_time and NOW()<=p.end_time and s.id = sp.supplier_id]]>
+					<if test="queryfilter['protocolType']!=null and queryfilter['protocolType']!=''">
+						and p.types=#{queryfilter.protocolType}
+					</if>
+				)>0
+				
+  			</if>
+  			<if test="queryfilter['orgId'] != null">
+				and os.org_id = #{queryfilter.orgId}
+			</if>
+			<if test="queryfilter['supplierId'] != null">
+				and s.id = #{queryfilter.supplierId}
+			</if>
+  			<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
+				order by ${queryfilter.orderByCondition}
+			</if>
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="findUsableListIdIn" resultMap="BaseResultMap">
+  	select tb.id,tb.name,tb.nick_name from suppliers as tb where tb.status = 1 and tb.id in
+  	<foreach collection="ids" item="item" open="(" close=")" separator=",">
+		#{item}
+	</foreach>
+	order by tb.priority asc
+  </select>
+  
+  <select id="findUsableByProtocol" resultType="Long">
+  	SELECT DISTINCT
+		s.id
+	FROM
+		suppliers AS s
+	INNER JOIN supplier_protocol AS sp ON s.id = sp.supplier_id
+	INNER JOIN protocol AS p ON sp.protocol_id = p.id
+	WHERE
+		sp. STATUS = 1
+	AND p.is_delete = 0
+	AND p. STATUS = 2
+	AND NOW() &gt;= p.start_time
+	AND NOW() &lt;= p.end_time
+	AND s.is_delete = 0
+	AND s.status = 1	
+  </select>
+  
+  <select id="findNoUserSuppliers" parameterType="Map" resultMap="BaseResultMap">
+    SELECT
+		s.*
+	FROM
+		suppliers s
+	WHERE
+		1 = 1
+	AND s.is_delete = 0
+	<if test="name!=null and name!=''">
+		AND s.name like CONCAT('%',#{name},'%') 
+	</if>
+	<if test="status!=null and status!=''">
+		AND s.status = #{status}
+	</if>
+	ORDER BY
+		s.created_at
+  </select>
+  
+  <select id="selectSupplierInfo" resultMap="ExtResultMap">
+  	select * from suppliers where id=#{id}
+  </select>
+  
+  <select id="selectByActivity" parameterType="Map" resultMap="BaseResultMap">
+  	select DISTINCT s.* from suppliers s left join org_supplier os on os.supplier_id = s.id where s.is_delete = 0
+  	<if test="labelType != null">
+  		and s.label_type = #{labelType}
+  	</if>
+  	<if test="activityId != null and activityType != null and activityType = 1 ">
+  		and os.org_id in (
+			select DISTINCT org_id from activity_org where activity_id = #{activityId}
+		)
+  	</if>
+  </select>
+  
+  <!-- 供应商code重复校验 -->
+  <select id="vaSupplierCode" resultType="Integer">
+  	select count(*) from suppliers where is_delete = 0 and code = #{code}
+  	<if test="id != null">
+  		and id &lt;&gt; #{id}
+  	</if>
+  </select>
+</mapper>

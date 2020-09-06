@@ -1,0 +1,2 @@
+# Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=org.spe.mall.api.utils.ConfigsProperties

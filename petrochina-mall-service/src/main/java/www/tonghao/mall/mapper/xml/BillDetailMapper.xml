@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.BillDetailMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.BillDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="bill_id" jdbcType="BIGINT" property="billId" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+  </resultMap>
+  <sql id="Base_Column_list">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.order_id,
+  	tb.bill_id
+  </sql>
+  <select id="findListByBillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_list" />
+  		,o.sn as "order.sn" 
+  		,o.total as "order.total"
+  		,o.completed_at as "order.completedAt"
+  		,o.ordersState as "order.ordersState"
+  		from bill_detail as tb INNER JOIN orders as o ON tb.order_id = o.id
+  </select>
+</mapper>

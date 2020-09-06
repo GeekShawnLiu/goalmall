@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ShopCatalogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ShopCatalogs">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="catalogs_id" jdbcType="BIGINT" property="catalogsId" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+  </resultMap>
+  
+  <select id="selectShopCatalogsList" parameterType="Long" resultType="www.tonghao.service.common.entity.ShopCatalogs">
+  	select
+  		t1.id,
+  		t1.catalogs_id,
+  		t2.name as catalogsName
+  	from
+  		shop_catalogs t1
+  	left join platform_catalogs t2 on t2.id = t1.catalogs_id
+  	where 
+  		shop_id = #{shopId}
+  </select>
+  
+  <delete id="deleteByshopId" parameterType="long">
+  	DELETE FROM shop_catalogs WHERE shop_id = #{shopId}
+  </delete>
+  
+</mapper>

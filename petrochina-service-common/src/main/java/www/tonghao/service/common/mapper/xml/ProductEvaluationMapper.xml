@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductEvaluationMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductEvaluation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="is_anonymous" jdbcType="INTEGER" property="isAnonymous" />
+    <result column="item_id" jdbcType="BIGINT" property="itemId" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.service.common.entity.ProductEvaluation" extends="BaseResultMap">
+  	<association property="user" column="user_id" jdbcType="BIGINT" select="www.tonghao.service.common.mapper.UsersMapper.findById"/>
+  	<collection column="id" property="fileList" javaType="ArrayList"
+  		ofType="www.tonghao.service.common.entity.ProductEvaluationFile" select="www.tonghao.service.common.mapper.ProductEvaluationFileMapper.findByproductEvaluationId"/>
+  </resultMap>
+  
+  <select id="findByProductId" parameterType="Map" resultMap="ExtResultMap">
+  	select * from product_evaluation 
+  	where is_delete = 0 
+  	and product_id = #{productId}
+  	<if test="level != null">
+  		and level = #{level}
+  	</if>
+  	order by created_at DESC
+  </select>
+  
+  <select id="findByMap" parameterType="Map" resultMap="ExtResultMap">
+  	select * from product_evaluation where is_delete = 0
+  	<if test="productId != null">
+  		and product_id = #{productId}
+  	</if>
+  	<if test="itemId != null">
+  		and item_id = #{itemId}
+  	</if>
+  	<if test="userId != null">
+  		and user_id = #{userId}
+  	</if>
+  </select>
+  
+  <select id="findRateByProductId" parameterType="Long" resultType="www.tonghao.service.common.entity.ProductEvaluation">
+  	select 
+  		round(sum(case when level = 1 then 1 else 0 end)/count(*), 2) as productRate,
+  		sum(case when level = 1 then 1 else 0 end) as highReviewNum,
+  		sum(case when level = 2 then 1 else 0 end) as mediumReviewNum,
+  		sum(case when level = 3 then 1 else 0 end) as badReviewNum,
+  		count(*) as reviewTotalNum
+  	from 
+  		product_evaluation 
+  	where 
+  		is_delete = 0 
+  		and product_id = #{productId}
+  </select>
+</mapper>

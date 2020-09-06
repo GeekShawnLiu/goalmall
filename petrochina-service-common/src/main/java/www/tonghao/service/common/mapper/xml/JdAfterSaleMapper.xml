@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.JdAfterSaleMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.JdAfterSale">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_item_id" jdbcType="BIGINT" property="orderItemId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="order_emall_sn" jdbcType="VARCHAR" property="orderEmallSn" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="product_num" jdbcType="INTEGER" property="productNum" />
+    <result column="reason" jdbcType="INTEGER" property="reason" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_has_package" jdbcType="INTEGER" property="isHasPackage" />
+    <result column="application_credentials" jdbcType="INTEGER" property="applicationCredentials" />
+    <result column="pickware_type" jdbcType="INTEGER" property="pickwareType" />
+    <result column="pickware_start_time" jdbcType="VARCHAR" property="pickwareStartTime" />
+    <result column="pickware_end_time" jdbcType="VARCHAR" property="pickwareEndTime" />
+    <result column="pickware_address_id" jdbcType="BIGINT" property="pickwareAddressId" />
+    <result column="pickware_address_name" jdbcType="VARCHAR" property="pickwareAddressName" />
+    <result column="pickware_detailed_address" jdbcType="VARCHAR" property="pickwareDetailedAddress" />
+    <result column="returnware_address_id" jdbcType="BIGINT" property="returnwareAddressId" />
+    <result column="returnware_address_name" jdbcType="VARCHAR" property="returnwareAddressName" />
+    <result column="returnware_detailed_address" jdbcType="VARCHAR" property="returnwareDetailedAddress" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="afs_service_id" jdbcType="VARCHAR" property="afsServiceId" />
+    <result column="pay_id" jdbcType="BIGINT" property="payId" />
+    <result column="return_price" jdbcType="DECIMAL" property="returnPrice" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status_message" jdbcType="VARCHAR" property="statusMessage" />
+    <result column="waybill_status" jdbcType="INTEGER" property="waybillStatus" />
+    <result column="allow_operations" jdbcType="INTEGER" property="allowOperations" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+    <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+  </resultMap>
+  
+  <!-- 条件查询 -->
+  <select id="findListByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+	select * from jd_after_sale where is_delete = 0
+	<if test="userId != null">
+		and user_id = #{userId}
+	</if>
+	<if test="supplierId != null">
+		and supplier_id = #{supplierId}
+	</if>
+	<if test="orderSn != null and orderSn != ''">
+		and order_sn like CONCAT('%',#{orderSn},'%')
+	</if>
+	<if test="orderItemId != null">
+		and order_item_id = #{orderItemId}
+	</if>
+	<if test="sn != null and sn != ''">
+		and sn like CONCAT('%',#{sn},'%')
+	</if>
+	<if test="type != null">
+		and type = #{type}
+	</if>
+	<if test="status != null">
+		and status = #{status}
+	</if>
+	<if test="statusList != null">
+		and status in
+		<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">  
+			#{item}
+		</foreach>
+	</if>
+	<if test="orderEmallSn != null and orderEmallSn !=''">
+		and order_emall_sn like CONCAT('%',#{orderEmallSn},'%')
+	</if>
+	<if test="productSku != null and productSku != ''">
+		and product_sku = #{productSku}
+	</if>
+	order by created_at desc
+  </select>
+  
+  <!-- 根据jd售后服务单号条件查询 -->
+  <select id="selectByAfsServiceId" parameterType="java.util.Map" resultMap="BaseResultMap">
+	select * from jd_after_sale where is_delete = 0
+	<if test="afsServiceId != null and afsServiceId !=''">
+		and afs_service_id = #{afsServiceId}
+	</if>
+	<if test="isNull != null and isNull !=''">
+		and afs_service_id is null
+	</if>
+	<if test="orderEmallSn != null and orderEmallSn !=''">
+		and order_emall_sn = #{orderEmallSn}
+	</if>
+	<if test="productSku != null and productSku != ''">
+		and product_sku = #{productSku}
+	</if>
+	order by created_at
+  </select>
+  
+  <!-- h5售后列表 -->
+  <select id="findH5ListByMap" parameterType="java.util.Map" resultType="www.tonghao.service.common.entity.JdAfterSale">
+	SELECT
+		*
+	FROM
+		(
+		SELECT
+			jdAfs.id, 
+			jdAfs.sn, 
+			jdAfs.type, 
+			jdAfs.order_item_id AS orderItemId, 
+			jdAfs.status, 
+			jdAfs.product_num AS productNum, 
+			jdAfs.product_name AS productName, 
+			jdAfs.created_at AS createdAt, 
+			'1' afsType,
+			jdAfs.allow_operations AS allowOperations,
+			jdAfs.waybill_status AS waybillStatus
+		FROM
+			jd_after_sale jdAfs
+		WHERE
+			jdAfs.is_delete = 0
+			<if test="sn != null and sn != ''">
+				and jdAfs.sn like CONCAT('%',#{sn},'%')
+			</if>
+			<if test="type != null">
+				and jdAfs.type = #{type}
+			</if>
+			<if test="status != null">
+				and jdAfs.status = #{status}
+			</if>
+			<if test="userId != null">
+				and jdAfs.user_id = #{userId}
+			</if>
+		UNION ALL
+			SELECT
+				afs.id, 
+				afs.after_sale_sn AS sn, 
+				afs.type, 
+				afs.order_itmes_id AS orderItemId, 
+				afs.status, 
+				afs.product_num AS productNum, 
+				afs.product_name AS productName, 
+				afs.created_at AS createdAt, 
+				'2' afsType,
+				0 allowOperations,
+				0 waybillStatus
+			FROM
+				after_sale afs
+			WHERE
+				1 = 1
+				<if test="sn != null and sn != ''">
+					and afs.after_sale_sn like CONCAT('%',#{sn},'%')
+				</if>
+				<if test="status != null and status == 1">
+					and afs.status != 5
+				</if>
+				<if test="status != null and status == 4">
+					and afs.status = 5
+				</if>
+				<if test="userId != null">
+					and afs.user_id = #{userId}
+				</if>
+		) tmp
+	ORDER BY
+	tmp.createdAt DESC
+  </select>
+</mapper>

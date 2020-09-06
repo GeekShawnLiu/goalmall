@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.PaysMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.Pays">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_id" jdbcType="VARCHAR" property="contractId" />
+    <result column="disburse_num" jdbcType="INTEGER" property="disburseNum" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="pay_date" jdbcType="VARCHAR" property="payDate" />
+    <result column="is_acceptance" jdbcType="INTEGER" property="isAcceptance" />
+    <result column="pay_scale" jdbcType="REAL" property="payScale" />
+    <result column="total_sum" jdbcType="DECIMAL" property="totalSum" />
+    <result column="total_sum01" jdbcType="DECIMAL" property="totalSum01" />
+    <result column="total_sum02" jdbcType="DECIMAL" property="totalSum02" />
+    <result column="total_sum03" jdbcType="DECIMAL" property="totalSum03" />
+    <result column="bdg_year" jdbcType="INTEGER" property="bdgYear" />
+    <result column="region" jdbcType="INTEGER" property="region" />
+  </resultMap>
+  <select id="getByContractId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select * from pays where contract_id =#{contractId}
+  </select>
+</mapper>

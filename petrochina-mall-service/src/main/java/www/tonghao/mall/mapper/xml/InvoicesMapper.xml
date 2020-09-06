@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.InvoicesMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.Invoices">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="invoice_type" jdbcType="SMALLINT" property="invoiceType" />
+    <result column="enterprise" jdbcType="VARCHAR" property="enterprise" />
+    <result column="id_code" jdbcType="VARCHAR" property="idCode" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="is_default" jdbcType="BIT" property="isDefault" />
+  </resultMap>
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.user_id,
+  	tb.invoice_type,
+  	tb.enterprise,
+  	tb.id_code,
+  	tb.company,
+  	tb.phone,
+  	tb.bank,
+  	tb.bank_account,
+  	tb.address,
+  	tb.is_default
+  </sql>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> from invoices as tb where tb.id = #{id}
+  </select>
+</mapper>

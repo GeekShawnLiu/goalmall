@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.ProductCarsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.ProductCars">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="area_id" jdbcType="BIGINT" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="car_type" jdbcType="INTEGER" property="carType" />
+  </resultMap>
+  
+  <!-- 根据商品id查询车辆价格信息 -->
+  <select id="getByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT 
+			p.* 
+		FROM product_cars p 
+		WHERE p.product_id = #{productId}
+  </select>
+</mapper>

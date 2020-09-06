@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.IntegralUserMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.IntegralUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="integral_id" jdbcType="BIGINT" property="integralId" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectIntegralUser" parameterType="Long" resultType="www.tonghao.service.common.entity.IntegralUser">
+  	SELECT
+  		t1.id,
+		t1.total,
+		t1.balance,
+		t1.activity_id as activityId,
+		t1.created_at,
+		t2.NAME AS integralName,
+		t3.name AS activityName,
+		t3.start_at AS activityStartAt,
+		t3.end_at AS activityEndAt,
+		t3.online_at AS activityOnlineAt,
+		t3.is_offline AS isOffline
+	FROM
+		integral_user t1
+	LEFT JOIN integral t2 ON t2.id = t1.integral_id
+	LEFT JOIN activity t3 ON t3.id = t1.activity_id
+	WHERE
+		t1.user_id = #{userId}
+	ORDER BY t3.start_at DESC
+  </select>
+  
+  <select id="selectAllIntegralUser" parameterType="www.tonghao.service.common.entity.IntegralUser" resultType="www.tonghao.service.common.entity.IntegralUser">
+  	SELECT
+  		t1.id,
+		t1.total,
+		t1.balance,
+		t2.NAME AS integralName,
+		t3.name AS activityName,
+		t3.start_at as activityStartAt,
+		t3.end_at as activityEndAt,
+		t4.real_name AS realName,
+		t4.mobile,
+		t4.email,
+		(t1.total - t1.balance) AS consumed
+	FROM
+		integral_user t1
+	LEFT JOIN integral t2 ON t2.id = t1.integral_id
+	LEFT JOIN activity t3 ON t3.id = t1.activity_id
+	LEFT JOIN users t4 ON t4.id = t1.user_id
+	WHERE
+	 	1=1
+	<if test="realName !=null and realName !=''">
+		and t4.real_name like CONCAT('%', #{realName} ,'%')
+	</if>
+	<if test="activityName !=null and activityName !=''">
+		and t3.name like CONCAT('%', #{activityName}, '%')
+	</if>
+	<if test="integralName !=null and integralName !=''">
+		and t2.NAME like CONCAT('%', #{integralName}, '%')
+	</if>
+	<if test="userId !=null and userId !=''">
+		and t1.user_id = #{userId}
+	</if>
+	<if test="id !=null">
+		and t1.id = #{id}
+	</if>
+	<if test="mobile !=null and mobile !=''">
+		and t4.mobile like concat("%", #{mobile}, "%")
+	</if>
+	<if test="email !=null and email!=''">
+		and t4.email like concat("%", #{email} ,"%")
+	</if>
+	<if test="startTotal !=null">
+		and t1.total &gt;= #{startTotal}
+	</if>
+	<if test="endTotal !=null">
+		and t1.total &lt;= #{endTotal}
+	</if>
+	<if test="startBalance !=null">
+		and t1.balance &gt;= #{startBalance}
+	</if>
+	<if test="endBalance !=null">
+		and t1.balance &lt;= #{endBalance}
+	</if>
+	<if test="startConsumed !=null">
+		and (t1.total - t1.balance) &gt;= #{startConsumed}
+	</if>
+	<if test="endConsumed !=null">
+		and (t1.total - t1.balance) &lt;= #{endConsumed}
+	</if>
+	order by t1.created_at desc
+  </select>
+  
+  	<!-- 根据活动id和用户id查询积分余额 -->
+	<select id="findbalanceByUIdAndAId" resultMap="BaseResultMap">
+		SELECT
+			id,
+			user_id,
+			activity_id,
+			sum(balance) AS balance
+		FROM
+			integral_user
+		WHERE
+			user_id = #{userId}
+		AND activity_id = #{activityId}
+		GROUP BY
+			user_id,
+			activity_id
+	</select>
+	
+	<!-- 查询用户积分到账提醒 -->
+	<select id="findIntegralPrompt" parameterType="Long" resultType="www.tonghao.service.common.entity.IntegralUser">
+		SELECT
+			tmp.id,
+			tmp.activity_id AS activityId,
+			tmp.balance,
+			ac.name AS activityName,
+			ac.end_at AS activityEndAt
+		FROM
+			(
+				SELECT
+					id,
+					user_id,
+					activity_id,
+					sum(balance) AS balance,
+					sum(is_prompt) AS is_prompt
+				FROM
+					integral_user
+				WHERE
+					user_id = #{userId}
+				GROUP BY
+					user_id,
+					activity_id
+			) tmp
+		INNER JOIN activity ac ON ac.id = tmp.activity_id
+		WHERE
+			tmp.is_prompt = 0
+		AND ac.is_delete = 0
+		AND ac.is_offline = 0
+		AND ac.type = 1
+		AND NOW() &gt;= ac.start_at
+		AND NOW() &lt; ac.end_at
+		AND NOW() &gt;= ac.online_at
+	</select>
+	
+	<update id="updateIntegralPrompt">
+		update integral_user set is_prompt = 1 where user_id = #{userId} and activity_id = #{activityId}
+	</update>
+</mapper>

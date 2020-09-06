@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.DeliveryWayMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.DeliveryWayEntity">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  
+  <select id="findSupplierUsableList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select tb.* from delivery_way as tb INNER JOIN delivery_supplier as ds ON tb.id = ds.delivery_id 
+  	where ds.supplier_id = #{supplierId} and tb.`status`=0
+  </select>
+</mapper>

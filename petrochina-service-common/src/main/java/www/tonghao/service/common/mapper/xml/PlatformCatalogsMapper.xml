@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.PlatformCatalogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.PlatformCatalogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="descs" jdbcType="VARCHAR" property="descs" />
+    <result column="usable" jdbcType="INTEGER" property="usable" />
+    <result column="tree_ids" jdbcType="VARCHAR" property="treeIds" />
+    <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="is_parent" jdbcType="VARCHAR" property="isParent" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="types" jdbcType="VARCHAR" property="types" />
+    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+    <result column="transaction_form" jdbcType="VARCHAR" property="transactionForm" />
+    <result column="systems" jdbcType="VARCHAR" property="systems" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="normal_price" jdbcType="DECIMAL" property="normalPrice" />
+  	<result column="mall_catalog_id" jdbcType="BIGINT" property="mallCatalogId" />
+  	<result column="product_flag" jdbcType="INTEGER" property="productFlag" />
+  	<result column="is_price_monitor" jdbcType="TINYINT" property="isPriceMonitor" />
+  	<result column="is_marketable_monitor" jdbcType="TINYINT" property="isMarketableMonitor" />
+  	<result column="is_key_monitor" jdbcType="TINYINT" property="isKeyMonitor" />
+  	<result column="is_unified_parameter" jdbcType="TINYINT" property="isUnifiedParameter" />
+  	<result column="is_marketable_unified_parameter" jdbcType="TINYINT" property="isMarketableUnifiedParameter" />
+  	<result column="price_range" jdbcType="VARCHAR" property="priceRange" />
+  </resultMap>
+  
+  <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.PlatformCatalogs" extends="BaseResultMap" >
+	<association column="parent_id" property="parent" select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.findRelationById"/>
+	<association column="catalog_id" property="catalog" select="www.tonghao.service.common.mapper.CatalogsMapper.selectByPrimaryKey"/>
+  </resultMap>
+  
+  <select id="getChildrenById" parameterType="Long" resultMap="BaseResultMap">
+      SELECT * FROM platform_catalogs WHERE 
+      	FIND_IN_SET(id,queryChildrenPlatformCatalogs(#{id}))
+     	AND is_delete = 0
+  </select>
+  
+  <select id="getParentById" parameterType="long" resultMap="BaseResultMap">
+    select * from platform_catalogs
+    where 
+    	FIND_IN_SET(id,getPlatformCatalogsList(#{id}))
+    	AND is_delete = 0
+    	ORDER BY tree_depth
+  </select>
+  
+  <!-- 获取数据排除自身及子节点 -->
+  <select id="getSelectData" parameterType="long" resultMap="BaseResultMap">
+    SELECT
+		*
+	FROM
+		platform_catalogs
+	WHERE
+		is_delete = 0
+		<if test="id != null">
+			AND id NOT IN (
+				SELECT id FROM platform_catalogs WHERE FIND_IN_SET(id,queryChildrenPlatformCatalogs(#{id}))
+			)
+		</if>
+	ORDER BY
+		tree_depth,
+		priority
+  </select>
+  
+  <select id="findRelationById" parameterType="java.lang.Long" resultMap="RelationResultMap">
+	select *
+	 from platform_catalogs tb where tb.id = #{id}
+  </select>
+  
+  <select id="findListByEntity" parameterType="www.tonghao.service.common.entity.PlatformCatalogs" resultMap="RelationResultMap">
+  	select * from platform_catalogs as tb 
+  	<where>
+  		<if test="treeDepth!=null">
+  			and tb.tree_depth = #{treeDepth}
+  		</if>
+  		<if test="isDelete!=null">
+  			and tb.is_delete = #{isDelete}
+  		</if>
+  		<if test="queryfilter!=null">
+  			<if test="queryfilter['likeSystems']!=null and queryfilter['likeSystems']!=''">
+  				and CONCAT(',',tb.systems) like '%,${queryfilter.likeSystems}%'
+  			</if>
+  		</if>
+  	</where>
+  	order by tb.priority ASC
+  	<if test="queryfilter!=null and queryfilter['limitCount']!=null">
+  		limit #{queryfilter.limitCount}
+  	</if>
+  </select>
+  
+   <select id="findListBySystem" parameterType="www.tonghao.service.common.entity.PlatformCatalogs" resultMap="RelationResultMap">
+  	select * from platform_catalogs as tb 
+  	<where>
+  		<if test="treeDepth!=null">
+  			and tb.tree_depth = #{treeDepth}
+  		</if>
+  		<if test="isDelete!=null">
+  			and tb.is_delete = #{isDelete}
+  		</if>
+  		<if test="queryfilter!=null">
+  			<if test="queryfilter['likeSystems']!=null and queryfilter['likeSystems']!=''">
+  				and CONCAT(',',tb.systems)like '%,${queryfilter.likeSystems}%'
+  			</if>
+  		</if>
+  	</where>
+  	order by convert(substr(name,1,1) using 'GBK')
+  	<if test="queryfilter!=null and queryfilter['limitCount']!=null">
+  		limit #{queryfilter.limitCount}
+  	</if>
+  </select>
+  <select id="getCatalogsBysupplierIdAndProId" parameterType="Map" resultType="www.tonghao.service.common.entity.PlatformCatalogs" >
+      SELECT
+		c.catalogs_id as id,
+	  c.catalogs_name as name
+	FROM
+		protocol p
+	INNER JOIN supplier_protocol s ON p.id = s.protocol_id
+	INNER JOIN supplier_protocol_catalog c ON c.supper_anent_id = s.id where 
+	 	p.id=#{proId} and s.id=#{supplierId}
+	<if test="type != null and type != ''">
+	  and  c.type=#{type}
+	</if>
+  </select>
+  <select id="findByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select * from platform_catalogs tb where tb.code = #{code} 
+  </select>
+  
+  <!-- 查询同级品目相同名称数量（排除本身） -->
+  <select id="validateName" resultType="Integer">
+	SELECT count(id) FROM `platform_catalogs` 
+	WHERE 
+		parent_id = #{parentId} 
+		AND `name` = #{name}
+	<if test="id != null">
+		AND id != #{id}
+	</if>
+  </select>
+  
+  <!-- 查询商城品目的品目列表 -->
+  <select id="findListByMallCatalogId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select tb.id,tb.name,tb.priority,tb.catalog_id,tb.is_parent from platform_catalogs as tb  
+  	where tb.mall_catalog_id = #{mallCatalogId} order by tb.priority desc
+  </select>
+  <select id="selectIDByCode" parameterType="String" resultType="Long">
+  select  DISTINCT tb.catalog_id from platform_catalogs as tb 
+  where tb.code=#{catalogCode}
+  </select>
+  
+  <select id="selectPIDByName" parameterType="String" resultType="Long">
+  select  tb.id from platform_catalogs as tb 
+  where tb.code=#{catalogCode}
+  </select>
+  
+  <select id="selectByTreeNamesOrCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	SELECT
+		*
+	FROM
+		platform_catalogs
+	WHERE
+		is_delete = 0
+	<if test="treeNames !=null">
+		and tree_names like CONCAT(CONCAT('%', #{treeNames}), '%')
+	</if>
+	<if test="code !=null">
+		and code like CONCAT(CONCAT('%', #{code}), '%')
+	</if>
+  </select>
+  
+  <!-- 查询关联mallCatalogs一级品目id -->
+  <select id="selectMallCatalogsIdByMid" parameterType="Long" resultType="Long">
+  	select parent_id from mall_catalogs where id = #{mallCatalogsId}
+  </select>
+  
+  <select id="selectShopCatalogs" parameterType="Long" resultType="www.tonghao.service.common.entity.PlatformCatalogs">
+  	SELECT
+		pc.id,
+		pc.name,
+		pc.tree_ids AS treeIds,
+		pc.tree_names AS treeNames,
+		pc.tree_depth AS treeDepth,
+		pc.parent_id AS parentId,
+		pc.is_parent AS isParent,
+	IF (sc.id IS NULL, 0, 1) AS checked
+	FROM
+		platform_catalogs pc
+	LEFT JOIN (
+		SELECT
+			*
+		FROM
+			shop_catalogs
+		WHERE
+			shop_id = #{shopId}
+	) sc ON sc.catalogs_id = pc.id
+	WHERE
+		pc.is_delete = 0
+  </select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.EnvironmentProductsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.EnvironmentProducts">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pur_item_code" jdbcType="VARCHAR" property="purItemCode" />
+    <result column="pur_item_num" jdbcType="VARCHAR" property="purItemNum" />
+    <result column="pur_item_name" jdbcType="VARCHAR" property="purItemName" />
+    <result column="product_dir_type" jdbcType="VARCHAR" property="productDirType" />
+    <result column="cert_code" jdbcType="VARCHAR" property="certCode" />
+    <result column="cert_expir" jdbcType="VARCHAR" property="certExpir" />
+    <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
+    <result column="brand_zh_name" jdbcType="VARCHAR" property="brandZhName" />
+    <result column="manuf_name" jdbcType="VARCHAR" property="manufName" />
+    <result column="period_no" jdbcType="VARCHAR" property="periodNo" />
+  </resultMap>
+</mapper>

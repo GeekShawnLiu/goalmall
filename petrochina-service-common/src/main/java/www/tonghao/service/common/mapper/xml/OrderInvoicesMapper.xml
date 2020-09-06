@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.OrderInvoiceMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.OrderInvoice">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="invoice_type" jdbcType="SMALLINT" property="invoiceType" />
+    <result column="enterprise" jdbcType="VARCHAR" property="enterprise" />
+    <result column="id_code" jdbcType="VARCHAR" property="idCode" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="invoice_id" jdbcType="BIGINT" property="invoiceId" />
+  </resultMap>
+</mapper>

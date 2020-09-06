@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.PermissionsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Permissions">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="type" jdbcType="BIT" property="type" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="icon_name" jdbcType="VARCHAR" property="iconName" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="is_frozen" jdbcType="INTEGER" property="isFrozen" />
+    <result column="tree_ids" jdbcType="VARCHAR" property="treeIds" />
+    <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+  </resultMap>
+  
+  <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Permissions" extends="BaseResultMap" >
+	<association column="parent_id" property="parent" select="www.tonghao.service.common.mapper.PermissionsMapper.findRelationById"/>
+  </resultMap>
+  
+  <!-- 通用查询结果列-->
+  <sql id="Base_Column_List">
+	tb.id,
+	tb.created_at,
+	tb.updated_at,
+	tb.name,
+	tb.parent_id,
+	tb.tree_depth,
+	tb.type,
+	tb.url,
+	tb.priority,
+	tb.icon_name,
+	tb.perms,
+	tb.is_delete,
+	tb.is_frozen,
+	tb.tree_ids,
+	tb.tree_names
+  </sql>
+  
+  <!-- 根据id获取所有的子节点(包括其本身) -->
+  <select id="getChildrenById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM permissions 
+      WHERE FIND_IN_SET(id,queryChildrenPermission(#{id}))
+      AND is_delete = 0
+      ORDER BY tree_depth,priority
+  </select>
+  
+  <!-- 根据id获取所有的子节点 -->
+  <select id="getOtherChildrenById" parameterType="long" resultMap="BaseResultMap">
+      SELECT * FROM permissions 
+      WHERE FIND_IN_SET(id,queryChildrenPermission(#{id}))
+      AND is_delete = 0
+      AND ID != #{id}
+      ORDER BY tree_depth,priority
+  </select>
+  
+  <!-- 获取数据排除自身及子节点 -->
+  <select id="getSelectData" parameterType="long" resultMap="BaseResultMap">
+      SELECT
+		id,
+		name,
+		parent_id,
+		tree_depth,
+		type,
+		priority,
+		icon_name,
+		perms,
+		is_frozen,
+		tree_ids,
+		tree_names
+	FROM
+		permissions
+	WHERE
+		is_delete = 0
+		<if test="id != null">
+			AND id NOT IN (
+				SELECT id FROM permissions WHERE FIND_IN_SET(id,queryChildrenPermission(#{id}))
+			)
+		</if>
+	ORDER BY
+		tree_depth,
+		priority
+  </select>
+  
+  <select id="findRelationById" parameterType="java.lang.Long" resultMap="RelationResultMap">
+	select <include refid="Base_Column_List" />
+	 from permissions tb where tb.id = #{id}
+  </select>
+  
+  <select id="findByUrl" parameterType="java.lang.String" resultMap="RelationResultMap">
+		select <include refid="Base_Column_List" />
+		from permissions tb where tb.url like '${url}%' limit 1
+  </select>
+  
+  <select id="findUsableRolesPerms" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+	 from role_permissions rp INNER JOIN permissions as tb on rp.permission_id =tb.id
+	where tb.is_delete = 0 and tb.is_frozen=0 and rp.role_id in
+	<foreach collection="roles" open="(" close=")" separator=","  item="item">
+		#{item.id}
+	</foreach>
+	group by tb.id
+	order by tb.priority asc
+  </select>
+  
+</mapper>

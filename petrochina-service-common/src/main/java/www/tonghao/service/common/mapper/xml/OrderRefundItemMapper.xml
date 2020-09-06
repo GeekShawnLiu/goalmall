@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.OrderRefundItemMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.OrderRefundItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pay_Id" jdbcType="INTEGER" property="payId" />
+    <result column="refund_integral_price" jdbcType="DECIMAL" property="refundIntegralPrice" />
+    <result column="refund_money" jdbcType="DECIMAL" property="refundMoney" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="order_total" jdbcType="DECIMAL" property="orderTotal" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="update_at" jdbcType="VARCHAR" property="updateAt" />
+    <result column="refund_user_id" jdbcType="INTEGER" property="refundUserId" />
+    <result column="refund_user_name" jdbcType="VARCHAR" property="refundUserName" />
+    <result column="operation_id" jdbcType="INTEGER" property="operationId" />
+    <result column="cj_code" jdbcType="VARCHAR" property="cjCode" />
+    <result column="order_pay_price_id" jdbcType="INTEGER" property="orderPayPriceId" />
+    <result column="order_master_id" jdbcType="INTEGER" property="orderMasterId" />
+    <result column="refund_status" jdbcType="INTEGER" property="refundStatus" />
+    <result column="refund_req_param" jdbcType="VARCHAR" property="refundReqParam" />
+    <result column="refund_res_param" jdbcType="VARCHAR" property="refundResParam" />
+    <result column="cj_json" jdbcType="VARCHAR" property="cjJson" />
+    <result column="refund_code" jdbcType="VARCHAR" property="refundCode" />
+    <result column="afs_id" jdbcType="BIGINT" property="afsId" />
+    <result column="afs_type" jdbcType="INTEGER" property="afsType" />
+    <result column="advice" jdbcType="VARCHAR" property="advice" />
+  </resultMap>
+  
+  <select id="getOrderFundItem" parameterType="Map" resultType="www.tonghao.service.common.entity.OrderRefundItem">
+      SELECT
+			item.id,
+			item.pay_id AS payId,
+		  item.refund_integral_price as refundIntegralPrice,
+		  item.refund_money as refundMoney,
+		  item.order_sn as orderSn,
+		  item.order_total as orderTotal,
+		  item.type,
+		  item.create_at as createAt,
+		  item.refund_user_name as refundUserName,
+		  item.cj_code as cjCode,
+		  o.orders_state as orderSate,
+		  item.refund_status as refundStatus,
+		  o.supplier_name as supplierName,
+		  item.advice as advice 
+		FROM
+			order_refund_item item left join orders o on o.sn=item.order_sn where 1=1
+			<if test="orderSn!=null and orderSn!=''">
+			   and item.order_sn like concat('%',#{orderSn},'%')
+			</if>
+			<if test="userName!=null and userName!=''">
+			   and item.refund_user_name like concat('%',#{userName},'%')
+			</if>
+     order by item.create_at desc
+  </select>
+  
+  
+  <select id="selectOrderFundItem" parameterType="Map" resultMap="BaseResultMap">
+     select * from order_refund_item where order_sn=#{orderSn} and order_master_id=#{orderMasterId} and refund_status!=4
+  </select>
+  
+</mapper>

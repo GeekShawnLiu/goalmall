@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProtocolMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Protocol">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="types" jdbcType="INTEGER" property="types" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="stint" jdbcType="INTEGER" property="stint" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <collection property="supplierProtocols" ofType="www.tonghao.service.common.entity.SupplierProtocol" select="www.tonghao.service.common.mapper.SupplierProtocolMapper.getSupplierProtocolByProtocolId" column="id">
+	</collection>
+  </resultMap>
+  
+  <select id="getProtocolById" resultMap="BaseResultMap" parameterType="Long">
+       select * from protocol where 1=1 and id=#{id} 
+  </select>
+  <select id="getProtocolBySupplier" resultType="www.tonghao.service.common.entity.Protocol" parameterType="Map">
+       select p.id, p.created_at as createdAt,p.updated_at as updatedAt,p.status, p.name,p.code,p.types,p.sales,p.start_time as startTime,p.end_time as endTime,s.id as supplierProtocolId,s.is_assign as isAssign   from protocol p RIGHT join supplier_protocol s on s.protocol_id=p.id where p.is_delete=0 and p.status=2 and s.status=1
+       <if test="name!=null and name!=''">
+           and p.name like CONCAT('%',#{name},'%') 
+       </if>
+       <if test="code!=null and code!=''">
+         and p.code like CONCAT('%',#{code},'%') 
+        </if>
+        <if test="types!=null and types!=''">
+         and p.types=#{types}
+        </if>
+       <if test="status!=null and status!=''">
+         and p.status=#{status}
+       </if>
+       <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+        and p.end_time BETWEEN #{startTime} and #{endTime}
+       </if>
+       <if test="(startTime == null or startTime == '') and endTime!=null and endTime!=''">
+        and p.end_time &gt;= #{endTime}
+       </if>
+       <if test="compareCurrDate!=null and compareCurrDate!=''">
+        <![CDATA[and p.start_time <= #{compareCurrDate} and p.end_time >= #{compareCurrDate}]]>
+       </if>
+       <if test="supplierId !=null and supplierId !=''">
+         and s.supplier_id = #{supplierId}
+       </if>
+  </select>
+ 
+ 	<select id="selectList" resultType="Integer">
+ 	SELECT
+     COUNT(1)
+     FROM
+	protocol p
+    LEFT JOIN protocol_agent pa ON p.id = pa.protocol_id
+       WHERE
+	      p.types = 2
+          AND p.is_delete = 0
+          AND p.`status` = 2
+    GROUP BY pa.supplier_agent_id,pa.protocol_id,pa.supplier_protocol_id
+ 	</select>
+ 	
+ 		<select id="selectFix" resultType="Integer">
+ 			SELECT   COUNT(1)    FROM
+	        protocol p
+            LEFT JOIN supplier_protocol pa ON p.id = pa.protocol_id
+            WHERE
+	        p.types = 4
+            AND p.is_delete = 0
+            AND p.`status` = 2
+ 		</select>
+</mapper>

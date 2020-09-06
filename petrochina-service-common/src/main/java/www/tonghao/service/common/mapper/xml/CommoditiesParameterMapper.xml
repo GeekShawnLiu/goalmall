@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.CommoditiesParameterMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.CommoditiesParameter">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="commodities_id" jdbcType="BIGINT" property="commoditiesId" />
+    <result column="stand_param_id" jdbcType="VARCHAR" property="standParamId" />
+    <result column="stand_value_id" jdbcType="VARCHAR" property="standValueId" />
+    <result column="ttype" jdbcType="INTEGER" property="ttype" />
+    <result column="position" jdbcType="REAL" property="position" />
+    <result column="param_value" jdbcType="LONGVARCHAR" property="paramValue" />
+  </resultMap>
+  
+   <select id="find" parameterType="Map" resultMap="BaseResultMap">
+   		SELECT
+			*
+		FROM
+			commodities_parameter c
+		WHERE 1=1
+			<if test="id != null">
+				AND c.id = #{id}
+			</if>
+			<if test="commoditiesId != null">
+				AND c.commodities_id = #{commoditiesId}
+			</if>
+			<if test="standParamId != null">
+				AND c.stand_param_id = #{standParamId}
+			</if>
+			<if test="standValueId != null">
+				AND c.stand_value_id = #{standValueId}
+			</if>
+			<if test="ttype != null">
+				AND c.ttype = #{ttype}
+			</if>
+			<if test="paramValue != null and paramValue !=''">
+				AND c.param_value = #{paramValue}
+			</if>
+   </select>
+   
+   <select id="getByCommoditiesId" parameterType="Long" resultMap="BaseResultMap">
+   		SELECT
+			c.*
+		FROM
+			commodities_parameter c
+		WHERE c.commodities_id = #{commoditiesId}
+  </select>
+
+</mapper>

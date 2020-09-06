@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.MallCatalogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.MallCatalogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="is_display" jdbcType="BIT" property="isDisplay" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="tree_depth" jdbcType="INTEGER" property="treeDepth" />
+    <result column="is_bidding" jdbcType="BIT" property="isBidding" />
+    <result column="mobile_img" jdbcType="VARCHAR" property="mobileImg" />
+    <result column="img_format" jdbcType="VARCHAR" property="imgFormat" />
+    <result column="display_platform" jdbcType="VARCHAR" property="displayPlatform" />
+  </resultMap>
+  
+  <resultMap type="www.tonghao.mall.entity.MallCatalogs" id="RelationResultMap" extends="BaseResultMap">
+	<association column="parent_id"  property="parent" select="www.tonghao.mall.mapper.MallCatalogsMapper.findById" />
+  	<collection column="id" property="platformCatalogList" 
+  		javaType="ArrayList" ofType="www.tonghao.service.common.entity.PlatformCatalogs"
+  		select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.findListByMallCatalogId"/>
+  </resultMap>
+  
+  <!-- 通用查询结果列-->
+  <sql id="Base_Column_List">
+		tb.id,
+		tb.created_at,
+		tb.updated_at,
+		tb.parent_id,
+		tb.name,
+		tb.priority,
+		tb.is_display,
+		tb.icon,
+		tb.tree_depth,
+		tb.is_bidding,
+		tb.mobile_img,
+		tb.img_format,
+		tb.display_platform
+  </sql>
+  
+  <select id="findByPlatformCatalogId" parameterType="java.lang.Long" resultMap="RelationResultMap">
+  	select <include refid="Base_Column_List" />
+	  from mall_catalogs as tb where tb.platform_catalogs_id = #{platformCatalogId} limit 1
+  </select>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="RelationResultMap">
+	 select <include refid="Base_Column_List" />
+	  from mall_catalogs as tb WHERE tb.id = #{id}
+ </select>
+ 
+ <select id="findListByEntity" parameterType="www.tonghao.mall.entity.MallCatalogs" resultMap="RelationResultMap">
+ 	select <include refid="Base_Column_List" />
+	  from mall_catalogs as tb
+	  <where>
+	  	<if test="isDisplay!=null">
+	  		tb.is_display = #{isDisplay}
+	  	</if>
+	  </where>
+	 order by tb.priority asc
+ </select>
+ 
+ <select id="findAllUsableList" resultMap="RelationResultMap">
+ 	select <include refid="Base_Column_List" />
+	  from  mall_catalogs as tb 
+	  where tb.is_display = 1
+ </select>
+ 
+ <!-- 查询供应商品目节点列表 -->
+ <select id="getSupplierCatalogsList" parameterType="java.lang.Long" resultMap="RelationResultMap">
+ 	select <include refid="Base_Column_List"/> FROM platform_catalogs pc INNER JOIN mall_catalogs as tb ON pc.mall_catalog_id = tb.id where pc.id 
+	in(select DISTINCT(spc.catalogs_id) from supplier_protocol_catalog as spc where spc.supplier_id=#{supplierId})
+	GROUP BY tb.id ORDER BY pc.priority asc
+ </select>
+ 
+ <select id="findAllUsableBiddingList" resultMap="BaseResultMap">
+ 	select <include refid="Base_Column_List" />
+	  from  mall_catalogs as tb 
+	  where tb.is_display = 1 and tb.is_bidding = 1
+ </select>
+ 
+ <select id="findBidingPlatformCatalogsByMcid" parameterType="java.lang.Long" resultType="www.tonghao.service.common.entity.PlatformCatalogs">
+ 	select tb.id,tb.name,tb.priority,tb.catalog_id,tb.is_parent,tb.mobile_img,tb.img_format from platform_catalogs as tb  
+  	where tb.mall_catalog_id = #{mallCatalogId}
+    and CONCAT(',',tb.systems) like '%,mall-bid%'
+ </select>
+ 
+  <select id="getMallCatalogsByActivity" resultMap="BaseResultMap">
+ 	SELECT DISTINCT
+		pmc.*
+	FROM
+		activity_product ap
+	LEFT JOIN products p ON ap.product_id = p.id
+	LEFT JOIN suppliers s ON p.supplier_id = s.id
+	LEFT JOIN platform_catalogs pc ON pc.id = p.catalog_id
+	LEFT JOIN mall_catalogs mc ON pc.mall_catalog_id = mc.id
+	LEFT JOIN mall_catalogs pmc ON mc.parent_id = pmc.id
+	<if test="orgId != null">
+		LEFT JOIN org_supplier os on os.supplier_id = p.supplier_id
+	</if>
+	WHERE
+		ap.activity_id = #{activityId}
+	AND p.`status` = 3
+	AND p.is_delete = 0
+	AND s.is_delete = 0
+	AND s.`status` = 1
+	AND pmc.parent_id IS NULL
+	<![CDATA[
+		AND (
+			SELECT
+				count(1)
+			FROM
+				suppliers AS s2
+			INNER JOIN supplier_protocol AS sp ON s2.id = sp.supplier_id
+			INNER JOIN protocol AS p ON sp.protocol_id = p.id
+			WHERE
+				sp.`status` = 1
+			AND p.is_delete = 0
+			AND p.`status` = 2
+			AND NOW() >= p.start_time
+			AND NOW() <= p.end_time
+			AND s2.id = s.id
+		) > 0
+	]]>
+	<if test="orgId != null">
+  		and os.org_id = #{orgId}
+  	</if>
+	ORDER BY pmc.priority
+ </select>
+ 
+ <select id="selectMallCatalogsByProducts" resultMap="BaseResultMap">
+ 	SELECT DISTINCT
+		c.*
+	FROM
+		mall_catalogs mc
+	RIGHT JOIN (
+		SELECT
+			p.catalog_id,
+			pc.mall_catalog_id
+		FROM
+			products p
+		INNER JOIN platform_catalogs pc ON p.catalog_id = pc.id
+		INNER JOIN protocol t ON p.protocol_id = t.id
+		INNER JOIN supplier_protocol sp ON p.protocol_id = sp.protocol_id
+		WHERE
+			p. STATUS = 3
+		AND p.is_delete = 0
+		AND sp.`status` = 1
+		AND (
+			now() BETWEEN t.start_time AND t.end_time
+		)
+		GROUP BY
+			p.catalog_id,
+			pc.mall_catalog_id
+	) tt ON tt.mall_catalog_id = mc.id
+	LEFT JOIN mall_catalogs c ON c.id = mc.parent_id
+	ORDER BY
+		c.priority
+ </select>
+</mapper>

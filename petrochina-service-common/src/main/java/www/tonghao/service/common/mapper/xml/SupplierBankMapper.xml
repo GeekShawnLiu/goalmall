@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SupplierBankMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.SupplierBank">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="opening_bank" jdbcType="VARCHAR" property="openingBank" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account_num" jdbcType="VARCHAR" property="accountNum" />
+    <result column="areas_id" jdbcType="BIGINT" property="areasId" />
+    <result column="sub_branch_name" jdbcType="VARCHAR" property="subBranchName" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectBySupplierId" parameterType="Long" resultMap="BaseResultMap">
+  	select * from supplier_bank where supplier_id = #{supplierId} order by created_at desc limit 1
+  </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.RolePermissionsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.RolePermissions">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
+  </resultMap>
+ 
+ 	<!-- 表中所有列 -->
+  <sql id="Base_Column_List">
+    	p.id as id,
+      	p.created_at as createdAt,
+      	p.updated_at as updatedAt,
+      	p.name as name,
+      	p.parent_id as parentId,
+      	p.tree_depth as treeDepth,
+      	p.type as type,
+      	p.priority as priority,
+      	p.icon_name as iconName,
+      	p.perms as perms,
+      	p.is_delete as isDelete,
+      	p.is_frozen as isFrozen,
+      	p.tree_ids as treeIds,
+      	p.tree_names as treeNames
+  </sql>
+ 
+  <!-- 获取权限菜单以及是否关联角色 -->
+  <select id="getAssignPermission" parameterType="long" resultType="www.tonghao.service.common.entity.Permissions">
+      SELECT 
+      	 <include refid="Base_Column_List"/>,
+      	(case  when rp.role_id = #{roleId} then 'true' else 'false'  end) as checked 
+      FROM permissions p 
+		LEFT JOIN role_permissions rp ON p.id = rp.permission_id AND rp.role_id = #{roleId}
+	  WHERE
+		p.is_frozen = '0'
+		AND p.is_delete = '0'
+		ORDER BY p.tree_depth,p.priority
+  </select>
+  
+   <!-- 获取角色关联的权限菜单 -->
+  <select id="getPermissionByRoleId" parameterType="long" resultType="www.tonghao.service.common.entity.Permissions">
+      SELECT 
+      	<include refid="Base_Column_List"/>
+      FROM permissions p 
+		LEFT JOIN role_permissions rp ON p.id = rp.permission_id
+	  WHERE
+		p.is_frozen = '0'
+		AND p.is_delete = '0'
+		AND rp.role_id = #{roleId}
+		ORDER BY p.tree_depth,p.priority
+  </select>
+  
+  <!-- 批量插入角色权限关联 -->
+  <insert id="insertBatch">
+    INSERT INTO role_permissions
+            (created_at, updated_at, role_id, permission_id)
+    VALUES
+    <foreach collection ="permissionIdArry" item="permissionId" separator =",">
+         (sysdate(), sysdate(), #{roleId}, #{permissionId})
+    </foreach >
+  </insert>
+</mapper>

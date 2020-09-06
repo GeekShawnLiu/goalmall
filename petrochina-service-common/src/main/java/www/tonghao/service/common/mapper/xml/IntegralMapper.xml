@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.IntegralMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Integral">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="confirm_quota" jdbcType="DECIMAL" property="confirmQuota" />
+    <result column="grant_quota" jdbcType="DECIMAL" property="grantQuota" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="startAt" jdbcType="VARCHAR" property="startAt" />
+    <result column="end_at" jdbcType="VARCHAR" property="endAt" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <resultMap id="IntegralAndOrgMap" type="www.tonghao.service.common.entity.Integral" extends="BaseResultMap">
+  	<collection column="id" javaType="ArrayList" ofType="www.tonghao.service.common.entity.IntegralOrg" property="integralOrgList" select="www.tonghao.service.common.mapper.IntegralOrgMapper.selectIntegralOrg" />
+  </resultMap>
+  
+  <select id="selectList" parameterType="www.tonghao.service.common.entity.Integral" resultMap="IntegralAndOrgMap">
+  	SELECT
+		t1.id,
+		t1.name,
+		t1.description,
+		t1.total,
+		t1.confirm_quota,
+		t1.grant_quota,
+		t1.created_at,
+		t2.name as activityName,
+		t2.start_at as activityStartAt,
+		t2.end_at as activityEndAt,
+		t3.name as orgName
+	FROM
+		integral t1
+	LEFT JOIN activity t2 ON t2.id = t1.activity_id
+	LEFT JOIN organization t3 ON t3.id = t1.org_id
+	where
+		t1.is_delete = 0
+	<if test="name !=null and name !=''">
+		and t1.name like CONCAT ('%',#{name},'%')
+	</if>
+	<if test="activityName !=null and activityName !=''">
+		and t2.name like CONCAT ('%',#{activityName},'%')
+	</if>
+	<if test="activityStartAt !=null and activityStartAt !=''">
+		and t2.start_at &gt;= #{activityStartAt}
+	</if>
+	<if test="activityEndAt !=null and activityEndAt !=''">
+		and t2.end_at &lt;= #{activityEndAt}
+	</if>
+	<if test="isIntegralUser !=null">
+		<if test="isIntegralUser == 1">
+			and t1.grant_quota &gt; 0
+		</if>
+		<if test="isIntegralUser == 2">
+			and t1.grant_quota =0
+		</if>
+	</if>
+	order by t2.start_at desc
+  </select>
+  
+  <select id="selectByUsableActivity" resultMap="IntegralAndOrgMap">
+  	SELECT
+		t1.*
+	FROM
+		integral t1
+	LEFT JOIN activity t2 ON t2.id = t1.activity_id
+	WHERE
+		t2.is_offline = 0
+	AND NOW() &gt;= t2.online_at
+	AND NOW() &gt;= t2.start_at
+	AND NOW() &lt; t2.end_at
+  </select>
+</mapper>

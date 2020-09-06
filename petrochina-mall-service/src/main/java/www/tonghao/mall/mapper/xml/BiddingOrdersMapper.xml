@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.BiddingOrdersMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.BiddingOrders">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bid_name" jdbcType="VARCHAR" property="bidName" />
+    <result column="project_num" jdbcType="VARCHAR" property="projectNum" />
+    <result column="plan_id" jdbcType="BIGINT" property="planId" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="bid_type" jdbcType="INTEGER" property="bidType" />
+    <result column="pay_way" jdbcType="INTEGER" property="payWay" />
+    <result column="is_subpackage" jdbcType="INTEGER" property="isSubpackage" />
+    <result column="is_first" jdbcType="INTEGER" property="isFirst" />
+    <result column="cycle" jdbcType="VARCHAR" property="cycle" />
+    <result column="receiving_address" jdbcType="VARCHAR" property="receivingAddress" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="update_at" jdbcType="VARCHAR" property="updateAt" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" /> 
+    <result column="clause" jdbcType="VARCHAR" property="clause" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="others" jdbcType="VARCHAR" property="others" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="budget_in" jdbcType="DECIMAL" property="budgetIn" />
+    <result column="budget_finance" jdbcType="DECIMAL" property="budgetFinance" /> 	
+    <result column="budget_self" jdbcType="DECIMAL" property="budgetSelf" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="bidding_endtime" jdbcType="VARCHAR" property="biddingEndtime" />
+    <result column="subpackage_num" jdbcType="VARCHAR" property="subpackageNum" />
+    <result column="bidding_time" jdbcType="INTEGER" property="biddingTime" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
+     <result column="contract_path" jdbcType="VARCHAR" property="contractPath" />
+     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+     <result column="bidding_type" jdbcType="INTEGER" property="biddingType" />
+   <collection column="id" property="biddingOrdersItems" javaType="ArrayList" ofType="www.tonghao.mall.entity.BiddingOrdersItems" select="www.tonghao.mall.mapper.BiddingOrdersItemsMapper.getByOrderId"/>
+   <collection column="id" property="biddingOrdersSuppliers" javaType="ArrayList" ofType="www.tonghao.mall.entity.BiddingOrdersSuppliers" select="www.tonghao.mall.mapper.BiddingOrdersSuppliersMapper.getSuppliersByOrderId"/>
+  </resultMap>
+  
+<!--    <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.BiddingOrders" extends="BaseResultMap" >
+   <association column="plan_id" property="plan" jdbcType="BIGINT"  select="org.spe.mapper.PlanMapper.getPlanById"/>
+	<association column="org_id" property="organization" jdbcType="BIGINT" select="org.spe.mapper.OrganizationMapper.selectByPrimaryKey"/>
+  </resultMap> -->
+  <select id="find" parameterType="Map" resultMap="BaseResultMap">
+      SELECT * FROM bidding_orders b   where 1=1
+      <if test="planCode != null and planCode !=''">
+        AND b.plan_code = #{planCode}
+      </if>
+        <if test="bidName != null and bidName !=''">
+        AND b.bid_name  LIKE CONCAT('%',#{bidName},'%')
+      </if>
+       <if test="projectNum != null and projectNum !=''">
+        AND b.project_num  =#{projectNum}
+      </if>
+      <if test="userId != null">
+        AND b.user_id = #{userId}
+      </if>
+     <if test="status != null">
+        AND b.status &lt;&gt; #{status} 
+      </if> 
+      <if test="biddingEndtime != null and biddingEndtime !=''">
+        AND b.bidding_endtime  LIKE CONCAT('%',#{biddingEndtime},'%')
+     </if> 
+      <if test="orderIds != null">
+      and b.id in
+      <foreach collection="orderIds" separator="," item="item" open="(" close=")">
+     #{item}
+  </foreach>
+  </if>
+      order by b.create_at desc
+  </select>
+  
+  <select id="findStatus" parameterType="Map" resultMap="BaseResultMap">
+      SELECT * FROM bidding_orders b   where 1=1
+      <if test="planCode != null and planCode !=''">
+        AND b.plan_code = #{planCode}
+      </if>
+        <if test="bidName != null and bidName !=''">
+        AND b.bid_name  LIKE CONCAT('%',#{bidName},'%')
+      </if>
+       <if test="projectNum != null and projectNum !=''">
+        AND b.project_num  =#{projectNum}
+      </if>
+      <if test="userId != null">
+        AND b.user_id = #{userId}
+      </if>
+     <if test="status != null">
+        AND b.status=#{status}
+      </if> 
+     <if test="biddingEndtime != null and biddingEndtime !=''">
+        AND b.bidding_endtime  LIKE CONCAT('%',#{biddingEndtime},'%')
+     </if> 
+      <if test="orderIds != null">
+      AND b.id in
+      <foreach collection="orderIds" separator="," item="id" open="(" close=")">
+     #{id}
+  </foreach>
+  </if>
+      order by b.create_at desc
+  </select>
+  
+  
+  <select id="findPurchase" parameterType="Map" resultMap="BaseResultMap">
+  SELECT * FROM  bidding_orders b   LEFT JOIN plan p ON b.plan_id = p.id   LEFT JOIN plan_item pi on p.id=pi.plan_id   LEFT JOIN organization o on o.id=b.org_id
+		where 1=1 
+      <if test="planCode != null and planCode != ''">
+	      and p.plan_code=#{planCode}
+      </if>
+  
+  </select>
+  
+  
+  <select id="findPlan" parameterType="Map" resultMap="BaseResultMap">
+  select * from bidding_orders  where 1=1
+  <if test="projectName != null and projectName != ''" >
+  and  bid_name LIKE CONCAT('%',#{projectName},'%') 
+  </if>
+  <if test="projectNum != null and projectNum != ''">
+  and project_num = #{projectNum}
+  </if>
+  <if test="planCode != null and planCode != ''">
+  and plan_code=#{planCode}
+  </if>
+  <if test="endTime != null and endTime != ''">
+  and end_time=#{endTime}
+  </if>
+  <if test="status != null and status != ''">
+  and status=#{status}
+  </if>
+  <if test="userId != null and userId != ''">
+  and user_id=#{userId}
+  </if>
+   order by create_at DESC
+  </select>
+  
+  <select id="getById" parameterType="long" resultMap="BaseResultMap">
+  	SELECT * from bidding_orders b 
+  where 1=1
+  <if test="id != null and id != ''">
+  and b.id=#{id}
+  </if>
+  </select>
+  <select id="getByIds" parameterType="long" resultMap="BaseResultMap">
+  	SELECT * from bidding_orders b 
+  where 1=1
+  <if test="id != null and id != ''">
+  and b.id=#{id}
+  </if>
+  </select>
+  
+  <select id="selectMaxCode" parameterType="String" resultType="String">
+  select max(right(project_num,5)) from bidding_orders  where project_num like '%${code}%'
+  </select>
+  
+  
+  <update id="updateStatusByID" parameterType="Map">
+  update bidding_orders set 
+  <if test="status != null">
+  status=#{status} ,
+  </if>
+   <if test="reason != null and reason != ''">
+    reason=#{reason}
+  </if>
+  where id=#{id}
+  </update>
+  
+  <update id="chooseSuppliers" parameterType="Map">
+  update bidding_orders set  status=0,
+   <if test="supplierId != null">
+    supplier_id = #{supplierId},
+  </if>
+  <if test="isFirst != null">
+    is_first = #{isFirst},
+  </if>
+    total_price = #{totalPrice},
+    reason = #{reason},status=0  where  id= #{id}
+  </update>
+  
+  <select id="countBiddingTotal" resultType="BigDecimal">
+  select SUM(total_price) from bidding_orders where `status`=0 
+  </select>
+</mapper>
+
+	

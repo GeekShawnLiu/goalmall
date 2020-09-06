@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.BillMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.Bill">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="begin_at" jdbcType="VARCHAR" property="beginAt" />
+    <result column="end_at" jdbcType="VARCHAR" property="endAt" />
+    <result column="purchaser_uid" jdbcType="BIGINT" property="purchaserUid" />
+    <result column="purchaser_name" jdbcType="VARCHAR" property="purchaserName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+     <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.Bill" extends="BaseResultMap">
+  	<collection column="id" property="details" javaType="ArrayList" ofType="www.tonghao.mall.entity.BillDetail" select="www.tonghao.mall.mapper.BillDetailMapper.findListByBillId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.begin_at,
+  	tb.end_at,
+  	tb.purchaser_uid,
+  	tb.purchaser_name,
+  	tb.status,
+  	tb.title,
+  	tb.total_amount
+  </sql>
+  <select id="findListByEntity" parameterType="www.tonghao.mall.entity.Bill" resultMap="ExtResultMap">
+  	select tb.* from bill as tb
+  	 <where>
+  	 	<if test="purchaserUid!=null">
+  	 		and tb.purchaser_uid = #{purchaserUid}
+  	 	</if>
+  	 </where>
+  </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.IntegralOrgMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.IntegralOrg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="integral_id" jdbcType="BIGINT" property="integralId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectIntegralOrg" parameterType="Long" resultType="www.tonghao.service.common.entity.IntegralOrg">
+  	SELECT
+		t2.id,
+		t1.integral_id as integralId,
+		t2.name as orgName
+	FROM
+		integral_org t1
+	LEFT JOIN organization t2 ON t2.id  = t1.org_id
+	where t1.integral_id = #{integralId}
+  </select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ActivityOrgMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ActivityOrg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+  </resultMap>
+  
+  <select id="selectByActivityId" parameterType="Long" resultMap="BaseResultMap">
+  	select
+  		id, org_id, activity_id, created_at, updated_at
+  	from 
+  		activity_org
+  	where
+  		activity_id = #{activityId}
+  </select>
+  
+  <select id="selectOrgByActivityId" parameterType="Long" resultType="www.tonghao.service.common.entity.ActivityOrg">
+  	SELECT
+		t1.id,
+		t1.org_id as orgId,
+		t1.activity_id as activityId,
+		t2.name as orgName
+	FROM
+		activity_org t1
+	LEFT JOIN organization t2 ON t2.id = t1.org_id
+	where
+		activity_id = #{activityId}
+  </select>
+</mapper>

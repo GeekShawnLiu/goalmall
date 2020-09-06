@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductParameterMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductParameter">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="stand_param_id" jdbcType="VARCHAR" property="standParamId" />
+    <result column="stand_value_id" jdbcType="VARCHAR" property="standValueId" />
+    <result column="ttype" jdbcType="INTEGER" property="ttype" />
+    <result column="param_value" jdbcType="VARCHAR" property="paramValue" />
+    <result column="platform_catalogs_id" jdbcType="BIGINT" property="platformCatalogsId" />
+    <result column="position" jdbcType="REAL" property="position" />
+  </resultMap>
+   
+  <!-- 查询产品参数 -->
+  <select id="getByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT 
+			p.* 
+		FROM product_parameter p 
+		WHERE p.product_id = #{productId}
+  </select>
+  
+   <select id="getRelationByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT 
+			pp.*,p.is_key as 'parameter.isKey',p.id as 'parameter.id'
+		FROM product_parameter pp
+		INNER JOIN parameter AS p ON pp.stand_param_id = p.stand_param_id
+		WHERE pp.product_id = #{productId}
+  </select>
+  
+  <select id="findStandID" parameterType="java.lang.Long" resultType="String">
+    select  DISTINCT stand_param_id from product_parameter where platform_catalogs_id=#{catalogId}
+    </select>
+  <select id="findListByProductIds" resultMap="BaseResultMap">
+  	select tb.id,tb.product_id,tb.stand_param_id,tb.param_value,tb.stand_value_id from product_parameter as tb where tb.product_id in
+  	<foreach collection="productIds" separator="," item="item" open="(" close=")">
+  		#{item}	
+  	</foreach>
+  </select>
+  
+   <select id="selectProduct" parameterType="map" resultType="Long">
+  SELECT DISTINCT product_id from product_parameter where platform_catalogs_id in
+  	<foreach collection="platformCatalogsId" separator="," item="item" open="(" close=")">
+  		#{item}	
+  	</foreach>
+	  <if test="ids != null">
+	  <foreach collection="ids" item="id">
+	  AND product_id in
+	( SELECT DISTINCT product_id from product_parameter WHERE param_value=#{id} )
+	  </foreach>
+	  </if>
+  </select>
+
+</mapper>

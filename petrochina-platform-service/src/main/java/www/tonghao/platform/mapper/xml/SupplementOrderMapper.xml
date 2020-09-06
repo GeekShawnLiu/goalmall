@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.SupplementOrderMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.SupplementOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="consignee_addr" jdbcType="VARCHAR" property="consigneeAddr" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="courier_name" jdbcType="VARCHAR" property="courierName" />
+    <result column="courier_sn" jdbcType="VARCHAR" property="courierSn" />
+    <result column="electricity_order_sn" jdbcType="VARCHAR" property="electricityOrderSn" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="price_total" jdbcType="DECIMAL" property="priceTotal" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.platform.entity.SupplementOrder" extends="BaseResultMap">
+  	<collection column="id" property="supplementOrderItemList" javaType="ArrayList"
+  		ofType="www.tonghao.platform.entity.SupplementOrderItem" select="www.tonghao.platform.mapper.SupplementOrderItemMapper.findBySupplementOrderId"/>
+  </resultMap>
+  
+  <select id="selectById" resultMap="ExtResultMap" parameterType="Long">
+  	select * from supplement_order where is_delete = 0 and id = #{id}
+  </select>
+  
+  <select id="findByMap" parameterType="Map" resultMap="ExtResultMap">
+  	select DISTINCT so.* from supplement_order so inner join supplement_order_item soi on soi.supplement_order_id = so.id 
+  	where soi.is_delete = 0 and so.is_delete = 0
+  	<if test="sn != null and sn != ''">
+  		and locate(#{sn}, so.sn) &gt; 0
+  	</if>
+  	<if test="productName != null and productName != ''">
+  		and locate(#{productName}, soi.product_name) &gt; 0
+  	</if>
+  	<if test="userName != null and userName != ''">
+  		and locate(#{userName}, so.user_name) &gt; 0
+  	</if>
+  	<if test="consigneeName != null and consigneeName != ''">
+  		and locate(#{consigneeName}, so.consignee_name) &gt; 0
+  	</if>
+  	<if test="supplierId != null">
+  		and so.supplier_id = #{supplierId}
+  	</if>
+  	<if test="createdAt != null">
+  		and so.created_at &gt;= #{createdAt}
+  	</if>
+  	order by created_at desc
+  </select>
+</mapper>

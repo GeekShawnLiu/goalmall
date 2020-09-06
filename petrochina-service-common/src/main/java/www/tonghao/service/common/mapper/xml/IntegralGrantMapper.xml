@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.IntegralGrantMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.IntegralGrant">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="integral_id" jdbcType="BIGINT" property="integralId" />
+    <result column="integral_name" jdbcType="VARCHAR" property="integralName" />
+    <result column="integral_user_id" jdbcType="BIGINT" property="integralUserId" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_realname" jdbcType="VARCHAR" property="userRealname" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="integral_num" jdbcType="DECIMAL" property="integralNum" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="submit_audit" jdbcType="VARCHAR" property="submitAudit" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="audit_at" jdbcType="VARCHAR" property="auditAt" />
+    <result column="batch" jdbcType="VARCHAR" property="batch" />
+  </resultMap>
+  
+  <select id="selectBatchByToday" resultType="www.tonghao.service.common.entity.IntegralGrant">
+  	SELECT
+		t1.batch,
+		t1.today,
+		MAX(t1.batchNum) as batchNum
+	FROM
+		(
+			SELECT
+				batch,
+				SUBSTRING(batch,1,8) as today,
+				SUBSTRING(batch,9) as batchNum
+			FROM
+				integral_grant
+		) t1
+	WHERE
+		t1.today = DATE_FORMAT(now(),'%Y%m%d')
+  </select>
+  
+ <select id="selectList" resultType="www.tonghao.service.common.entity.IntegralGrant">
+ 	SELECT
+		t1.id,
+		t1.integral_id as integralId,
+		t1.integral_name as integralName,
+		t1.integral_user_id as integralUserId,
+		t1.activity_id as activityId,
+		t1.activity_name as activityName,
+		t1.user_id as userId,
+		t1.user_realname as userRealname,
+		t1.org_id as orgId,
+		t1.org_name as orgName,
+		t1.integral_num as integralNum,
+		t1.created_at as createdAt,
+		t1.state,
+		t1.batch,
+		t2.email,
+		t2.mobile,
+		t2.login_name as loginName
+	FROM
+		integral_grant t1
+	LEFT JOIN users t2 ON t2.id = t1.user_id
+	where
+		t1.is_delete = 0
+	<if test="orgName !=null and orgName !=''">
+		and t1.org_name like concat('%', #{orgName}, '%')
+	</if>
+	<if test="state !=null">
+		and t1.state = #{state}
+	</if>
+	<if test="activityName !=null and activityName !=''">
+		and t1.activity_name like concat('%', #{activityName}, '%')
+	</if>
+	<if test="integralName !=null and integralName !=''">
+		and t1.integral_name like concat('%', #{integralName}, '%')
+	</if>
+	<if test="batch !=null and batch !=''">
+		and t1.batch like concat('%', #{batch} ,'%')
+	</if>
+	<if test="userRealname !=null and userRealname !=''">
+		and t1.user_realname like concat('%', #{userRealname}, '%')
+	</if>
+	<if test="email !=null and email !=''">
+		and t2.email = #{email}
+	</if>
+	<if test="mobile !=null and mobile !=''">
+		and t2.mobile like concat('%', #{mobile} ,'%')
+	</if>
+	<if test="loginName !=null and loginName !=''">
+		and t2.login_name like concat('%', #{loginName} ,'%')
+	</if>
+	<if test="notState !=null">
+		and t1.state != #{notState}
+	</if>
+	<if test="orderBySubmitAudit !=null">
+		order by t1.submit_audit desc
+	</if>
+	<if test="orderBySubmitAudit ==null">
+		order by t1.created_at desc
+	</if>
+ </select>
+</mapper>

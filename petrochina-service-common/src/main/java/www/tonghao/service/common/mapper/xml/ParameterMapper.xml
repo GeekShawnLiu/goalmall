@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ParameterMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Parameter">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="stand_param_id" jdbcType="VARCHAR" property="standParamId" />
+    <result column="is_key" jdbcType="VARCHAR" property="isKey" />
+    <result column="is_sellable" jdbcType="VARCHAR" property="isSellable" />
+    <result column="ttype" jdbcType="INTEGER" property="ttype" />
+    <result column="position" jdbcType="REAL" property="position" />
+    <result column="catalogs_id" jdbcType="BIGINT" property="catalogsId" />
+  </resultMap>
+  
+  <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Parameter" extends="BaseResultMap" >
+  	<collection column="stand_param_id" property="parameterItems" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ParameterItem" select="www.tonghao.service.common.mapper.ParameterItemMapper.getByStandParamId"/>
+  </resultMap>
+  
+  <select id="getParamterByCatalogsId" parameterType="Long" resultType="www.tonghao.service.common.entity.ParameterItem">
+    select p.name,p.is_key as isKey,p.is_sellable as isSellable,p.ttype,p.position,it.name as itemName,it.position as itemPosition  from parameter p LEFT JOIN parameter_item it on p.id=it.parameter_id
+    where 1=1 and p.catalogs_id=#{catalogsId}
+  </select>
+  
+  <!-- 根据财政品目id获取对应品目参数及对应参数值 -->
+  <select id="getParameterJoinByCatalogId" parameterType="Long" resultMap="RelationResultMap">
+  	SELECT * FROM `parameter` WHERE catalogs_id = #{catalogId} ORDER BY position
+  </select>
+  
+  <delete id="deleteParameterBycatalogsId" parameterType="Long">
+     delete from parameter where catalogs_id=#{catalogsId}
+  </delete>
+  
+  <select id="getNameByStand" parameterType="String" resultMap="RelationResultMap">
+  		select * from parameter pr 
+  		where pr.stand_param_id=#{standParamId}
+  </select>
+  
+  <select id="selectBycatalogID" parameterType="Long" resultMap="RelationResultMap">
+  select * from parameter where catalogs_id=#{catalogID} and ttype= 1 and is_key= 'true' 
+</select>
+
+  <select id="getOneByStandParamId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  		select tb.id,tb.name,tb.is_key from parameter tb 
+  		where tb.stand_param_id=#{standParamId} limit 1
+  </select>
+</mapper>

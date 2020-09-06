@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.CommoditiesMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Commodities">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="sales_num" jdbcType="INTEGER" property="salesNum" />
+    <result column="sales_total" jdbcType="DECIMAL" property="salesTotal" />
+    <result column="mall_num" jdbcType="INTEGER" property="mallNum" />
+    <result column="protocol_num" jdbcType="INTEGER" property="protocolNum" />
+    <result column="min_price" jdbcType="INTEGER" property="minPrice" />
+  </resultMap>
+  
+  <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Commodities" extends="BaseResultMap" >
+  	<collection column="id" property="commoditiesParameters" javaType="ArrayList" ofType="www.tonghao.service.common.entity.CommoditiesParameter" select="www.tonghao.service.common.mapper.CommoditiesParameterMapper.getByCommoditiesId"/>
+  </resultMap>
+  
+  <!-- 根据条件查询，包括关联表 -->
+  <select id="find" parameterType="www.tonghao.service.common.entity.Commodities" resultMap="RelationResultMap">
+	select *
+	from commodities tb where 1=1
+	<if test="id != null">
+		AND tb.id = #{id}
+	</if>
+	<if test="brandId != null">
+		AND tb.brand_id = #{brandId}
+	</if>
+	<if test="catalogId != null">
+		AND tb.catalog_id = #{catalogId}
+	</if>
+	<if test="model != null and model != ''">
+		AND tb.model = #{model}
+	</if>
+  </select>
+  
+  <!-- 根据条件查询,返回聚合商品数量 -->
+  <select id="findCond" parameterType="www.tonghao.service.common.entity.Commodities" resultMap="BaseResultMap">
+	SELECT DISTINCT
+		c.*,
+		(SELECT min(p.price) FROM products p WHERE p.commodities_id = c.id AND p.is_delete = 0) min_price,
+		(SELECT COUNT(p.id) FROM products p JOIN protocol pr ON p.protocol_id = pr.id WHERE	p.commodities_id = c.id AND p.is_delete = 0 AND pr.types = 1) mall_num,
+	  	(SELECT COUNT(p.id) FROM products p JOIN protocol pr ON p.protocol_id = pr.id WHERE	p.commodities_id = c.id AND p.is_delete = 0 AND pr.types != 1) protocol_num
+	FROM
+		`commodities` c
+	LEFT JOIN products p ON c.id = p.commodities_id
+	WHERE 1=1
+	<if test="catalogId != null">
+		AND c.catalog_id = #{catalogId}
+	</if>
+	<if test="model != null and model != ''">
+		AND c.model LIKE CONCAT('%',#{model},'%') 
+	</if>
+	ORDER BY c.created_at desc
+  </select>
+</mapper>

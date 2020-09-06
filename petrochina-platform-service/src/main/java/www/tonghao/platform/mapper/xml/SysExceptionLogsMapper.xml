@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.SysExceptionLogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.SysExceptionLogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="controller" jdbcType="VARCHAR" property="controller" />
+    <result column="controller_method" jdbcType="VARCHAR" property="controllerMethod" />
+    <result column="http_method" jdbcType="VARCHAR" property="httpMethod" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="local_ip" jdbcType="VARCHAR" property="localIp" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="http_url" jdbcType="VARCHAR" property="httpUrl" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="params" jdbcType="LONGVARCHAR" property="params" />
+    <result column="stack_trace" jdbcType="LONGVARCHAR" property="stackTrace" />
+  </resultMap>
+</mapper>

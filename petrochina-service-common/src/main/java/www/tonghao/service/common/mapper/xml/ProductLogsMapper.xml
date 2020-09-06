@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductLogsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductLogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="before_value" jdbcType="VARCHAR" property="beforeValue" />
+    <result column="after_value" jdbcType="VARCHAR" property="afterValue" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="creater_uid" jdbcType="BIGINT" property="createrUid" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+	tb.created_at,
+	tb.updated_at,
+	tb.product_id,
+	tb.type,
+	tb.before_value,
+	tb.after_value
+  </sql>
+  
+  <select id="findListByEntity" parameterType="www.tonghao.service.common.entity.ProductLogs" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from product_logs as tb
+  	<where>
+  		<if test="productId!=null">
+  			and tb.product_id = #{productId}
+  		</if>
+  		<if test="type!=null">
+  			and tb.type = #{type}
+  		</if>
+  		<if test="queryfilter!=null">
+ 		<![CDATA[
+  			<if test="queryfilter['startDate']!=null and queryfilter['startDate']!=''">
+  				and tb.created_at >= #{queryfilter.startDate}
+  			</if>
+  			<if test="queryfilter['endDate']!=null and queryfilter['endDate']!=''">
+  				and tb.created_at <= #{queryfilter.endDate}
+  			</if>
+ 		]]>
+ 		<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
+ 			order by #{queryfilter.orderByCondition}
+ 		</if>
+  		</if>
+  	</where>
+  </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.FloorBrandMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.FloorBrand">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="brand_logo" jdbcType="VARCHAR" property="brandLogo" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="floor_id" jdbcType="BIGINT" property="floorId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.brand_id,
+  	tb.brand_name,
+  	tb.brand_logo,
+  	tb.sort,
+  	tb.link_url,
+  	tb.floor_id
+  </sql>
+  
+  <select id="selectByFloorId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	select <include refid = "Base_Column_List" /> from floor_brand as tb where tb.floor_id= #{floorId}
+  </select>
+  
+  <delete id="deleteByFloorId" parameterType="java.lang.Long">
+  	delete from floor_brand where floor_id = #{floorId} 
+  </delete>
+</mapper>

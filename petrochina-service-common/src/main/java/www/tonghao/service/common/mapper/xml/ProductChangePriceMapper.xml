@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductChangePriceMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductChangePrice">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="productId" jdbcType="BIGINT" property="product_id" />
+    <result column="marketPrice" jdbcType="DECIMAL" property="market_price" />
+    <result column="protocolPrice" jdbcType="DECIMAL" property="protocol_price" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="newMarketPrice" jdbcType="DECIMAL" property="new_market_price" />
+    <result column="newProtocolPrice" jdbcType="DECIMAL" property="new_protocol_price" />
+    <result column="newPrice" jdbcType="DECIMAL" property="new_price" />
+    <result column="createAt" jdbcType="VARCHAR" property="create_at" />
+  </resultMap>
+  
+</mapper>

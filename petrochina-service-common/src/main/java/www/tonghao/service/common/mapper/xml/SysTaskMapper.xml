@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.SysTaskMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.SysTask">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="task_remark" jdbcType="VARCHAR" property="taskRemark" />
+    <result column="job_class" jdbcType="VARCHAR" property="jobClass" />
+    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="is_enable" jdbcType="SMALLINT" property="isEnable" />
+    <result column="job_time" jdbcType="TIMESTAMP" property="jobTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+</mapper>

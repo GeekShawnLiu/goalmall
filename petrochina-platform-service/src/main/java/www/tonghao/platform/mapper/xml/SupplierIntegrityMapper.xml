@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.SupplierIntegrityMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.SupplierIntegrity">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="integrity_id" jdbcType="BIGINT" property="integrityId" />
+    <result column="deducting_score" jdbcType="DECIMAL" property="deductingScore" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="integrity_title" jdbcType="VARCHAR" property="integrityTitle" />
+    <result column="is_transaction" jdbcType="INTEGER" property="isTransaction" />
+    <result column="create_at" jdbcType="VARCHAR" property="createAt" />
+    <result column="recover_at" jdbcType="VARCHAR" property="recoverAt" />
+    <result column="address_ip" jdbcType="VARCHAR" property="addressIp" />
+  </resultMap>
+  
+  <select id="selectSupplier" parameterType="Map" resultType="www.tonghao.platform.entity.SupplierIntegrityVo">
+    select tab.* from (
+SELECT
+	s. NAME,
+s.id,
+	(100-IFNULL((
+		SELECT
+			sum(deducting_score)
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id and create_at like CONCAT('%',DATE_FORMAT(now(), '%Y-%m'),'%')),0
+	)) AS score,
+	(
+		SELECT
+			count(*)
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id and create_at like CONCAT('%',DATE_FORMAT(now(), '%Y-%m'),'%')
+	) AS deductingScoreNum,
+	(
+		SELECT
+			count(*)
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id
+		AND is_transaction = 1 and create_at like CONCAT('%',DATE_FORMAT(now(), '%Y-%m'),'%') order by create_at desc LIMIT 1
+	) AS tranNum,
+(
+SELECT
+			create_at
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id
+		AND is_transaction = 1   order by create_at desc LIMIT 1) as createAt,
+(
+SELECT
+			recover_at
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id
+		AND is_transaction = 1  order by create_at desc  LIMIT 1) as recoverAt,
+IFNULL((
+SELECT
+			is_transaction
+		FROM
+			supplier_integrity
+		WHERE
+			supplier_id = s.id
+		AND is_transaction = 1 order by create_at desc  LIMIT 1),0) as isTransaction
+FROM
+	suppliers s ) tab where 1=1
+	<if test="supplierName!='' and supplierName!=null">
+	    and tab.NAME like CONCAT('%',#{supplierName},'%')
+	</if>
+	 <if test="isTransaction!=null and isTransaction!=''">
+	   and tab.isTransaction =#{isTransaction}
+	 </if>
+	 <if test="minScore!='' and minScore!=null and maxScore!='' and maxScore!=null">
+	   and tab.score BETWEEN #{minScore} and #{maxScore}
+	 </if>
+	 order by tab.isTransaction desc,tab.score desc
+  </select>
+  
+</mapper>

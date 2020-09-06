@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api_config>
+    <common>
+        <small_mapping>
+            <mall name="齐心" code="qixin"/>
+			<mall name="得力集团有限公司" code="dl"/>
+			<mall name="山东云品信息技术有限公司" code="ypkj"/>
+			<mall name="山东汇金" code="SD6"/> 
+			<mall name="一线达通" code="yxdt"/>
+			<mall name="领先未来" code="lxwl"/>
+        </small_mapping>
+		<emall_mapping>
+			<mall name="齐心" code="qixin"/>
+			<mall name="得力集团有限公司" code="dl"/>
+			<mall name="山东云品信息技术有限公司" code="ypkj"/>
+			<mall name="山东汇金" code="SD6"/> 
+			<mall name="一线达通" code="yxdt"/>
+			<mall name="京东" code="jd"/>
+			<mall name="苏宁" code="suning"/>
+			<mall name="领先未来" code="lxwl"/>
+		</emall_mapping>
+	</common>
+   <jd>
+		<config key="grant_type" value="access_token" comment="该值固定为access_token"/>
+		<config key="client_id" value="qsBhfxuZx0yB7yxJgOPg" comment="即对接账号(由京东人员提供)"/>
+		<config key="client_secret" value="hrDXNQHLmpnks9lmRqZo" comment="即对接账号的密码 (由京东人员提供)"/>
+		<config key="username" value="山东政府采购VOP" comment="京东的用户名"/>
+		<config key="password" value="A906449D5769FA7361D7ECC6AA3F6D28" comment="京东的用户密码,MD5加密"/>
+		<config key="scope" value="" comment="申请权限（目前推荐为空。为以后扩展用）"/>
+		<access_token_url comment="获取token" value="https://bizapi.jd.com/oauth2/accessToken" />
+		<refresh_token_url comment="刷新token" value="https://bizapi.jd.com/oauth2/refreshToken" />
+		<!-- 商品API接口 -->
+		<getPageNum comment="获取商品池编号接口" value="https://bizapi.jd.com/api/product/getPageNum" />
+		<getSkuByPage comment="获取池内商品编号接口-品类商品池（兼容老接口）" value="https://bizapi.jd.com/api/product/getSkuByPage" />
+		<getDetail comment="获取商品详细信息接口" value="https://bizapi.jd.com/api/product/getDetail" />
+		<skuState comment="获取商品上下架状态接口" value="https://bizapi.jd.com/api/product/skuState" />
+		<skuImage comment="获取所有图片信息" value="https://bizapi.jd.com/api/product/skuImage" />
+		<getFreight comment="运费查询接口" value="https://bizapi.jd.com/api/order/getFreight"/>
+		<!-- 地址API接口 -->
+		<getProvince comment="获取一级地址" value="https://bizapi.jd.com/api/area/getProvince"/>
+		<getCity comment="获取二级地址" value="https://bizapi.jd.com/api/area/getCity"/>
+		<getCounty comment="获取三级地址" value="https://bizapi.jd.com/api/area/getCounty"/>
+		<getTown comment="获取四级地址" value="https://bizapi.jd.com/api/area/getTown"/>
+		<!-- 价格API接口 -->
+		<getPrice comment="批量查询协议价价格" value="https://bizapi.jd.com/api/price/getSellPrice"/>
+		<getNewStockById comment="批量获取库存接口（建议订单详情页、下单使用)" value="https://bizapi.jd.com/api/stock/getNewStockById"/>
+		<!-- 库存API接口 -->
+		<getStockById comment="批量获取库存接口(建议商品列表页使用)" value="https://bizapi.jd.com/api/stock/getStockById"/>
+		<!-- 订单API接口 -->
+		<submitOrder comment="统一下单接口" value="https://bizapi.jd.com/api/order/submitOrder"/>
+		<confirmOrder comment="确认预占库存订单接口" value="https://bizapi.jd.com/api/order/confirmOrder"/>
+		<cancelOrder comment="取消未确认订单接口" value="https://bizapi.jd.com/api/order/cancel"/>
+		<selectJdOrderIdByThirdOrder comment="订单反查接口" value="https://bizapi.jd.com/api/order/selectJdOrderIdByThirdOrder"/>
+		<selectJdOrder commoent="查询京东订单信息接口" value="https://bizapi.jd.com/api/order/selectJdOrder"/>
+		<orderTrack commoent="查询配送信息接口" value="https://bizapi.jd.com/api/order/orderTrack"/>
+		<getInvoiceList commoent="获取电子发票信息" value="https://bizapi.jd.com/api/invoice/getInvoiceList"/>
+		<getAvailableNumberComp commoent="校验某订单中某商品是否可以提交售后服务" value="https://bizapi.jd.com/api/afterSale/getAvailableNumberComp"/>
+		<getCustomerExpectComp commoent="根据订单号、商品编号查询支持的服务类型" value="https://bizapi.jd.com/api/afterSale/getCustomerExpectComp"/>
+		<getMessage commoent="获取消息" value="https://bizapi.jd.com/api/message/get"/>
+		<delMessage commoent="删除消息" value="https://bizapi.jd.com/api/message/del"/>
+		<getImage comment="地址前缀"    value="http://img13.360buyimg.com/n0/"/>
+		<getCheck comment="商品是否可售" value="https://bizapi.jd.com/api/product/check"/>
+	    <getCategorys comment="查询分类信息接口" value="https://bizapi.jd.com/api/product/getCategory"/>
+	
+	</jd>
+	<suning>
+		<!-- <config key="appKey" value="5ad3bda7651896b83d3426945507f613"/>
+		<config key="appSecret" value="0c43fb20feb749155b23f3c46762b0d6"/>
+		<common_url comment="公共地址" value="http://openpre.cnsuning.com/api/http/sopRequest"/>  -->
+		<config key="appKey" value="85db3385e14df30361ae74999b17d945"/>
+		<config key="appSecret" value="e2785ab4709532b4cb425b71bbdd7531"/>
+		<common_url comment="公共地址" value="http://open.suning.com/api/http/sopRequest"/>
+	</suning>
+	
+	<!-- 标准的电商接口配置 -->
+	<standard>
+	  <qixin>
+	   		<config key="username" value="16001171"/>
+			<config key="password" value="Comix@2018"/>	
+			<access_token_url comment="获取token" value="https://cop.comix.com.cn/system/orders/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="https://cop.comix.com.cn/system/orders/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="https://cop.comix.com.cn/system/orders/skus" />
+			<product_detail_url comment="商品详情接口" value="https://cop.comix.com.cn/system/orders/detail" />
+			<product_state_url comment="上下架状态接口" value="https://cop.comix.com.cn/system/orders/shelf_states" />
+			<product_image_url comment="图片接口" value="https://cop.comix.com.cn/system/orders/images" />
+			<product_ratings_url comment="商品好评度接口" value="https://cop.comix.com.cn/system/orders/ratings" />
+			<product_price_url comment="价格接口" value="https://cop.comix.com.cn/system/orders/prices" />
+			<area_provinces_url comment="获取一级地址" value="https://cop.comix.com.cn/system/orders/provinces" />
+			<area_cities_url comment="获取二级地址" value="https://cop.comix.com.cn/system/orders/cities" />
+			<area_county_url comment="获取三级地址" value="https://cop.comix.com.cn/system/orders/counties" />
+			<product_stocks_url comment="库存接口" value="https://cop.comix.com.cn/system/orders/stocks" />
+			<order_submit_url comment="订单接口" value="https://cop.comix.com.cn/system/orders/submit" />
+			<order_confirm_url comment="确认订单接口" value="https://cop.comix.com.cn/system/orders/confirm" />
+			<order_cancel_url comment="取消订单接口" value="https://cop.comix.com.cn/system/orders/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="https://cop.comix.com.cn/system/orders/select" />
+			<order_return_url comment="退换货接口" value="https://cop.comix.com.cn/system/orders/returnorder" />
+			<!-- <order_after_service_url comment="退换货查询接口" value="https://cop.comix.com.cn/system/order/after_service" /> -->
+			<order_track_url comment="物流接口" value="https://cop.comix.com.cn/system/orders/track" />
+			<get_invoice_list comment="电子发票接口" value="https://cop.comix.com.cn/system/orders/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="https://cop.comix.com.cn/system/orders/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="https://cop.comix.com.cn/system/orders/delMessagePool" />
+			<!-- <checkr comment="对账接口" value="https://cop.comix.com.cn/system/order/checkr" /> -->
+		</qixin>
+	   <dl>
+	   		<config key="username" value="SDGov"/>
+			<config key="password" value="a83adf1dc18e05a354c5b12575998ecf"/>	
+			<access_token_url comment="获取token" value="http://b2binner.nbdeli.com/rest/yggc/api/auth2/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/skus" />
+			<product_detail_url comment="商品详情接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/detail" />
+			<product_state_url comment="上下架状态接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/shelf_states" />
+			<product_image_url comment="图片接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/images" />
+			<product_ratings_url comment="商品好评度接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/ratings" />
+			<product_price_url comment="价格接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/prices" />
+			<area_provinces_url comment="获取一级地址" value="http://b2binner.nbdeli.com/rest/yggc/api/area/provinces" />
+			<area_cities_url comment="获取二级地址" value="http://b2binner.nbdeli.com/rest/yggc/api/area/cities" />
+			<area_county_url comment="获取三级地址" value="http://b2binner.nbdeli.com/rest/yggc/api/area/getCounty" />
+			<product_stocks_url comment="库存接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/stocks" />
+			<order_submit_url comment="订单接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/submit" />
+			<order_confirm_url comment="确认订单接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/confirm" />
+			<order_cancel_url comment="取消订单接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/select" />
+			<order_return_url comment="退换货接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/return" />
+			<order_after_service_url comment="退换货查询接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/after_service" />
+			<order_track_url comment="物流接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/track" />
+			<get_invoice_list comment="电子发票接口" value="http://b2binner.nbdeli.com/rest/yggc/api/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="http://b2binner.nbdeli.com/rest/yggc/api/product/delMessagePool" />
+			<checkr comment="对账接口" value="http://b2binner.nbdeli.com/rest/yggc/api/order/checkr" />
+		</dl>
+	    <ypkj>
+	   		<config key="username" value="yp_sun_sd"/>
+			<config key="password" value="7db8fbcc-a9c2-4010-bc79-e7c4bcd9ab04"/>	
+			<access_token_url comment="获取token" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/auth2/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/skus" />
+			<product_detail_url comment="商品详情接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/detail" />
+			<product_state_url comment="上下架状态接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/shelf_states" />
+			<product_image_url comment="图片接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/images" />
+			<product_ratings_url comment="商品好评度接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/ratings" />
+			<product_price_url comment="价格接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/prices" />
+			<area_provinces_url comment="获取一级地址" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/area/provinces" />
+			<area_cities_url comment="获取二级地址" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/area/cities" />
+			<area_county_url comment="获取三级地址" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/area/getCounty" />
+			<product_stocks_url comment="库存接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/stocks" />
+			<order_submit_url comment="订单接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/submit" />
+			<order_confirm_url comment="确认订单接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/confirm" />
+			<order_cancel_url comment="取消订单接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/select" />
+			<order_return_url comment="退换货接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/return" />
+			<order_after_service_url comment="退换货查询接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/after_service" />
+			<order_track_url comment="物流接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/track" />
+			<get_invoice_list comment="电子发票接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/product/delMessagePool" />
+			<checkr comment="对账接口" value="http://www.shandongyunpin.com:8080/ccshop/v1.1/api/order/checkr" />
+		 </ypkj>
+		 
+		 <SD6>
+	   		<config key="username" value="zhengcai"/>
+			<config key="password" value="36ee1070951e9d2d8726a48457475d84"/>	
+			<access_token_url comment="获取token" value="http://www.sdhuijinmall.cn/api/auth2/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="http://www.sdhuijinmall.cn/api/product/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="http://www.sdhuijinmall.cn/api/product/skus" />
+			<product_detail_url comment="商品详情接口" value="http://www.sdhuijinmall.cn/api/product/detail" />
+			<product_state_url comment="上下架状态接口" value="http://www.sdhuijinmall.cn/api/product/shelf_states" />
+			<product_image_url comment="图片接口" value="http://www.sdhuijinmall.cn/api/product/images" />
+			<product_ratings_url comment="商品好评度接口" value="http://www.sdhuijinmall.cn/api/product/ratings" />
+			<product_price_url comment="价格接口" value="http://www.sdhuijinmall.cn/api/product/prices" />
+			<area_provinces_url comment="获取一级地址" value="http://www.sdhuijinmall.cn/api/area/provinces" />
+			<area_cities_url comment="获取二级地址" value="http://www.sdhuijinmall.cn/api/area/cities" />
+			<area_county_url comment="获取三级地址" value="http://www.sdhuijinmall.cn/api/area/getCounty" />
+			<product_stocks_url comment="库存接口" value="http://www.sdhuijinmall.cn/api/product/stocks" />
+			<order_submit_url comment="订单接口" value="http://www.sdhuijinmall.cn/api/order/submit" />
+			<order_confirm_url comment="确认订单接口" value="http://www.sdhuijinmall.cn/api/order/confirm" />
+			<order_cancel_url comment="取消订单接口" value="http://www.sdhuijinmall.cn/api/order/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://www.sdhuijinmall.cn/api/order/select" />
+			<order_return_url comment="退换货接口" value="http://www.sdhuijinmall.cn/api/order/return" />
+			<order_after_service_url comment="退换货查询接口" value="http://www.sdhuijinmall.cn/api/order/return" />
+			<order_track_url comment="物流接口" value="http://www.sdhuijinmall.cn/api/order/track" />
+			<get_invoice_list comment="电子发票接口" value="http://www.sdhuijinmall.cn/api/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://www.sdhuijinmall.cn/api/product/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="http://www.sdhuijinmall.cn/api/product/delMessagePool" />
+			<checkr comment="对账接口" value="http://www.sdhuijinmall.cn/api/order/checkr" />
+		 </SD6>
+		 <yxdt>
+	   		<config key="username" value="yxdt_shandong"/>
+			<config key="password" value="yxdt_shandong"/>	
+			<access_token_url comment="获取token" value="http://www.city-office.com.cn/api/shandong/auth2/access_token.php" />
+			<sku_pool_url comment="获取品目池接口" value="http://www.city-office.com.cn/api/shandong/product/get_pools.php" />
+			<product_sku_url comment="商品编号SKU接口" value="http://www.city-office.com.cn/api/shandong/product/skus.php" />
+			<product_detail_url comment="商品详情接口" value="http://www.city-office.com.cn/api/shandong/product/detail.php" />
+			<product_state_url comment="上下架状态接口" value="http://www.city-office.com.cn/api/shandong/product/shelf_states.php" />
+			<product_image_url comment="图片接口" value="http://www.city-office.com.cn/api/shandong/product/images.php" />
+			<product_ratings_url comment="商品好评度接口" value="http://www.city-office.com.cn/api/shandong/product/ratings.php" />
+			<product_price_url comment="价格接口" value="http://www.city-office.com.cn/api/shandong/product/prices.php" />
+			<area_provinces_url comment="获取一级地址" value="http://www.city-office.com.cn/api/shandong/area/provinces.php" />
+			<area_cities_url comment="获取二级地址" value="http://www.city-office.com.cn/api/shandong/area/cities.php" />
+			<area_county_url comment="获取三级地址" value="http://www.city-office.com.cn/api/shandong/area/getCounty.php" />
+			<product_stocks_url comment="库存接口" value="http://www.city-office.com.cn/api/shandong/product/stocks.php" />
+			<order_submit_url comment="订单接口" value="http://www.city-office.com.cn/api/shandong/order/submit.php" />
+			<order_confirm_url comment="确认订单接口" value="http://www.city-office.com.cn/api/shandong/order/confirm.php" />
+			<order_cancel_url comment="取消订单接口" value="http://www.city-office.com.cn/api/shandong/order/cancel.php" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://www.city-office.com.cn/api/shandong/order/select.php" />
+			<order_return_url comment="退换货接口" value="http://www.city-office.com.cn/api/shandong/order/return.php" />
+			<!-- <order_after_service_url comment="退换货查询接口" value="http://121.199.37.48:8080/ccshop/v1.1/api/order/return" /> -->
+			<order_track_url comment="物流接口" value="http://www.city-office.com.cn/api/shandong/order/track.php" />
+			<get_invoice_list comment="电子发票接口" value="http://www.city-office.com.cn/api/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://www.city-office.com.cn/api/shandong/product/getMessagePool.php" />
+			<del_message_pool comment="删除消息接口" value="http://www.city-office.com.cn/api/shandong/product/delMessagePool.php" /> 
+			<checkr comment="对账接口" value="http://www.city-office.com.cn/api/shandong/order/checkr.php" />
+		 </yxdt>
+		 <lxwl>
+	   		<config key="username" value="SDSZFCGW"/>
+			<config key="password" value="a4087260f048a08bc82ee72e51169f5d"/>	
+			<access_token_url comment="获取token" value="http://api.66123123.com:8008/auth2/access_token" />
+			<sku_pool_url comment="获取品目池接口" value="http://api.66123123.com:8008/product/get_pools" />
+			<product_sku_url comment="商品编号SKU接口" value="http://api.66123123.com:8008/product/skus" />
+			<product_detail_url comment="商品详情接口" value="http://api.66123123.com:8008/product/detail" />
+			<product_state_url comment="上下架状态接口" value="http://api.66123123.com:8008/product/shelf_states" />
+			<product_image_url comment="图片接口" value="http://api.66123123.com:8008/product/images" />
+			<product_ratings_url comment="商品好评度接口" value="http://api.66123123.com:8008/product/ratings" />
+			<product_price_url comment="价格接口" value="http://api.66123123.com:8008/product/prices" />
+			<area_provinces_url comment="获取一级地址" value="http://api.66123123.com:8008/area/provinces" />
+			<area_cities_url comment="获取二级地址" value="http://api.66123123.com:8008/area/cities" />
+			<area_county_url comment="获取三级地址" value="http://api.66123123.com:8008/area/getCounty" />
+			<product_stocks_url comment="库存接口" value="http://api.66123123.com:8008/product/stocks" />
+			<order_submit_url comment="订单接口" value="http://api.66123123.com:8008/order/submit" />
+			<order_confirm_url comment="确认订单接口" value="http://api.66123123.com:8008/order/confirm" />
+			<order_cancel_url comment="取消订单接口" value="http://api.66123123.com:8008/order/cancel" />
+			<order_select_url comment="查询贵方订单信息接口" value="http://api.66123123.com:8008/order/select" />
+			<order_return_url comment="退换货接口" value="http://api.66123123.com:8008/order/return" />
+			<!-- <order_after_service_url comment="退换货查询接口" value="http://api.66123123.com:8008/order/return" /> -->
+			<order_track_url comment="物流接口" value="http://api.66123123.com:8008/order/track" />
+			<get_invoice_list comment="电子发票接口" value="http://api.66123123.com:8008/invoice/getInvoiceList" />
+			<get_message_pool comment="消息接口" value="http://api.66123123.com:8008/product/getMessagePool" />
+			<del_message_pool comment="删除消息接口" value="http://api.66123123.com:8008/product/delMessagePool" /> 
+			<checkr comment="对账接口" value="http://api.66123123.com:8008/order/checkr" />
+		 </lxwl>
+	</standard>
+</api_config>

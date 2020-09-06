@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.RolesMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Roles">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_admin" jdbcType="BIT" property="isAdmin" />
+    <result column="is_super_admin" jdbcType="BIT" property="isSuperAdmin" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="is_init" jdbcType="INTEGER" property="isInit" />
+    <result column="is_supplier_child" jdbcType="INTEGER" property="isSupplierChild" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+  </resultMap>
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.name,
+  	tb.description,
+  	tb.is_admin,
+  	tb.is_super_admin,
+  	tb.is_delete,
+  	tb.is_init,
+  	tb.code,
+  	tb.is_supplier_child
+  </sql>
+  <select id="getUserRoles" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	SELECT
+		<include refid="Base_Column_List" />
+	FROM
+		roles AS tb
+	WHERE
+		tb.is_delete = 0 AND
+		tb.id IN (
+			SELECT
+				ur.role_id
+			FROM
+				user_roles AS ur
+			WHERE
+				ur.user_id = #{userId}
+		)
+  </select>
+  
+  <!-- 查询角色 -->
+  <select id="find" parameterType="Map" resultMap="BaseResultMap">
+  	SELECT 
+  		<include refid="Base_Column_List" />,
+		(SELECT COUNT(u.id) FROM users u LEFT JOIN  `user_roles` ur ON u.id = ur.user_id WHERE ur.role_id = tb.id) AS userCount
+ 	FROM roles tb 
+ 	WHERE tb.is_delete = 0 
+ 	<if test="name != null and name != ''">
+ 		AND tb.name LIKE CONCAT('%',#{name},'%') 
+ 	</if>
+ 	ORDER BY created_at DESC
+  </select>
+</mapper>

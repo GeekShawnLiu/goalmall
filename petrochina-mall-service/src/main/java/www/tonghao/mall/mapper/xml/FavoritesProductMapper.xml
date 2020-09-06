@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.FavoritesProductMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.FavoritesProduct">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  
+  <select id="findListByEntity" parameterType="www.tonghao.mall.entity.FavoritesProduct" resultMap="BaseResultMap">
+  	select tb.id,tb.product_id as 'product.id',p.`name` as 'product.name',p.catalog_id as 'product.catalogId'
+  	,p.cover_url as 'product.coverUrl',p.sku as 'product.sku',p.sn as 'product.sn',p.price as 'product.price'
+  	,p.status as 'product.status'
+  	,p.market_price as 'product.marketPrice' from favorites_product as tb 
+  	INNER JOIN products as p ON tb.product_id = p.id
+  	<where>
+  		<if test="userId!=null">
+  			tb.user_id = #{userId}
+  		</if>
+  	</where>
+  	order by tb.created_at desc
+  </select>
+  
+  <select id="findUserProductIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+  	select tb.product_id from favorites_product as tb where tb.user_id = #{userId}
+  </select>
+  
+  <select id="selectByPId" resultType="www.tonghao.mall.entity.FavoritesProduct">
+  	select * from favorites_product as tb where tb.user_id = #{userId} and tb.product_id = #{productId}
+  </select>
+</mapper>

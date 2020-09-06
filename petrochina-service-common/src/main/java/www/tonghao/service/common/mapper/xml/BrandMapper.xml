@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.BrandMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Brand">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="pinyin" jdbcType="VARCHAR" property="pinyin" />
+    <result column="priority" jdbcType="REAL" property="priority" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="is_frozen" jdbcType="INTEGER" property="isFrozen" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="mapping_name" jdbcType="VARCHAR" property="mappingName" />
+  </resultMap>
+  
+  <select id="findUsableListIdIn" resultMap="BaseResultMap">
+  	select tb.id,tb.name,tb.short_name,tb.logo,tb.url from brand as tb where tb.is_delete = 0 and tb.is_frozen = 0
+	<if test="ids!=null and ids.size>0">
+		and tb.id in 
+		<foreach collection="ids" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</if>
+	order by tb.priority asc
+  </select>
+  
+  <select id="findByMappingName" resultMap="BaseResultMap">
+  	select * from brand where mapping_name like CONCAT('%',#{name},'%') and is_frozen=0 and is_delete=0
+  </select>
+  
+  
+  <select id="selectByGroupId" resultType="www.tonghao.service.common.entity.Brand">
+     select c.brand_id as id from(
+select brand_id from products where brand_id is not null group by brand_id ) c where c.brand_id  not in(select id from brand)
+  </select>
+</mapper>

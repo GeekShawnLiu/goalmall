@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.mall.mapper.OrderItemsMapper">
+  <resultMap id="BaseResultMap" type="www.tonghao.mall.entity.OrderItems">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="planitem_budget_in" jdbcType="DECIMAL" property="planItemBudgetIn" />
+    <result column="planitem_budget_finance" jdbcType="DECIMAL" property="planItemBudgetFinance" />
+    <result column="planitem_budget_self" jdbcType="DECIMAL" property="planItemBudgetSelf" />
+    <result column="emall_item_id" jdbcType="VARCHAR" property="emallItemId" />
+    <result column="params" jdbcType="LONGVARCHAR" property="params" />
+    <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+    <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice" />
+    <result column="is_evaluation" jdbcType="INTEGER" property="isEvaluation" />
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.OrderItems" extends="BaseResultMap">
+  	<association column="product_id" property="product" select="www.tonghao.service.common.mapper.ProductsMapper.getBaseById"/>
+  	<association column="order_id" property="order" select="www.tonghao.mall.mapper.OrdersMapper.findBaseById"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+  	tb.id,
+  	tb.created_at,
+  	tb.updated_at,
+  	tb.name,
+  	tb.price,
+  	tb.protocol_price,
+  	tb.num,
+  	tb.catalog_name,
+  	tb.market_price,
+  	tb.sn,
+  	tb.thumbnail,
+  	tb.product_id,
+  	tb.order_id,
+  	tb.order_sn,
+  	tb.model,
+  	tb.brand,
+  	tb.planitem_budget_in,
+  	tb.planitem_budget_finance,
+  	tb.planitem_budget_self,
+  	tb.emall_item_id,
+  	tb.params,
+  	tb.activity_id,
+  	tb.is_evaluation
+  </sql>
+  
+  <select id="findListByOrderId" parameterType="java.lang.Long" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List" /> from order_items as tb where tb.order_id = #{orderId}
+  </select>
+  
+  <select id="findProductOrderItems" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select o.completed_at as 'order.completedAt'
+  		,o.purchaser_name as 'order.purchaserName'
+  		,tb.price,tb.num 
+  		from order_items as tb 
+  		INNER JOIN orders as o ON tb.order_id = o.id 
+  		where o.orders_state = 'completed' and tb.product_id = #{productId}
+  </select>
+  
+  <select id="findById" parameterType="java.lang.Long" resultMap="ExtResultMap">
+  	select <include refid="Base_Column_List" /> from order_items as tb where tb.id = #{id}
+  </select>
+  
+  <select id="findByMap" parameterType="Map" resultMap="ExtResultMap">
+  	SELECT
+		oi.*
+	FROM
+		orders o
+	INNER JOIN order_items oi ON oi.order_id = o.id
+	WHERE
+		o.is_delete = 0
+	AND o.user_id = #{userId} 
+	<if test="isEvaluation != null">
+		AND oi.is_evaluation = #{isEvaluation}
+	</if>
+  </select>
+  
+  <select id="findChildOrderItem" resultMap="BaseResultMap">
+  	SELECT
+		oi.id, oi.name, oi.price, osi.num, oi.thumbnail, oi.protocol_price, oi.product_id, oi.order_id
+	FROM
+		order_split_item osi
+	LEFT JOIN order_items oi ON osi.product_id = oi.product_id
+	WHERE
+		osi.child_emall_sn = #{childSn}
+	AND oi.order_sn = #{parentSn}
+  </select>
+  
+  <resultMap id="productStatisticalMap" type="www.tonghao.mall.entity.OrderItems">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="cname" jdbcType="VARCHAR" property="threeCatalogName" />
+    <result column="tree_names" jdbcType="VARCHAR" property="twoCatalogName" />
+  </resultMap>
+  
+  <select id="productStatisticalList" parameterType="Map" resultType="www.tonghao.mall.entity.OrderItems">
+  	SELECT
+		oi.id,
+		oi.order_id AS orderId,
+		oi.sn,
+		oi.name,
+		oi.protocol_price AS protocolPrice,
+		oi.price,
+		oi.num,
+		pc.name as threeCatalogName,
+		pc.tree_names AS twoCatalogName,
+		oo.id AS 'order.id',
+		oo.purchaser_name AS 'order.purchaserName',
+		oo.real_name AS 'order.userName',
+		oo.sn AS 'order.sn',
+		oo.supplier_name AS 'order.supplierName',
+		oo.emall_sn AS 'order.emallSn',
+		oo.created_at AS 'order.createdAt',
+		oo.completed_at AS 'order.completedAt',
+		oo.orders_state AS 'order.ordersState',
+		oo.protocol_total AS 'order.protocolTotal',
+		oo.total AS 'order.total',
+		oo.profit AS 'order.profit',
+		oo.pay_id AS 'order.payId',
+		oo.pay_integral AS 'order.payIntegral',
+		oo.pay_money AS 'order.payMoney',
+		oo.freight AS 'order.freight',
+		oo.consignee_name AS 'order.consigneeName',
+		oo.addr AS 'order.addr',
+		oo.mobile AS 'order.mobile',
+		oo.user_id AS 'order.userId',
+		oo.balanceIntegral AS 'order.balanceIntegral',
+		oo.childOrderEmallSns AS 'order.childOrderEmallSns',
+		oo.activity_name AS 'order.activityNames',
+		oi.price - oi.protocol_price AS profit,
+		CONCAT(format((oi.price*100 - oi.protocol_price*100)/oi.price, 2), '%') AS profitRate
+	FROM
+		order_items oi
+	INNER JOIN (
+		SELECT DISTINCT
+			o.id,
+			o.purchaser_name,
+			u.real_name,
+			o.sn,
+			o.supplier_name,
+			o.emall_sn,
+			o.created_at,
+			o.completed_at,
+			o.orders_state,
+			o.protocol_total,
+			o.total,
+			o.total - o.protocol_total AS profit,
+			o.pay_id,
+			o.pay_integral,
+			o.pay_money,
+			o.freight,
+			o.consignee_name,
+			o.addr,
+			o.mobile,
+			o.user_id,
+			IF (iu_tmp.balance IS NULL, 0.00, iu_tmp.balance) AS balanceIntegral,
+		 	child_order.childOrderEmallSns AS childOrderEmallSns,
+		 	ic_tmp.activity_name AS activity_name
+		FROM
+			orders o
+		LEFT JOIN users u ON u.id = o.user_id
+		LEFT JOIN (
+			SELECT
+				iu.id,
+				iu.user_id,
+				sum(iu.balance) AS balance
+			FROM
+				integral_user iu
+			LEFT JOIN activity ac ON ac.id = iu.activity_id
+			WHERE
+				ac.is_offline = 0
+			AND NOW() &gt;= ac.start_at
+			AND NOW() &lt;= ac.end_at
+			AND NOW() &gt;= ac.online_at
+			GROUP BY
+				iu.user_id
+		) iu_tmp ON iu_tmp.user_id = o.user_id
+		LEFT JOIN (
+			SELECT
+				co.parent_id,
+				GROUP_CONCAT(co.emall_sn) AS childOrderEmallSns
+			FROM
+				orders co
+			WHERE
+				co.parent_id IS NOT NULL
+			GROUP BY
+				co.parent_id
+		) child_order ON child_order.parent_id = o.id
+		LEFT JOIN (
+			SELECT
+				ic.order_id,
+				GROUP_CONCAT(ic. NAME) AS activity_name
+			FROM
+				(
+					SELECT DISTINCT
+						oi.order_id,
+						a. NAME
+					FROM
+						order_items oi
+					LEFT JOIN activity a ON a.id = oi.activity_id
+					WHERE
+						a.is_delete = 0
+				) ic
+			GROUP BY
+				ic.order_id
+		) ic_tmp ON ic_tmp.order_id = o.id
+		WHERE
+			o.parent_id IS NULL
+	) oo ON oo.id = oi.order_id
+	INNER JOIN products p ON oi.product_id = p.id
+	INNER JOIN platform_catalogs pc ON pc.id = p.catalog_id
+	<if test="createStartAt != null and createStartAt != ''">
+		and oo.created_at &gt;= #{createStartAt}
+	</if>
+	<if test="createEndAt != null and createEndAt != ''">
+		and oo.created_at &lt;= #{createEndAt}
+	</if>
+	<if test="purchaserName != null and purchaserName != ''">
+		and oo.purchaser_name like CONCAT('%',#{purchaserName},'%') 
+	</if>
+	<if test="userName != null and userName != ''">
+		and oo.real_name like CONCAT('%',#{userName},'%') 
+	</if>
+	<if test="productName != null and productName != ''">
+		and oi.name like CONCAT('%',#{productName},'%') 
+	</if>
+	<if test="supplierName != null and supplierName != ''">
+		and oo.supplier_name like CONCAT('%',#{supplierName},'%') 
+	</if>
+	<if test="completedStartAt != null and completedStartAt != ''">
+		and oo.completed_at &gt;= #{completedStartAt}
+	</if>
+	<if test="completedEndAt != null and completedEndAt != ''">
+		and oo.completed_at &lt;= #{completedEndAt}
+	</if>
+	<if test="sn != null and sn != ''">
+		and oo.order_sn like CONCAT('%',#{sn},'%')
+	</if>
+	<if test="emallSn != null and emallSn != ''">
+		and oo.emall_sn like CONCAT('%',#{emallSn},'%')
+	</if>
+	<if test="activityName != null and activityName != ''">
+		and oo.activity_name like CONCAT('%',#{activityName},'%')
+	</if>
+	<if test="payId != null">
+		and oo.pay_id = #{payId}
+	</if>
+	<if test="sku != null and sku != ''">
+		and oi.sn = #{sku}
+	</if>
+	and oo.orders_state in ('commit','confirmed','completed')
+	ORDER BY
+		oi.num,
+		oo.created_at DESC, oo.id DESC
+  </select>
+  
+  <select id="selectByOrderAndProduct" resultMap="BaseResultMap">
+  	select * from order_items as tb where tb.order_id = #{orderId} and tb.product_id = #{productId} limit 1
+  </select>
+</mapper>
