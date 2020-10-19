@@ -11,16 +11,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
 import www.tonghao.platform.service.ParameterService;
 import www.tonghao.service.common.entity.Parameter;
 import www.tonghao.service.common.entity.PlatformCatalogs;
+import www.tonghao.service.common.entity.Users;
 import www.tonghao.service.common.service.PlatformCatalogsService;
 
 import com.github.pagehelper.PageHelper;
@@ -89,19 +88,60 @@ public class ParameterController {
 	 * @param platformCatalogId
 	 * @return  
 	 */  
+//	@ApiOperation(value="根据 平台品目 id获取对应品目参数及对应参数值",notes="根据平台品目id获取对应品目参数及对应参数值api")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name="platformCatalogId",value="平台品目id",required=true,dataType="Long",paramType="query"),
+//	})
+//	@RequestMapping(value="/getParameterJoinByPlatformCatalogId",method=RequestMethod.GET)
+//	public List<Parameter> getParameterJoinByPlatformCatalogId(Long platformCatalogId){
+//		PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(platformCatalogId);
+//		if (platformCatalog != null && platformCatalog.getCatalogId() != null) {
+//			//平台品目对应财政品目id
+//			List<Parameter> parameters = parameterService.getParameterJoinByCatalogId(platformCatalog.getCatalogId());
+//			List<Parameter> collect = parameters.stream().filter(e->!"品牌".equals(e.getName()) && !"型号".equals(e.getName()) ).collect(Collectors.toList());
+//			return collect;
+//		}
+//		return null;
+//	}
+
 	@ApiOperation(value="根据 平台品目 id获取对应品目参数及对应参数值",notes="根据平台品目id获取对应品目参数及对应参数值api")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name="platformCatalogId",value="平台品目id",required=true,dataType="Long",paramType="query"),
+			@ApiImplicitParam(name="platformCatalogId",value="平台品目id",required=true,dataType="Long",paramType="query"),
 	})
 	@RequestMapping(value="/getParameterJoinByPlatformCatalogId",method=RequestMethod.GET)
 	public List<Parameter> getParameterJoinByPlatformCatalogId(Long platformCatalogId){
 		PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(platformCatalogId);
 		if (platformCatalog != null && platformCatalog.getCatalogId() != null) {
 			//平台品目对应财政品目id
-			List<Parameter> parameters = parameterService.getParameterJoinByCatalogId(platformCatalog.getCatalogId());
-			List<Parameter> collect = parameters.stream().filter(e->!"品牌".equals(e.getName()) && !"型号".equals(e.getName()) ).collect(Collectors.toList());
-			return collect;
+			List<Parameter> list = parameterService.getByCatalogId(platformCatalogId);
+//			List<Parameter> collect = parameters.stream().filter(e->!"品牌".equals(e.getName()) && !"型号".equals(e.getName()) ).collect(Collectors.toList());
+			return list;
 		}
+		return null;
+	}
+
+
+
+	@PostMapping(value = "/saveOrUpdate")
+	public Map<String, Object> saveOrUpdate(@RequestBody Parameter parameter){
+		return parameterService.saveOrUpdate(parameter);
+	}
+
+	@DeleteMapping(value = "/deleteById")
+	public Map<String,Object> deleteById(Long id){
+		int result = parameterService.delete(id);
+		return ResultUtil.resultMessage(result,"");
+	}
+
+	@GetMapping(value = "/getAllParam")
+	public List<Parameter> getAll(){
+		return parameterService.selectAllByOrder();
+	}
+
+	@GetMapping(value = "/getParamByPage")
+	public List<Parameter> getParamByPage(@ModelAttribute PageBean page,String paramName){
+		PageHelper.startPage(page.getPage(), page.getRows());
+
 		return null;
 	}
 }

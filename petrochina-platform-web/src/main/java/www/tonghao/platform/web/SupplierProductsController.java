@@ -85,14 +85,7 @@ public class SupplierProductsController {
 	@Autowired
 	private EmallCatalogsService emallCatalogsService;
 
-	/**  
-	 * <p>Title: list</p>  
-	 * <p>Description: </p>  
-	 * @author Yml  
-	 * @param products
-	 * @param page
-	 * @return  
-	 */  
+
 	@ApiOperation(value="分页查询普通商品列表",notes="获取普通商品列表数据api")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="page",value="当前页",required=true,dataType="int",paramType="query"),
@@ -103,7 +96,7 @@ public class SupplierProductsController {
 			String catalogName, String brandName, Integer status, String model, String protocolName,
 			Long catalogId, String supplierName, HttpServletRequest request){
 		Users user = UserUtil.getUser(request);
-		if (user != null && user.getType() != null && user.getType() == 4 && user.getTypeId() != null) {
+		if (user != null && user.getType() != null && user.getTypeId() != null) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("supplierId", user.getTypeId());
 			map.put("is_car", "false");
@@ -179,7 +172,7 @@ public class SupplierProductsController {
 		}
 		
 		Users user = UserUtil.getUser(request);
-		if (user.getType() != null && user.getType() == 4 && user.getTypeId() != null) {
+		if (user.getType() != null  && user.getTypeId() != null) {
 			product.setUserId(user.getId());//设置当前操作用户id
 			Suppliers supplier = suppliersService.selectByKey(user.getTypeId());
 			if (supplier != null) {
@@ -187,11 +180,11 @@ public class SupplierProductsController {
 				product.setSupplierId(supplier.getId());//设置供应商id
 				product.setSupplierName(supplier.getName());//设置供应商名称
 				//product.setProtocolPrice(product.getPrice());
-				product.setPrice(product.getProtocolPrice());
+//				product.setPrice(product.getProtocolPrice());
 				//价格对比
 				BigDecimal price = product.getPrice();
 				//第三方供应商新增商品  协议价=售价
-				product.setProtocolPrice(price);
+//				product.setProtocolPrice(price);
 				log.info("price:"+product.getPrice());
 				//2020-09-07 注释掉商品保存价格限制
 //				if (price != null) {

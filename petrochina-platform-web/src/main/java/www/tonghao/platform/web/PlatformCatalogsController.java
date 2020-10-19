@@ -28,7 +28,9 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 import www.tonghao.common.utils.FileUtilEx;
 import www.tonghao.common.utils.ResultUtil;
 import www.tonghao.common.warpper.HttpResponseCode;
+import www.tonghao.service.common.entity.CatalogParameter;
 import www.tonghao.service.common.entity.PlatformCatalogs;
+import www.tonghao.service.common.service.CatalogParameterService;
 import www.tonghao.service.common.service.PlatformCatalogsService;
 
 /**  
@@ -49,6 +51,9 @@ public class PlatformCatalogsController {
 
 	@Autowired
 	private PlatformCatalogsService platformCatalogsService;
+
+	@Autowired
+	private CatalogParameterService catalogParameterService;
 	
 	@ApiOperation(value="根据id获取所有的子节点",notes="根据id获取所有的子节点api")
 	@ApiImplicitParams({
@@ -68,6 +73,8 @@ public class PlatformCatalogsController {
 	@RequestMapping(value="/getById",method=RequestMethod.GET)
 	public PlatformCatalogs getById(Long id){
 		PlatformCatalogs catalogs = platformCatalogsService.findRelationById(id);
+		List<CatalogParameter> parameterList = catalogParameterService.getByPlatformCatalogId(id);
+		catalogs.setParametersList(parameterList);
 		return catalogs;
 	}
 	
