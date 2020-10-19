@@ -1,0 +1,21 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.CatalogParameterMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.CatalogParameter">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+        <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+        <result column="parameter_id" jdbcType="BIGINT" property="parameterId" />
+        <result column="parameter_name" jdbcType="VARCHAR" property="parameterName" />
+    </resultMap>
+
+    <delete id="deleteByCatalogId" parameterType="Long">
+      delete from catalog_parameter where catalog_id=#{catalogId}
+  </delete>
+
+    <select id="getByPlatformCatalogId" parameterType="Long" resultMap="BaseResultMap">
+        select * from catalog_parameter where catalog_id=#{catalogId}
+    </select>
+</mapper>
