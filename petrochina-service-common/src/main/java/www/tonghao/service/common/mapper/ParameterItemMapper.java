@@ -34,4 +34,11 @@ public interface ParameterItemMapper extends BaseMapper<ParameterItem> {
 	 * @return
 	 */
 	Set<Long> getByParameterIds(@Param("parameterIds") Set<Long> parameterIds);
+
+	/**
+	 * 根据参数id查询
+	 * @param parameterId
+	 * @return
+	 */
+	List<ParameterItem> getByParameterId(@Param("parameterId") Long parameterId);
 }

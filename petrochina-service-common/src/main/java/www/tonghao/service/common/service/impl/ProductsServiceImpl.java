@@ -182,37 +182,37 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 		Long platformCatalogId = product.getCatalogId();
 		if (platformCatalogId != null) {
 			PlatformCatalogs platformCatalog = platformCatalogsMapper.selectByPrimaryKey(platformCatalogId);
-			if (platformCatalog != null) {
-				govCatalogId = platformCatalog.getCatalogId();
-				catalog = catalogsMapper.selectByPrimaryKey(govCatalogId);
-				/**------------是否批量-start----------------------*/
-				if (StringUtils.isNotBlank(platformCatalog.getSystems()) && platformCatalog.getSystems().contains("central")) {
-					product.setIsBatch(1);
-				}else {
-					product.setIsBatch(0);
-				}
-				/**------------是否批量-end----------------------*/
-			}else {
-				resultMap.put("status", 0);
-				resultMap.put("message", "请选择归属品目");
-				return resultMap;
-			}
+//			if (platformCatalog != null) {
+//				govCatalogId = platformCatalog.getCatalogId();
+//				catalog = catalogsMapper.selectByPrimaryKey(govCatalogId);
+//				/**------------是否批量-start----------------------*/
+//				if (StringUtils.isNotBlank(platformCatalog.getSystems()) && platformCatalog.getSystems().contains("central")) {
+//					product.setIsBatch(1);
+//				}else {
+//					product.setIsBatch(0);
+//				}
+//				/**------------是否批量-end----------------------*/
+//			}else {
+//				resultMap.put("status", 0);
+//				resultMap.put("message", "请选择归属品目");
+//				return resultMap;
+//			}
 		}else {
 			resultMap.put("status", 0);
 			resultMap.put("message", "请选择归属品目");
 			return resultMap;
 		}
-		/*if (govCatalogId == null || catalog == null) {
-			resultMap.put("status", 0);
-			resultMap.put("message", "归属品目未映射标准品目参数");
-			return resultMap;
-		}*/
+//		if (govCatalogId == null || catalog == null) {
+//			resultMap.put("status", 0);
+//			resultMap.put("message", "归属品目未映射标准品目参数");
+//			return resultMap;
+//		}
 		//设置财政品目id
 		product.setGovCatalogId(govCatalogId);
 		/** ---------品目相关---end----------  */
 		
 		/**-----------产品关键参数校验不为空---start-------------------*/
-		if (govCatalogId != null) {
+		/*if (govCatalogId != null) {
 			//获取财政品目对应参数
 			List<Parameter> parameters = parameterMapper.getParameterJoinByCatalogId(govCatalogId);
 			String parameterMsg = "";
@@ -240,7 +240,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				resultMap.put("message", "请录入" + parameterMsg + "参数信息");
 				return resultMap;
 			}
-		}
+		}*/
 		/**-----------产品参数校验---end-------------------*/
 		
 		if (product.getId() != null) {
@@ -305,9 +305,9 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 			result = saveSelective(product);
 			
 			Suppliers supplier = suppliersMapper.selectByPrimaryKey(product.getSupplierId());
-			if(supplier != null && supplier.getCode() != null){
-				product.setSku(supplier.getCode() + product.getId());
-			}
+//			if(supplier != null && supplier.getCode() != null){
+//				product.setSku(supplier.getCode() + product.getId());
+//			}
 			result = updateNotNull(product);
 			/*---保存图片----*/
 			if (result > 0 && !CollectionUtils.isEmpty(product.getPics())) {

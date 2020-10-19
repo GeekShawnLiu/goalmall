@@ -12,10 +12,13 @@ import org.springframework.util.CollectionUtils;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+import www.tonghao.common.utils.CollectionUtil;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.service.common.base.impl.BaseServiceImpl;
+import www.tonghao.service.common.entity.CatalogParameter;
 import www.tonghao.service.common.entity.PlatformCatalogs;
 import www.tonghao.service.common.mapper.PlatformCatalogsMapper;
+import www.tonghao.service.common.service.CatalogParameterService;
 import www.tonghao.service.common.service.PlatformCatalogsService;
 
 @Service("platformCatalogsService")
@@ -23,7 +26,10 @@ import www.tonghao.service.common.service.PlatformCatalogsService;
 public class PlatformCatalogsServiceImpl extends BaseServiceImpl<PlatformCatalogs> implements PlatformCatalogsService {
 
 	@Autowired
-	private PlatformCatalogsMapper platformCatalogsMapper; 
+	private PlatformCatalogsMapper platformCatalogsMapper;
+
+	@Autowired
+	private CatalogParameterService catalogParameterService;
 	
 	@Override
 	public int saveOrUpdate(PlatformCatalogs platformCatalogs) {
@@ -105,7 +111,18 @@ public class PlatformCatalogsServiceImpl extends BaseServiceImpl<PlatformCatalog
 					updateNotNull(oldParentCata);
 				}
 			}
+
+			//更新品目参数，先删除后添加
+			catalogParameterService.deleteByCatalogId(platformCatalogs.getId());
+
+			List<CatalogParameter> parameterList = platformCatalogs.getParametersList();
+			if (!CollectionUtils.isEmpty(parameterList)){
+				for (CatalogParameter catalogParameter : parameterList) {
+					catalogParameterService.save(catalogParameter);
+				}
+			}
 		}else{
+			//新增品目
 			PlatformCatalogs newParentCata = platformCatalogsMapper.selectByPrimaryKey(platformCatalogs.getParentId());
 			//更新所选父节点isParent
 			if(newParentCata !=null && "false".equals(newParentCata.getIsParent())){
@@ -121,6 +138,14 @@ public class PlatformCatalogsServiceImpl extends BaseServiceImpl<PlatformCatalog
 			platformCatalogs.setCreatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 			platformCatalogs.setUpdatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 			reault_default = saveSelective(platformCatalogs);
+
+			//添加品目参数
+			List<CatalogParameter> parameterList = platformCatalogs.getParametersList();
+			if (!CollectionUtils.isEmpty(parameterList)){
+				for (CatalogParameter catalogParameter : parameterList) {
+					catalogParameterService.save(catalogParameter);
+				}
+			}
 		}
 		return reault_default;
 	}
@@ -162,6 +187,9 @@ public class PlatformCatalogsServiceImpl extends BaseServiceImpl<PlatformCatalog
 			updateNotNull(parentCata);
 		}
 		int deleteByPrimaryKey = delete(id);
+
+		//删除品目参数
+		catalogParameterService.deleteByCatalogId(id);
 		return deleteByPrimaryKey;
 	}
 	@Override

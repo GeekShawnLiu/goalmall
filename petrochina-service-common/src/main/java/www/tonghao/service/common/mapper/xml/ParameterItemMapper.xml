@@ -14,7 +14,11 @@
     <result column="stand_value_id" jdbcType="VARCHAR" property="standValueId" />
     <result column="parameter_id" jdbcType="BIGINT" property="parameterId" />
   </resultMap>
-  
+
+  <select id="getByParameterId" parameterType="Long" resultMap="BaseResultMap">
+      SELECT * FROM `parameter_item` WHERE parameter_id = #{parameterId} ORDER BY position
+  </select>
+
   <!-- 根据大数据平台参数id获取参数值 -->
   <select id="getByStandParamId" parameterType="String" resultMap="BaseResultMap">
   		SELECT * FROM `parameter_item` WHERE stand_param_id = #{standParamId} ORDER BY position

@@ -15,6 +15,9 @@
     <result column="param_value" jdbcType="VARCHAR" property="paramValue" />
     <result column="platform_catalogs_id" jdbcType="BIGINT" property="platformCatalogsId" />
     <result column="position" jdbcType="REAL" property="position" />
+    <result column="parent_param_id" jdbcType="BIGINT" property="parentParamId" />
+    <result column="parent_param_value" jdbcType="VARCHAR" property="parentParamValue" />
+    <result column="param_id" jdbcType="BIGINT" property="paramId" />
   </resultMap>
    
   <!-- 查询产品参数 -->

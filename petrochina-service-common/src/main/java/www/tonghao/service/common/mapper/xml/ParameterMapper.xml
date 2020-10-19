@@ -20,6 +20,10 @@
   <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Parameter" extends="BaseResultMap" >
   	<collection column="stand_param_id" property="parameterItems" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ParameterItem" select="www.tonghao.service.common.mapper.ParameterItemMapper.getByStandParamId"/>
   </resultMap>
+
+  <resultMap id="ExtResultMap" type="www.tonghao.service.common.entity.Parameter" extends="BaseResultMap" >
+    <collection column="id" property="parameterItems" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ParameterItem" select="www.tonghao.service.common.mapper.ParameterItemMapper.getByParameterId"/>
+  </resultMap>
   
   <select id="getParamterByCatalogsId" parameterType="Long" resultType="www.tonghao.service.common.entity.ParameterItem">
     select p.name,p.is_key as isKey,p.is_sellable as isSellable,p.ttype,p.position,it.name as itemName,it.position as itemPosition  from parameter p LEFT JOIN parameter_item it on p.id=it.parameter_id
@@ -30,7 +34,17 @@
   <select id="getParameterJoinByCatalogId" parameterType="Long" resultMap="RelationResultMap">
   	SELECT * FROM `parameter` WHERE catalogs_id = #{catalogId} ORDER BY position
   </select>
-  
+
+  <!--<select id="getByCatalogId" parameterType="Long" resultMap="ExtResultMap">-->
+  	<!--SELECT * FROM `parameter` WHERE catalogs_id = #{catalogId} ORDER BY position-->
+  <!--</select>-->
+
+  <select id="getByCatalogId" parameterType="Long" resultMap="ExtResultMap">
+  	SELECT * FROM `parameter` WHERE id in
+  	(select  parameter_id from catalog_parameter where catalog_id = #{catalogId})
+  	ORDER BY position
+  </select>
+
   <delete id="deleteParameterBycatalogsId" parameterType="Long">
      delete from parameter where catalogs_id=#{catalogsId}
   </delete>
@@ -47,5 +61,13 @@
   <select id="getOneByStandParamId" parameterType="java.lang.String" resultMap="BaseResultMap">
   		select tb.id,tb.name,tb.is_key from parameter tb 
   		where tb.stand_param_id=#{standParamId} limit 1
+  </select>
+
+  <select id="getCountByName" parameterType="java.lang.String" resultType="Long">
+  select count(0) from parameter where `name` = #{name}
+</select>
+
+  <select id="selectAllByOrder" resultMap="ExtResultMap">
+    SELECT * FROM `parameter`  ORDER BY position
   </select>
 </mapper>

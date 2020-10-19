@@ -209,6 +209,12 @@ public class PlatformCatalogs extends BaseEntity{
     private String priceRange;
 
     /**
+     * 品目参数
+     */
+    @Transient
+    private List<CatalogParameter> parametersList;
+
+    /**
      * 获取创建时间
      *
      * @return created_at - 创建时间
@@ -761,5 +767,12 @@ public class PlatformCatalogs extends BaseEntity{
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-    
+
+    public List<CatalogParameter> getParametersList() {
+        return parametersList;
+    }
+
+    public void setParametersList(List<CatalogParameter> parametersList) {
+        this.parametersList = parametersList;
+    }
 }

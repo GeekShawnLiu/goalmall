@@ -14,7 +14,7 @@ public interface ParameterMapper extends BaseMapper<Parameter> {
 	/**  
 	 * <p>Title: getParameterJoinByCatalogId</p>  
 	 * <p>Description: </p>  
-	 * @author Yml  
+	 * @author Yml
 	 * @param catalogId
 	 * @return  
 	 */  
@@ -32,5 +32,11 @@ public interface ParameterMapper extends BaseMapper<Parameter> {
      * @return
      */
     Parameter getOneByStandParamId(@Param("standParamId")String standParamId);
+
+    long getCountByName(@Param("name") String name);
+
+	List<Parameter> getByCatalogId(@Param("catalogId") Long catalogId);
+
+	List<Parameter> selectAllByOrder();
 
 }
