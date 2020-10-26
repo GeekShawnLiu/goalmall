@@ -66,11 +66,11 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 return ApiResultUtil.error("用户名或密码错误");
             }
             String token = UUID.randomUUID().toString().replaceAll("-", "");
-            redisDao.setKey(token, users.getId() + "", 43200000L);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(nowDate);
             calendar.add(Calendar.HOUR, 12);
             String expires_at = dateFormat.format(calendar.getTime());
+            redisDao.setKey(token, users.getId() + "", 43200000L);
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("access_token", token);
             tokenMap.put("expires_at", expires_at);

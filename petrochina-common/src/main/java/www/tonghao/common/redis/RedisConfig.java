@@ -34,8 +34,8 @@ public class RedisConfig {
     private int port;
     @Value("${spring.redis.timeout}")
     private int timeout;
-//    @Value("${spring.redis.password}")
-//    private String password;
+    @Value("${spring.redis.password}")
+    private String password;
     @Value("${spring.redis.database}")
     private int database;
     @Value("${spring.redis.pool.max-idle}")
@@ -76,8 +76,8 @@ public class RedisConfig {
     	RedisStandaloneConfiguration configuration=new RedisStandaloneConfiguration();
     	configuration.setDatabase(database);
     	configuration.setHostName(host);
-//    	RedisPassword of = RedisPassword.of(password);
-//    	configuration.setPassword(of);
+    	RedisPassword of = RedisPassword.of(password);
+    	configuration.setPassword(of);
     	configuration.setPort(port);
     	JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(configuration);
     	JedisPoolConfig poolConfig=new JedisPoolConfig();

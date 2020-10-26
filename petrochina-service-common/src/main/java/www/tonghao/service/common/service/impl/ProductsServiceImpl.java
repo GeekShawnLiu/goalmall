@@ -1109,15 +1109,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol=null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol=protocols.get(0);
-							if(protocol != null){
-								product.setProtocolId(protocol.getId());
-								product.setProtocolName(protocol.getName());
-							}
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol=null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol=protocols.get(0);
+//							if(protocol != null){
+//								product.setProtocolId(protocol.getId());
+//								product.setProtocolName(protocol.getName());
+//							}
+//						}
 						product.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 						product.setIsDelete(0);
 						product.setSupplierId(supplier.getId());
@@ -1476,13 +1476,13 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol = null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol = protocols.get(0);
-							products.setProtocolId(protocol.getId());
-							products.setProtocolName(protocol.getName());
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol = null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol = protocols.get(0);
+//							products.setProtocolId(protocol.getId());
+//							products.setProtocolName(protocol.getName());
+//						}
 					}
 					products.setCatalogId(platformCatalog.getId());
 					products.setCatalogName(platformCatalog.getName());
@@ -1645,15 +1645,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol=null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol=protocols.get(0);
-							if(protocol != null){
-								product.setProtocolId(protocol.getId());
-								product.setProtocolName(protocol.getName());
-							}
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol=null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol=protocols.get(0);
+//							if(protocol != null){
+//								product.setProtocolId(protocol.getId());
+//								product.setProtocolName(protocol.getName());
+//							}
+//						}
 						product.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 						product.setIsDelete(0);
 						product.setSupplierId(supplier.getId());
@@ -1905,11 +1905,11 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol = null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol = protocols.get(0);
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol = null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol = protocols.get(0);
+//						}
 						
 						product = new Products();
 						
@@ -1937,10 +1937,10 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						product.setCatalogId(platformCatalog.getId());
 						product.setCatalogName(platformCatalog.getName());
 						product.setGovCatalogId(platformCatalog.getCatalogId());
-						if(protocol != null){
-							product.setProtocolId(protocol.getId());
-							product.setProtocolName(protocol.getName());
-						}
+//						if(protocol != null){
+//							product.setProtocolId(protocol.getId());
+//							product.setProtocolName(protocol.getName());
+//						}
 						product.setCoverUrl(productDetail.getResult().getImage_path());
 						product.setDetail(productDetail.getResult().getIntroduction());
 						product.setWare(productDetail.getResult().getWare());

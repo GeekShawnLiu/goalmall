@@ -76,4 +76,12 @@ public class PlatformCatalogMapping extends BaseEntity {
     public void setPlatformInfoCode(String platformInfoCode) {
         this.platformInfoCode = platformInfoCode;
     }
+
+    public String getPlatformCatalogTreeName() {
+        return platformCatalogTreeName;
+    }
+
+    public void setPlatformCatalogTreeName(String platformCatalogTreeName) {
+        this.platformCatalogTreeName = platformCatalogTreeName;
+    }
 }
