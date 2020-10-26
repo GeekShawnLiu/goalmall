@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ProductQuotationMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ProductQuotation">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="product_id" jdbcType="BIGINT" property="productId" />
+        <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+        <result column="price" jdbcType="DECIMAL" property="price" />
+        <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice" />
+        <result column="stock" jdbcType="INTEGER" property="stock" />
+        <result column="sales" jdbcType="INTEGER" property="sales" />
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="sku" jdbcType="VARCHAR" property="sku" />
+        <result column="platform_info_id" jdbcType="BIGINT" property="platformInfoId" />
+        <result column="platform_info_code" jdbcType="VARCHAR" property="platformInfoCode" />
+        <result column="protocol_id" jdbcType="BIGINT" property="protocolId" />
+        <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+        <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+    </resultMap>
+
+    <select id="selectSkuPool" resultType="String">
+        SELECT
+            pq.sku
+        FROM
+            (
+                SELECT catalog_id FROM platform_catalog_mapping WHERE platform_info_code = #{platformCode} AND platform_catalog_id = #{catalogId}
+            ) pcm
+        INNER JOIN
+            (
+                SELECT sku, catalog_id FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND status = 3
+            )pq
+        ON
+            pcm.catalog_id = pq.catalog_id
+    </select>
+
+    <select id="selectBySku" resultMap="BaseResultMap">
+        SELECT * FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND sku = #{sku}
+    </select>
+
+    <select id="selectBySkus" resultMap="BaseResultMap">
+        SELECT
+            id,
+            sku,
+            price,
+            stock,
+            status,
+            protocol_price
+        FROM
+            product_quotation
+        WHERE
+            is_delete = 0
+        AND platform_info_code = #{platformCode}
+        AND sku IN
+        <foreach collection="skus" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectByProductId" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            product_quotation
+        WHERE
+            product_id = #{productId}
+            AND is_delete = 0
+            AND platform_info_code = #{platformCode}
+        ORDER BY
+            id DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectByProtocolId" resultMap="BaseResultMap">
+        SELECT
+            pq.*
+        FROM
+            product_quotation pq
+            inner join products p on p.id = pq.product_id
+        WHERE
+            pq.is_delete = 0
+            <if test="status != null">
+                AND pq.status = #{status}
+            </if>
+            <if test="productName != null and productName != ''">
+                AND p.name LIKE CONCAT('%',#{productName},'%')
+            </if>
+            <if test="sku != null and sku != ''">
+                AND pq.sku = #{sku}
+            </if>
+            AND pq.protocol_id = #{protocolId}
+        ORDER BY
+            pq.id DESC
+    </select>
+
+    <select id="selectAddProtocolProductList" resultType="www.tonghao.service.common.entity.Products">
+        SELECT
+            *
+        FROM
+            products
+        WHERE
+            is_delete = 0
+            <if test="productName != null and productName != ''">
+                AND name LIKE CONCAT('%',#{productName},'%')
+            </if>
+            <if test="sku != null and sku != ''">
+                AND sku = #{sku}
+            </if>
+            AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId})
+        ORDER BY
+            id DESC
+    </select>
+</mapper>

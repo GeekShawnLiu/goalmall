@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.PlatformCatalogMappingMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.PlatformCatalogMapping">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="catalog_id" jdbcType="BIGINT" property="catalogId"/>
+        <result column="platform_catalog_id" jdbcType="VARCHAR" property="platformCatalogId"/>
+        <result column="platform_catalog_name" jdbcType="VARCHAR" property="platformCatalogName"/>
+        <result column="platform_catalog_tree_name" jdbcType="VARCHAR" property="platformCatalogTreeName"/>
+        <result column="platform_info_id" jdbcType="BIGINT" property="platformInfoId"/>
+        <result column="platform_info_code" jdbcType="VARCHAR" property="platformInfoCode"/>
+    </resultMap>
+
+
+    <select id="selectByPlatformInfoCode" parameterType="String" resultType="String">
+        select platform_catalog_id from platform_catalog_mapping where platform_info_code = #{platformInfoCode}
+    </select>
+    
+    <select id="selectByCatalogId" resultMap="BaseResultMap">
+        select * from platform_catalog_mapping where platform_info_code = #{platformInfoCode} and catalog_id = #{catalogId} order by id desc limit 1
+    </select>
+</mapper>

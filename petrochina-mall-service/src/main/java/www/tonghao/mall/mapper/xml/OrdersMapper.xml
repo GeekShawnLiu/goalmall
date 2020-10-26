@@ -65,6 +65,8 @@
     <result column="receipt_at" jdbcType="VARCHAR" property="receiptAt" />
     <result column="is_receipt" jdbcType="INTEGER" property="isReceipt" />
     <result column="is_cancel" jdbcType="INTEGER" property="isCancel" />
+	<result column="logistics_type" jdbcType="INTEGER" property="logisticsType" />
+	<result column="platform_code" jdbcType="VARCHAR" property="platformCode" />
   </resultMap>
   
   <resultMap id="ExtResultMap" type="www.tonghao.mall.entity.Orders" extends="BaseResultMap">
