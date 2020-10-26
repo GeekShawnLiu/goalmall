@@ -63,5 +63,6 @@ public interface OrderItemsMapper extends BaseMapper<OrderItems> {
 	 * @return
 	 */
 	OrderItems selectByOrderAndProduct(@Param("orderId")Long orderId, @Param("productId")Long productId);
-	
+
+	List<OrderItems> findListByOrderId(@Param("orderId")Long orderId);
 }

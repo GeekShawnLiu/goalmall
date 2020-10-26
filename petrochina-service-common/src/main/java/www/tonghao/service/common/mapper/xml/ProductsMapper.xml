@@ -1,223 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="www.tonghao.service.common.mapper.ProductsMapper">
-  <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Products">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
-    <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
-    <result column="sn" jdbcType="VARCHAR" property="sn" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="market_price" jdbcType="DECIMAL" property="marketPrice" />
-    <result column="cost" jdbcType="DECIMAL" property="cost" />
-    <result column="cover_url" jdbcType="VARCHAR" property="coverUrl" />
-    <result column="cover_name" jdbcType="VARCHAR" property="coverName" />
-    <result column="unit" jdbcType="VARCHAR" property="unit" />
-    <result column="weight" jdbcType="VARCHAR" property="weight" />
-    <result column="stock" jdbcType="INTEGER" property="stock" />
-    <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
-    <result column="brand_id" jdbcType="BIGINT" property="brandId" />
-    <result column="model" jdbcType="VARCHAR" property="model" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
-    <result column="sales" jdbcType="INTEGER" property="sales" />
-    <result column="hits" jdbcType="INTEGER" property="hits" />
-    <result column="is_marketable" jdbcType="TINYINT" property="isMarketable" />
-    <result column="month_sales" jdbcType="INTEGER" property="monthSales" />
-    <result column="month_sales_index" jdbcType="INTEGER" property="monthSalesIndex" />
-    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
-   	<result column="sku" jdbcType="VARCHAR" property="sku" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="protocol_id" jdbcType="INTEGER" property="protocolId" />
-    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
-    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
-    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
-    <result column="protocol_name" jdbcType="VARCHAR" property="protocolName" />
-    <result column="manufacturer_ident" jdbcType="VARCHAR" property="manufacturerIdent" />
-    <result column="after_sale_service" jdbcType="VARCHAR" property="afterSaleService" />
-    <result column="detail" jdbcType="VARCHAR" property="detail" />
-    <result column="supplier_protocol_id" jdbcType="INTEGER" property="supplierProtocolId" /> 
-    <result column="gov_catalog_id" jdbcType="INTEGER" property="govCatalogId" /> 
-    <result column="factory_URL" jdbcType="VARCHAR" property="factoryURL" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="is_complete_machine" jdbcType="INTEGER" property="isCompleteMachine" />
-    <result column="guarantee_period" jdbcType="INTEGER" property="guaranteePeriod" />
-    <result column="mall_brand_name" jdbcType="VARCHAR" property="mallBrandName" />
-    <result column="param" jdbcType="VARCHAR" property="param" />
-    <result column="ware" jdbcType="VARCHAR" property="ware" />
-    <result column="product_area" jdbcType="VARCHAR" property="productArea" />
-    <result column="upc" jdbcType="VARCHAR" property="upc" />
-    <result column="commodities_id" jdbcType="VARCHAR" property="commoditiesId" />
-    <result column="is_batch" jdbcType="INTEGER" property="isBatch" /> 
-    <result column="is_energy_saving" jdbcType="INTEGER" property="isEnergySaving" /> 
-    <result column="car_type" jdbcType="INTEGER" property="carType" />
-    <result column="energy_save_certNo" jdbcType="VARCHAR" property="energySaveCertNo" />
-    <result column="product_area_type" jdbcType="INTEGER" property="productAreaType" />
-    <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice" />
-    <result column="is_change_price" jdbcType="INTEGER" property="isChangePrice" />
-    <result column="emall_cataloge_id" jdbcType="VARCHAR" property="emallCatalogeId" />
-    <result column="is_show" jdbcType="INTEGER" property="isShow" />
-    <result column="wxintroduction" jdbcType="VARCHAR" property="wxintroduction" />
-    <result column="appintroduce" jdbcType="VARCHAR" property="appintroduce" />
-    <result column="is_factory_ship" jdbcType="INTEGER" property="isFactoryShip" />
-  </resultMap>
-  
-  <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap" >
-  	<association column="protocol_id" property="protocol" select="www.tonghao.service.common.mapper.ProtocolMapper.getProtocolById"/>
-	<association column="brand_id" property="brand" select="www.tonghao.service.common.mapper.BrandMapper.selectByPrimaryKey"/>
-	<association column="catalog_id" property="platformCatalogs" select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"/>
-  	<collection column="id" property="pics" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ProductPics" select="www.tonghao.service.common.mapper.ProductPicsMapper.getByProductId"/>
-  	<collection column="id" property="productParameters" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ProductParameter" select="www.tonghao.service.common.mapper.ProductParameterMapper.getByProductId"/>
-  </resultMap>
-  
-  <resultMap id="ExResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap" >
-	<association column="brand_id" property="brand" select="www.tonghao.service.common.mapper.BrandMapper.selectByPrimaryKey"/>
-	<association column="catalog_id" property="platformCatalogs" select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"/>
-  	<collection column="id" property="pics" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ProductPics" select="www.tonghao.service.common.mapper.ProductPicsMapper.getByProductId"/>
-  	<collection column="id" property="productParameters" javaType="ArrayList" ofType="www.tonghao.service.common.entity.ProductParameter" select="www.tonghao.service.common.mapper.ProductParameterMapper.getByProductId"/>
-  </resultMap>
-  
-  <select id="getById" parameterType="java.lang.Long" resultMap="ExResultMap">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.Products">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="created_at" jdbcType="VARCHAR" property="createdAt"/>
+        <result column="updated_at" jdbcType="VARCHAR" property="updatedAt"/>
+        <result column="sn" jdbcType="VARCHAR" property="sn"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="market_price" jdbcType="DECIMAL" property="marketPrice"/>
+        <result column="cost" jdbcType="DECIMAL" property="cost"/>
+        <result column="cover_url" jdbcType="VARCHAR" property="coverUrl"/>
+        <result column="cover_name" jdbcType="VARCHAR" property="coverName"/>
+        <result column="unit" jdbcType="VARCHAR" property="unit"/>
+        <result column="weight" jdbcType="VARCHAR" property="weight"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="catalog_id" jdbcType="BIGINT" property="catalogId"/>
+        <result column="brand_id" jdbcType="BIGINT" property="brandId"/>
+        <result column="model" jdbcType="VARCHAR" property="model"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="sales" jdbcType="INTEGER" property="sales"/>
+        <result column="hits" jdbcType="INTEGER" property="hits"/>
+        <result column="is_marketable" jdbcType="TINYINT" property="isMarketable"/>
+        <result column="month_sales" jdbcType="INTEGER" property="monthSales"/>
+        <result column="month_sales_index" jdbcType="INTEGER" property="monthSalesIndex"/>
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
+        <result column="sku" jdbcType="VARCHAR" property="sku"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="protocol_id" jdbcType="INTEGER" property="protocolId"/>
+        <result column="brand_name" jdbcType="VARCHAR" property="brandName"/>
+        <result column="catalog_name" jdbcType="VARCHAR" property="catalogName"/>
+        <result column="supplier_name" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="protocol_name" jdbcType="VARCHAR" property="protocolName"/>
+        <result column="manufacturer_ident" jdbcType="VARCHAR" property="manufacturerIdent"/>
+        <result column="after_sale_service" jdbcType="VARCHAR" property="afterSaleService"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="supplier_protocol_id" jdbcType="INTEGER" property="supplierProtocolId"/>
+        <result column="gov_catalog_id" jdbcType="INTEGER" property="govCatalogId"/>
+        <result column="factory_URL" jdbcType="VARCHAR" property="factoryURL"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="is_complete_machine" jdbcType="INTEGER" property="isCompleteMachine"/>
+        <result column="guarantee_period" jdbcType="INTEGER" property="guaranteePeriod"/>
+        <result column="mall_brand_name" jdbcType="VARCHAR" property="mallBrandName"/>
+        <result column="param" jdbcType="VARCHAR" property="param"/>
+        <result column="ware" jdbcType="VARCHAR" property="ware"/>
+        <result column="product_area" jdbcType="VARCHAR" property="productArea"/>
+        <result column="upc" jdbcType="VARCHAR" property="upc"/>
+        <result column="commodities_id" jdbcType="VARCHAR" property="commoditiesId"/>
+        <result column="is_batch" jdbcType="INTEGER" property="isBatch"/>
+        <result column="is_energy_saving" jdbcType="INTEGER" property="isEnergySaving"/>
+        <result column="car_type" jdbcType="INTEGER" property="carType"/>
+        <result column="energy_save_certNo" jdbcType="VARCHAR" property="energySaveCertNo"/>
+        <result column="product_area_type" jdbcType="INTEGER" property="productAreaType"/>
+        <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice"/>
+        <result column="is_change_price" jdbcType="INTEGER" property="isChangePrice"/>
+        <result column="emall_cataloge_id" jdbcType="VARCHAR" property="emallCatalogeId"/>
+        <result column="is_show" jdbcType="INTEGER" property="isShow"/>
+        <result column="wxintroduction" jdbcType="VARCHAR" property="wxintroduction"/>
+        <result column="appintroduce" jdbcType="VARCHAR" property="appintroduce"/>
+        <result column="is_factory_ship" jdbcType="INTEGER" property="isFactoryShip"/>
+    </resultMap>
+
+    <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap">
+        <association column="protocol_id" property="protocol"
+                     select="www.tonghao.service.common.mapper.ProtocolMapper.getProtocolById"/>
+        <association column="brand_id" property="brand"
+                     select="www.tonghao.service.common.mapper.BrandMapper.selectByPrimaryKey"/>
+        <association column="catalog_id" property="platformCatalogs"
+                     select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"/>
+        <collection column="id" property="pics" javaType="ArrayList"
+                    ofType="www.tonghao.service.common.entity.ProductPics"
+                    select="www.tonghao.service.common.mapper.ProductPicsMapper.getByProductId"/>
+        <collection column="id" property="productParameters" javaType="ArrayList"
+                    ofType="www.tonghao.service.common.entity.ProductParameter"
+                    select="www.tonghao.service.common.mapper.ProductParameterMapper.getByProductId"/>
+    </resultMap>
+
+    <resultMap id="ExResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap">
+        <association column="brand_id" property="brand"
+                     select="www.tonghao.service.common.mapper.BrandMapper.selectByPrimaryKey"/>
+        <association column="catalog_id" property="platformCatalogs"
+                     select="www.tonghao.service.common.mapper.PlatformCatalogsMapper.selectByPrimaryKey"/>
+        <collection column="id" property="pics" javaType="ArrayList"
+                    ofType="www.tonghao.service.common.entity.ProductPics"
+                    select="www.tonghao.service.common.mapper.ProductPicsMapper.getByProductId"/>
+        <collection column="id" property="productParameters" javaType="ArrayList"
+                    ofType="www.tonghao.service.common.entity.ProductParameter"
+                    select="www.tonghao.service.common.mapper.ProductParameterMapper.getByProductId"/>
+    </resultMap>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="ExResultMap">
 	select *
 	from products tb where tb.id = #{id}
   </select>
-  
-  <select id="getBaseById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+    <select id="getBaseById" parameterType="java.lang.Long" resultMap="BaseResultMap">
 	select tb.id,tb.catalog_id,tb.sn,tb.sku,tb.brand_name,tb.model,sales,tb.month_sales,tb.month_sales_index,tb.price,tb.market_price,tb.stock,tb.`status`
 			,tb.is_marketable,tb.protocol_id,tb.supplier_name
 	from products tb where tb.id = #{id}
   </select>
-  
-  <select id="findByCommoditiesId" parameterType="Map" resultMap="BaseResultMap">
-	 select tb.*
-	 from products tb LEFT JOIN protocol p ON tb.protocol_id = p.id 
-	 where tb.is_delete=0 AND tb.commodities_id = #{commoditiesId}
-	 <choose>
-	 	<when test="ptype != null and ptype == 'mall'">
-	 		AND p.types = 1
-	 	</when>
-	 	<when test="ptype != null and ptype == 'others'">
-	 		AND p.types != 1
-	 	</when>
-	 </choose>
-	  <if test="name != null and name != ''">
-      	AND tb.name LIKE CONCAT('%',#{name},'%') 
-      </if>
-      <if test="status != null">
-      	AND tb.status = #{status}
-      </if>
-      <if test="brandName != null and brandName != ''">
-      	AND tb.brand_name LIKE CONCAT('%',#{brandName},'%') 
-      </if>
-      <if test="model != null and model != ''">
-      	AND tb.model LIKE CONCAT('%',#{model},'%') 
-      </if>
-      <if test="catalogId != null and catalogId != ''">
-      	AND tb.catalog_id = #{catalogId}
-      </if>
-      <if test="sku != null and sku != ''">
-      	AND tb.sku LIKE CONCAT('%',#{sku},'%') 
-      </if>
-      <if test="supplierId != null">
-      	AND tb.supplier_id = #{supplierId} 
-      </if>
-      <if test="supplierName != null and supplierName != ''">
-      	AND tb.supplier_name LIKE CONCAT('%',#{supplierName},'%') 
-      </if>
-      <if test="protocolName != null and protocolName != ''">
-      	AND tb.protocol_name LIKE CONCAT('%',#{protocolName},'%') 
-      </if>
-	 ORDER BY tb.created_at desc
-   </select>
-  
-   <select id="find" parameterType="Map" resultMap="BaseResultMap">
-	 select *
-	 from products tb left join platform_catalogs pc on pc.id = tb.catalog_id
-	 where tb.is_delete=0
-	  <if test="name != null and name != ''">
-      	AND tb.name LIKE CONCAT('%',#{name},'%') 
-      </if>
-      <if test="status != null">
-      	AND tb.status = #{status}
-      </if>
-      <if test="isMarketable != null">
-      	AND tb.is_marketable = #{isMarketable}
-      </if>
-      <if test="brandName != null and brandName != ''">
-      	AND tb.brand_name LIKE CONCAT('%',#{brandName},'%') 
-      </if>
-      <if test="model != null and model != ''">
-      	AND tb.model LIKE CONCAT('%',#{model},'%') 
-      </if>
-      <if test="catalogName != null and catalogName != ''">
-      	AND tb.catalog_name LIKE CONCAT('%',#{catalogName},'%') 
-      </if>
-      <if test="catalogId != null and catalogId != '' and tds != null">
-		<if test="tds == 1">
-			and locate(CONCAT('_',#{catalogId},'_'), CONCAT('_', pc.tree_ids)) &gt; 0
-		</if>
-		<if test="tds == 2">
-			and locate(CONCAT('_',#{catalogId},'_'), CONCAT(pc.tree_ids, '_')) &gt; 0
-		</if>
-		<if test="tds == 3">
-			and tb.catalog_id = #{catalogId}
-		</if>
-      </if>
-      <if test="sku != null and sku != ''">
-      	AND tb.sku LIKE CONCAT('%',#{sku},'%') 
-      </if>
-      <if test="supplierId != null">
-      	AND tb.supplier_id = #{supplierId} 
-      </if>
-      <if test="supplierName != null and supplierName != ''">
-      	AND tb.supplier_name LIKE CONCAT('%',#{supplierName},'%') 
-      </if>
-      <if test="protocolName != null and protocolName != ''">
-      	AND tb.protocol_name LIKE CONCAT('%',#{protocolName},'%') 
-      </if>
-      <if test="notStaus != null">
-        AND tb.status != #{notStaus}
-      </if>
-      <if test="commoditiesId != null">
-      	AND tb.commodities_id = #{commoditiesId}
-      </if>
-      <if test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
-        <![CDATA[and tb.updated_at <= #{compareEndDate} and tb.updated_at >= #{compareStartDate}]]>
-      </if>
-      <if test="leftPrice != null">
-      	AND tb.price &gt;= #{leftPrice}
-      </if>
-      <if test="rightPrice != null">
-      	AND tb.price &lt;= #{rightPrice}
-      </if>
-      <if test="checkedIds != null">
-      	AND tb.id not in
-			<foreach collection="checkedIds" index="index" item="item" open="(" separator="," close=")">  
-	        	#{item}
-	    	</foreach>
-      </if>
-      <choose>
-      	<when test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
-      		ORDER BY tb.updated_at desc
-      	</when>
-      	<otherwise>
-	      	ORDER BY FIELD(tb.status,0,2,1,4,3) asc, tb.created_at desc
-      	</otherwise>
-      </choose>
-  </select>
-  
-  <select id="findSupplierProtocolListByEntity" parameterType="www.tonghao.service.common.entity.Products" resultMap="BaseResultMap">
-  	select tb.* from products as tb 
-		INNER JOIN suppliers as s ON tb.supplier_id = s.id 
-		INNER JOIN platform_catalogs as pc ON tb.catalog_id = pc.id
-		<if test="queryfilter!=null and queryfilter['orgId'] != null">
-			LEFT JOIN org_supplier os on os.supplier_id = tb.supplier_id
-		</if>
-		where tb.`status` = 3 and s.is_delete = 0 and s.`status`  = 1 
-		<![CDATA[
+
+    <select id="findByCommoditiesId" parameterType="Map" resultMap="BaseResultMap">
+        select tb.*
+        from products tb LEFT JOIN protocol p ON tb.protocol_id = p.id
+        where tb.is_delete=0 AND tb.commodities_id = #{commoditiesId}
+        <choose>
+            <when test="ptype != null and ptype == 'mall'">
+                AND p.types = 1
+            </when>
+            <when test="ptype != null and ptype == 'others'">
+                AND p.types != 1
+            </when>
+        </choose>
+        <if test="name != null and name != ''">
+            AND tb.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null">
+            AND tb.status = #{status}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND tb.brand_name LIKE CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model != null and model != ''">
+            AND tb.model LIKE CONCAT('%',#{model},'%')
+        </if>
+        <if test="catalogId != null and catalogId != ''">
+            AND tb.catalog_id = #{catalogId}
+        </if>
+        <if test="sku != null and sku != ''">
+            AND tb.sku LIKE CONCAT('%',#{sku},'%')
+        </if>
+        <if test="supplierId != null">
+            AND tb.supplier_id = #{supplierId}
+        </if>
+        <if test="supplierName != null and supplierName != ''">
+            AND tb.supplier_name LIKE CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="protocolName != null and protocolName != ''">
+            AND tb.protocol_name LIKE CONCAT('%',#{protocolName},'%')
+        </if>
+        ORDER BY tb.created_at desc
+    </select>
+
+    <select id="find" parameterType="Map" resultMap="BaseResultMap">
+        select *
+        from products tb left join platform_catalogs pc on pc.id = tb.catalog_id
+        where tb.is_delete=0
+        <if test="name != null and name != ''">
+            AND tb.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null">
+            AND tb.status = #{status}
+        </if>
+        <if test="isMarketable != null">
+            AND tb.is_marketable = #{isMarketable}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND tb.brand_name LIKE CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model != null and model != ''">
+            AND tb.model LIKE CONCAT('%',#{model},'%')
+        </if>
+        <if test="catalogName != null and catalogName != ''">
+            AND tb.catalog_name LIKE CONCAT('%',#{catalogName},'%')
+        </if>
+        <if test="catalogId != null and catalogId != '' and tds != null">
+            <if test="tds == 1">
+                and locate(CONCAT('_',#{catalogId},'_'), CONCAT('_', pc.tree_ids)) &gt; 0
+            </if>
+            <if test="tds == 2">
+                and locate(CONCAT('_',#{catalogId},'_'), CONCAT(pc.tree_ids, '_')) &gt; 0
+            </if>
+            <if test="tds == 3">
+                and tb.catalog_id = #{catalogId}
+            </if>
+        </if>
+        <if test="sku != null and sku != ''">
+            AND tb.sku LIKE CONCAT('%',#{sku},'%')
+        </if>
+        <if test="supplierId != null">
+            AND tb.supplier_id = #{supplierId}
+        </if>
+        <if test="supplierName != null and supplierName != ''">
+            AND tb.supplier_name LIKE CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="protocolName != null and protocolName != ''">
+            AND tb.protocol_name LIKE CONCAT('%',#{protocolName},'%')
+        </if>
+        <if test="notStaus != null">
+            AND tb.status != #{notStaus}
+        </if>
+        <if test="commoditiesId != null">
+            AND tb.commodities_id = #{commoditiesId}
+        </if>
+        <if test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
+            <![CDATA[and tb.updated_at <= #{compareEndDate} and tb.updated_at >= #{compareStartDate}]]>
+        </if>
+        <if test="leftPrice != null">
+            AND tb.price &gt;= #{leftPrice}
+        </if>
+        <if test="rightPrice != null">
+            AND tb.price &lt;= #{rightPrice}
+        </if>
+        <if test="checkedIds != null">
+            AND tb.id not in
+            <foreach collection="checkedIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <choose>
+            <when test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
+                ORDER BY tb.updated_at desc
+            </when>
+            <otherwise>
+                ORDER BY FIELD(tb.status,0,2,1,4,3) asc, tb.created_at desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findSupplierProtocolListByEntity" parameterType="www.tonghao.service.common.entity.Products"
+            resultMap="BaseResultMap">
+        select tb.* from products as tb
+        INNER JOIN suppliers as s ON tb.supplier_id = s.id
+        INNER JOIN platform_catalogs as pc ON tb.catalog_id = pc.id
+        <if test="queryfilter!=null and queryfilter['orgId'] != null">
+            LEFT JOIN org_supplier os on os.supplier_id = tb.supplier_id
+        </if>
+        where tb.`status` = 3 and s.is_delete = 0 and s.`status` = 1
+        <![CDATA[
 		and (
 		  select count(1) from suppliers as s2 
 			INNER JOIN supplier_protocol as sp ON s2.id = sp.supplier_id 
@@ -226,101 +240,100 @@
 			and NOW()>=p.start_time and NOW()<=p.end_time and s2.id = s.id
 		)>0
 		]]>
-		<if test="queryfilter!=null">
-			<!-- tds 树层级标识 0:末级 否则非末级 末级用等于 否则like -->
-			<if test="queryfilter['mcid']!=null and queryfilter['andCidEq']!=null">
-				and pc.id = #{queryfilter.mcid}
-			</if>
-			<if test="queryfilter['mcid']!=null and queryfilter['andCidLike']!=null">
-				and locate(CONCAT('_', #{queryfilter.mcid}, '_'), CONCAT('_', pc.tree_ids)) &gt; 0
-			</if>
-			<if test="queryfilter['orgId'] != null">
-				and os.org_id = #{queryfilter.orgId}
-			</if>
-			<if test="queryfilter['supplierId'] != null">
-				and tb.supplier_id = #{queryfilter.supplierId}
-			</if>
-			<if test="queryfilter['groupByCondition']!=null and queryfilter['groupByCondition']!=''">
-				group by ${queryfilter.groupByCondition}
-			</if>
-			<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
-				order by ${queryfilter.orderByCondition}
-			</if>
-			<if test="queryfilter['limitNum']!=null">
-				limit #{queryfilter.limitNum}
-			</if>
-		</if>
-  </select>
-  
-  
-  
-   <select id="getBrandPara" parameterType="map" resultType="long">
-	    SELECT  DISTINCT p.catalog_id from products p where 1=1
-	    <if test="catalogName != null and catalogName != ''">
-				and p.catalog_name = #{catalogName}
-			</if>
-  </select>
-  
-  <!-- 查询我代理的商品 -->
-  <select id="findMyAgentProducts" parameterType="map" resultMap="BaseResultMap">
-	SELECT 
-		DISTINCT p.*
-	FROM
-		products p
-	INNER JOIN supplier_protocol_catalog spc ON  p.protocol_id = spc.protocol_id AND p.catalog_id = spc.catalogs_id
-	INNER JOIN protocol_agent pa ON pa.id =spc.supper_anent_id AND pa.supplier_agent_id = #{supplierId}
-	INNER JOIN supplier_protocol sp ON pa.supplier_protocol_id = sp.id AND sp.supplier_id = p.supplier_id
-	WHERE spc.supplier_id = #{supplierId} AND spc.type = 2 AND pa.is_delete=0 AND p.is_delete=0
-	<if test="name != null and name != ''">
-      	AND p.name LIKE CONCAT('%',#{name},'%') 
-      </if>
-      <if test="status != null">
-      	AND p.status = #{status}
-      </if>
-      <if test="isMarketable != null">
-      	AND p.is_marketable = #{isMarketable}
-      </if>
-      <if test="brandName != null and brandName != ''">
-      	AND p.brand_name LIKE CONCAT('%',#{brandName},'%') 
-      </if>
-      <if test="model != null and model != ''">
-      	AND p.model LIKE CONCAT('%',#{model},'%') 
-      </if>
-      <if test="catalogName != null and catalogName != ''">
-      	AND p.catalog_name LIKE CONCAT('%',#{catalogName},'%') 
-      </if>
-      <if test="catalogId != null and catalogId != ''">
-      	AND p.catalog_id = #{catalogId}
-      </if>
-      <if test="sku != null and sku != ''">
-      	AND p.sku LIKE CONCAT('%',#{sku},'%') 
-      </if>
-      <if test="protocolName != null and protocolName != ''">
-      	AND p.protocol_name LIKE CONCAT('%',#{protocolName},'%') 
-      </if>
-      <if test="notStaus != null">
-        AND p.status != #{notStaus}
-      </if>
-      <if test="supplierName != null and supplierName != ''">
-      	AND p.supplier_name LIKE CONCAT('%',#{supplierName},'%') 
-      </if>
-      ORDER BY FIELD(p.status,0,2,1,4,3) asc, p.created_at desc
-  </select>
-  
-  <select id="selectProductByBrandModel" parameterType="String" resultMap="BaseResultMap">
-  	select * from products where 1=1
-  	<if test="brand != null and brand !=''">
-  	 and brand_name LIKE CONCAT('%',#{brand},'%') 
-  	</if>
-  	<if test="model != null and model !=''">
-  	 and model=#{model}
-  	</if>
-  	<if test="catalogId != null and catalogId !=''">
-  	 and catalog_name=#{catalogId}
-  	</if>
-  	order by created_at desc
-  </select>
-  
+        <if test="queryfilter!=null">
+            <!-- tds 树层级标识 0:末级 否则非末级 末级用等于 否则like -->
+            <if test="queryfilter['mcid']!=null and queryfilter['andCidEq']!=null">
+                and pc.id = #{queryfilter.mcid}
+            </if>
+            <if test="queryfilter['mcid']!=null and queryfilter['andCidLike']!=null">
+                and locate(CONCAT('_', #{queryfilter.mcid}, '_'), CONCAT('_', pc.tree_ids)) &gt; 0
+            </if>
+            <if test="queryfilter['orgId'] != null">
+                and os.org_id = #{queryfilter.orgId}
+            </if>
+            <if test="queryfilter['supplierId'] != null">
+                and tb.supplier_id = #{queryfilter.supplierId}
+            </if>
+            <if test="queryfilter['groupByCondition']!=null and queryfilter['groupByCondition']!=''">
+                group by ${queryfilter.groupByCondition}
+            </if>
+            <if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
+                order by ${queryfilter.orderByCondition}
+            </if>
+            <if test="queryfilter['limitNum']!=null">
+                limit #{queryfilter.limitNum}
+            </if>
+        </if>
+    </select>
+
+
+    <select id="getBrandPara" parameterType="map" resultType="long">
+        SELECT DISTINCT p.catalog_id from products p where 1=1
+        <if test="catalogName != null and catalogName != ''">
+            and p.catalog_name = #{catalogName}
+        </if>
+    </select>
+
+    <!-- 查询我代理的商品 -->
+    <select id="findMyAgentProducts" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        DISTINCT p.*
+        FROM
+        products p
+        INNER JOIN supplier_protocol_catalog spc ON p.protocol_id = spc.protocol_id AND p.catalog_id = spc.catalogs_id
+        INNER JOIN protocol_agent pa ON pa.id =spc.supper_anent_id AND pa.supplier_agent_id = #{supplierId}
+        INNER JOIN supplier_protocol sp ON pa.supplier_protocol_id = sp.id AND sp.supplier_id = p.supplier_id
+        WHERE spc.supplier_id = #{supplierId} AND spc.type = 2 AND pa.is_delete=0 AND p.is_delete=0
+        <if test="name != null and name != ''">
+            AND p.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null">
+            AND p.status = #{status}
+        </if>
+        <if test="isMarketable != null">
+            AND p.is_marketable = #{isMarketable}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND p.brand_name LIKE CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model != null and model != ''">
+            AND p.model LIKE CONCAT('%',#{model},'%')
+        </if>
+        <if test="catalogName != null and catalogName != ''">
+            AND p.catalog_name LIKE CONCAT('%',#{catalogName},'%')
+        </if>
+        <if test="catalogId != null and catalogId != ''">
+            AND p.catalog_id = #{catalogId}
+        </if>
+        <if test="sku != null and sku != ''">
+            AND p.sku LIKE CONCAT('%',#{sku},'%')
+        </if>
+        <if test="protocolName != null and protocolName != ''">
+            AND p.protocol_name LIKE CONCAT('%',#{protocolName},'%')
+        </if>
+        <if test="notStaus != null">
+            AND p.status != #{notStaus}
+        </if>
+        <if test="supplierName != null and supplierName != ''">
+            AND p.supplier_name LIKE CONCAT('%',#{supplierName},'%')
+        </if>
+        ORDER BY FIELD(p.status,0,2,1,4,3) asc, p.created_at desc
+    </select>
+
+    <select id="selectProductByBrandModel" parameterType="String" resultMap="BaseResultMap">
+        select * from products where 1=1
+        <if test="brand != null and brand !=''">
+            and brand_name LIKE CONCAT('%',#{brand},'%')
+        </if>
+        <if test="model != null and model !=''">
+            and model=#{model}
+        </if>
+        <if test="catalogId != null and catalogId !=''">
+            and catalog_name=#{catalogId}
+        </if>
+        order by created_at desc
+    </select>
+
     <select id="findBrandByIds" parameterType="map" resultMap="BaseResultMap">
 	select tb.* from products as tb 
 	inner join suppliers as s on tb.supplier_id=s.id
@@ -334,298 +347,303 @@
 	)&gt; 0
 	AND pc.code = #{catalogCode} and tb.sku is null
   </select>
-  
-  <select id="selectProductCount" parameterType="map" resultType="Integer">
+
+    <select id="selectProductCount" parameterType="map" resultType="Integer">
     select count(*) from products where brand_name is null and supplier_id=#{supplierId}
   </select>
-  
-  <select id="selectProductPage" parameterType="map" resultMap="BaseResultMap">
+
+    <select id="selectProductPage" parameterType="map" resultMap="BaseResultMap">
      select * from products where brand_name is null and supplier_id=#{supplierId} 
      limit #{start},#{end}
   </select>
-  
-  <select id="selectProduct" parameterType="long" resultMap="BaseResultMap">
-  select tb.* from products as tb 
-	inner join suppliers as s on tb.supplier_id=s.id
-	inner join platform_catalogs as pc on tb.catalog_id=pc.id
-	where tb.status=3 and s.is_delete=0 and s.status =1
-	and(select count(1) from suppliers as s2 
-	inner join supplier_protocol as sp on  s2.id=sp.supplier_id
-	inner join protocol as p on sp.protocol_id=p.id
-	where sp.status=1  and p.is_delete=0  and p.status=2  and now()&gt;= p.start_time 
-	and now() &lt;=p.end_time  and  s2.id= s.id
-	)&gt; 0 and tb.sku is null and tb.id in 
-  <foreach collection="pId" separator="," item="item" open="(" close=")">
-     #{item}
-  </foreach>
-  </select> 
-  
-  <select id="selectCarBrand" parameterType="Map" resultType="java.lang.String">
-  	SELECT DISTINCT(brand_name) FROM products 
-  	<where>
-  		<if test="catalogId!=null">
-  			and catalog_id = #{catalogId}
-  		</if>
-  		<if test="supplierId!=null">
-  			and supplier_id = #{supplierId}
-  		</if>
-  	</where>
-  	 and status = 3 and (car_type = 1 or car_type =2);
-  </select>
-  
-  <select id="selectCarSupplier" parameterType="java.lang.Long" resultType="java.lang.Long">
+
+    <select id="selectProduct" parameterType="long" resultMap="BaseResultMap">
+        select tb.* from products as tb
+        inner join suppliers as s on tb.supplier_id=s.id
+        inner join platform_catalogs as pc on tb.catalog_id=pc.id
+        where tb.status=3 and s.is_delete=0 and s.status =1
+        and(select count(1) from suppliers as s2
+        inner join supplier_protocol as sp on s2.id=sp.supplier_id
+        inner join protocol as p on sp.protocol_id=p.id
+        where sp.status=1 and p.is_delete=0 and p.status=2 and now()&gt;= p.start_time
+        and now() &lt;=p.end_time and s2.id= s.id
+        )&gt; 0 and tb.sku is null and tb.id in
+        <foreach collection="pId" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectCarBrand" parameterType="Map" resultType="java.lang.String">
+        SELECT DISTINCT(brand_name) FROM products
+        <where>
+            <if test="catalogId!=null">
+                and catalog_id = #{catalogId}
+            </if>
+            <if test="supplierId!=null">
+                and supplier_id = #{supplierId}
+            </if>
+        </where>
+        and status = 3 and (car_type = 1 or car_type =2);
+    </select>
+
+    <select id="selectCarSupplier" parameterType="java.lang.Long" resultType="java.lang.Long">
   	SELECT DISTINCT(supplier_id) FROM products where 
   	catalog_id = #{catalogId} and status = 3 and (car_type =1 or car_type =2);
   </select>
-  
-  <select id="findFixProduct" resultType="Integer">
+
+    <select id="findFixProduct" resultType="Integer">
 	SELECT COUNT(1) from products p LEFT JOIN protocol  a on  p.protocol_id =a.id where p.`status`=3 and a.types=4
   </select>
-  
-  <select id="selectEmallProducts" parameterType="Map" resultType="Map">
-  	select count(id) as total,(SELECT COUNT(id) from products
-  	<where>
-  		<if test="startDate!=null">
-  			and updated_at &gt;= #{startDate}
-  		</if>
-  		<if test="endDate!=null">
-  			and updated_at &lt;= #{endDate}
-  		</if>
-  		<if test="supplierList!=null">
-  			and supplier_id in
-  			  	<foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
-  					#{supplierId}
-  				</foreach>
-  		</if>
-  	</where> 
-  	and is_delete=0) as emallNum 
-  	FROM products WHERE is_delete=0 and supplier_id is not NULL;
-  </select>
-  
-  <select id="findByEmallSupplier" parameterType="Map" resultType="Map">
-  	select COUNT(id) as num,supplier_id,supplier_name FROM products 
-  	<where>
-  		<if test="startDate!=null">
-  			and updated_at &gt;= #{startDate}
-  		</if>
-  		<if test="endDate!=null">
-  			and updated_at &lt;= #{endDate}
-  		</if>
-  		<if test="supplierList!=null">
-  			and supplier_id in
-  			  	<foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
-  					#{supplierId}
-  				</foreach>
-  		</if>
-  	</where>
-  	 GROUP BY supplier_id ORDER BY num DESC
-  </select>
-  
-  <select id="selectEmallBrand" parameterType="ArrayList" resultType="Map">
-  	select supplier_name,COUNT(catalog_id) as catalogNum,COUNT(brand_id) as brandNum,COUNT(id) as num
-  	from products where supplier_id in
-  	  	<foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
-  		#{supplierId}
-  	</foreach>
-  	GROUP BY supplier_id order by catalogNum desc
-  </select>
-  
-  <select id="findSupplierProducts" parameterType="Map" resultMap="BaseResultMap">
-	 select p.*
-	 from products p 
-	 LEFT JOIN (SELECT * FROM upper_lower_history WHERE id in (SELECT MAX(id) id FROM upper_lower_history tb GROUP BY tb.product_id)) u 
-	 ON u.product_id = p.id
-	 where is_delete=0
-	 <!-- 根据价格监测结果查询(最近一次上下架记录) -->
-	  <if test="priceMonitor != null and priceMonitor != ''">
-	  	<!-- #type   1：申请上架,2：退回,3：上架,4：下架 -->
-	  	<!-- #`status`  3:价格监测：价格合理上架  4：价格监测：高于市场合理价下架 5：协议价不高于官网价的98% 6：价格监测：特供专供商品 -->
-	  	<choose>
-	  		<!-- 高于市场合理价下架 -->
-	  		<when test="priceMonitor == 'up_reasonable'">
-				AND u.type = 4
-				AND u.status = 4
-	  		</when>
-	  		<!-- 特供专供下架 -->
-	  		<when test="priceMonitor == 'special'">
-	  			AND u.type = 4
-				AND u.status = 6
-	  		</when>
-	  		<!-- 价格合理上架 -->
-	  		<when test="priceMonitor == 'reasonable'">
-	  			AND u.type = 3
-				AND u.status = 3
-	  		</when>
-	  	</choose>
-	  </if>
-	  <if test="name != null and name != ''">
-      	AND p.name LIKE CONCAT('%',#{name},'%') 
-      </if>
-      <if test="status != null">
-      	AND p.status = #{status}
-      </if>
-      <if test="isMarketable != null">
-      	AND p.is_marketable = #{isMarketable}
-      </if>
-      <if test="brandName != null and brandName != ''">
-      	AND p.brand_name LIKE CONCAT('%',#{brandName},'%') 
-      </if>
-      <if test="model != null and model != ''">
-      	AND p.model LIKE CONCAT('%',#{model},'%') 
-      </if>
-      <if test="catalogName != null and catalogName != ''">
-      	AND p.catalog_name LIKE CONCAT('%',#{catalogName},'%') 
-      </if>
-      <if test="catalogId != null and catalogId != ''">
-      	AND p.catalog_id = #{catalogId}
-      </if>
-      <if test="sku != null and sku != ''">
-      	AND p.sku LIKE CONCAT('%',#{sku},'%') 
-      </if>
-      <if test="supplierId != null">
-      	AND p.supplier_id = #{supplierId} 
-      </if>
-      <if test="supplierName != null and supplierName != ''">
-      	AND p.supplier_name LIKE CONCAT('%',#{supplierName},'%') 
-      </if>
-      <if test="protocolName != null and protocolName != ''">
-      	AND p.protocol_name LIKE CONCAT('%',#{protocolName},'%') 
-      </if>
-      <if test="notStaus != null">
-        AND p.status != #{notStaus}
-      </if>
-      <if test="commoditiesId != null">
-      	AND p.commodities_id = #{commoditiesId}
-      </if>
-      <if test="is_car != null and is_car != '' and is_car == 'true' ">
-        AND p.car_type in(1,2)
-      </if>
-      <if test="is_car != null and is_car != '' and is_car == 'false' ">
-        AND p.car_type IS NULL
-      </if>
-      <if test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
-        <![CDATA[and p.updated_at <= #{compareEndDate} and p.updated_at >= #{compareStartDate}]]>
-      </if>
-      <choose>
-      	<when test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
-      		ORDER BY p.updated_at desc
-      	</when>
-      	<otherwise>
-	      	ORDER BY FIELD(p.status,0,2,1,4,3) asc, p.created_at desc
-      	</otherwise>
-      </choose>
-  </select>
-  
-  <!-- 活动添加商品列表  -->
-  <select id="getActivityProductsList" resultType="www.tonghao.service.common.entity.Products" parameterType="java.util.Map">
-  	SELECT DISTINCT
-  		t1.id,
-		t1.name,
-		t1.supplier_name as supplierName,
-		t1.sku,
-		t1.price,
-		t1.catalog_name as catalogName,
-		t1.catalog_id as catalogId,
-		t1.status
-	FROM
-		products t1
-		LEFT JOIN suppliers s ON t1.supplier_id = s.id
-		LEFT JOIN org_supplier os ON os.supplier_id = t1.supplier_id
-	<!-- LEFT JOIN platform_catalogs t2 ON t2.id= t1.catalog_id -->
-	WHERE
-		t1.is_delete = 0 and t1.status = 3
-  	<if test="catalogName !=null and catalogName !=''">	
-  		and t1.name LIKE CONCAT('%',#{catalogName},'%') 
-  	</if>
-  	<if test="supplierName !=null and supplierName !=''">	
-  		and t1.supplier_name LIKE CONCAT('%',#{supplierName},'%') 
-  	</if>
-  	<if test="sku !=null and sku !=''">	
-  		and t1.sku = #{sku}
-  	</if>
-  	<if test="name !=null and name !=''">	
-  		and t1.name LIKE CONCAT('%',#{name},'%') 
-  	</if>
-  	<if test="startPrice !=null">
-  		and t1.price &gt;= #{startPrice}
-	</if>
-	<if test="endPrice !=null">
-		and t1.price &lt;= #{endPrice}
-	</if>
-	<if test="catalogIds !=null">
-		<foreach collection="catalogIds" item="catalogId" index="index"  open="and t1.catalog_id in(" close=")" separator=",">
-			#{catalogId}
-		</foreach>
-	</if>
-	<if test="activityId !=null">
-		and not exists (select product_id from activity_product where t1.id = product_id and is_delete = 0 and activity_id = #{activityId})
-	</if>
-	<if test="labelType != null">
-		and s.label_type = #{labelType}
-	</if>
-	<if test="activityType != null and activityType == 1">
-		and os.org_id in (
-			select DISTINCT org_id from activity_org where activity_id = #{activityId}
-		)
-	</if>
-  </select>
-  
-  <!-- 根据活动查询所有符合条件的商品 --> 
-  <select id="selectActivityProducts" parameterType="Map" resultMap="BaseResultMap">
-  	SELECT DISTINCT
-		p.id, p.name, p.price, p.cover_url, p.status, p.brand_id, p.brand_name, p.model, p.catalog_id, p.supplier_id, p.sku, p.sales
-	FROM
-		activity_product ap
-	LEFT JOIN products p ON ap.product_id = p.id
-	left join platform_catalogs pc ON pc.id = p.catalog_id
-	LEFT JOIN mall_catalogs mc ON pc.mall_catalog_id = mc.id
-	<if test="orgId != null">
-		LEFT JOIN org_supplier os on os.supplier_id = p.supplier_id
-	</if>
-	WHERE
-		ap.activity_id = #{activityId}
-	AND p.`status` = 3
-	AND p.is_delete = 0
-	<if test="productName != null and  productName != '' ">
-		AND p.name like CONCAT('%',#{productName},'%') 
-	</if>
-	<if test="keywords != null and  keywords != '' ">
-		AND (
-			p.name like CONCAT('%',#{keywords},'%') 
-			OR p.brand_name like CONCAT('%',#{keywords},'%')
-			OR p.catalog_name like CONCAT('%',#{keywords},'%')
-			OR p.supplier_name like CONCAT('%',#{keywords},'%')
-			OR p.model like CONCAT('%',#{keywords},'%')
-		)    
-	</if>
-	<if test="mallCatalogsIds !=null and mallCatalogsIds.length>0">
-		AND mc.parent_id in 
-		<foreach collection="mallCatalogsIds" separator="," open="(" close=")" item="item">
-			#{item}
-		</foreach>
-	</if>
-	<if test="inBrandIds !=null and inBrandIds.length>0">
-		and p.brand_id in 
-		<foreach collection="inBrandIds" separator="," open="(" close=")" item="item">
-			#{item}
-		</foreach>
-	</if>
-	<if test="inSupplierIds!=null and inSupplierIds.length>0">
-		and p.supplier_id in 
-		<foreach collection="inSupplierIds" separator="," open="(" close=")" item="item">
-			#{item}
-		</foreach>
-	</if>
-	<if test="priceBegin != null">
-		<![CDATA[and p.price >= #{priceBegin}]]>
-	</if>
-	<if test="priceEnd != null">
-		<![CDATA[and p.price <= #{priceEnd}]]>
-	</if>
-	<if test="isDelete != null">
-		and ap.is_delete = #{isDelete}
-	</if>
-  	<![CDATA[
+
+    <select id="selectEmallProducts" parameterType="Map" resultType="Map">
+        select count(id) as total,(SELECT COUNT(id) from products
+        <where>
+            <if test="startDate!=null">
+                and updated_at &gt;= #{startDate}
+            </if>
+            <if test="endDate!=null">
+                and updated_at &lt;= #{endDate}
+            </if>
+            <if test="supplierList!=null">
+                and supplier_id in
+                <foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
+                    #{supplierId}
+                </foreach>
+            </if>
+        </where>
+        and is_delete=0) as emallNum
+        FROM products WHERE is_delete=0 and supplier_id is not NULL;
+    </select>
+
+    <select id="findByEmallSupplier" parameterType="Map" resultType="Map">
+        select COUNT(id) as num,supplier_id,supplier_name FROM products
+        <where>
+            <if test="startDate!=null">
+                and updated_at &gt;= #{startDate}
+            </if>
+            <if test="endDate!=null">
+                and updated_at &lt;= #{endDate}
+            </if>
+            <if test="supplierList!=null">
+                and supplier_id in
+                <foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
+                    #{supplierId}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY supplier_id ORDER BY num DESC
+    </select>
+
+    <select id="selectEmallBrand" parameterType="ArrayList" resultType="Map">
+        select supplier_name,COUNT(catalog_id) as catalogNum,COUNT(brand_id) as brandNum,COUNT(id) as num
+        from products where supplier_id in
+        <foreach collection="supplierList" item="supplierId" separator="," open="(" close=")">
+            #{supplierId}
+        </foreach>
+        GROUP BY supplier_id order by catalogNum desc
+    </select>
+
+    <select id="findSupplierProducts" parameterType="Map" resultMap="BaseResultMap">
+        select p.*
+        from products p
+        LEFT JOIN (SELECT * FROM upper_lower_history WHERE id in (SELECT MAX(id) id FROM upper_lower_history tb GROUP BY
+        tb.product_id)) u
+        ON u.product_id = p.id
+        where is_delete=0
+        <!-- 根据价格监测结果查询(最近一次上下架记录) -->
+        <if test="priceMonitor != null and priceMonitor != ''">
+            <!-- #type   1：申请上架,2：退回,3：上架,4：下架 -->
+            <!-- #`status`  3:价格监测：价格合理上架  4：价格监测：高于市场合理价下架 5：协议价不高于官网价的98% 6：价格监测：特供专供商品 -->
+            <choose>
+                <!-- 高于市场合理价下架 -->
+                <when test="priceMonitor == 'up_reasonable'">
+                    AND u.type = 4
+                    AND u.status = 4
+                </when>
+                <!-- 特供专供下架 -->
+                <when test="priceMonitor == 'special'">
+                    AND u.type = 4
+                    AND u.status = 6
+                </when>
+                <!-- 价格合理上架 -->
+                <when test="priceMonitor == 'reasonable'">
+                    AND u.type = 3
+                    AND u.status = 3
+                </when>
+            </choose>
+        </if>
+        <if test="name != null and name != ''">
+            AND p.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="status != null">
+            AND p.status = #{status}
+        </if>
+        <if test="isMarketable != null">
+            AND p.is_marketable = #{isMarketable}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND p.brand_name LIKE CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model != null and model != ''">
+            AND p.model LIKE CONCAT('%',#{model},'%')
+        </if>
+        <if test="catalogName != null and catalogName != ''">
+            AND p.catalog_name LIKE CONCAT('%',#{catalogName},'%')
+        </if>
+        <if test="catalogId != null and catalogId != ''">
+            AND p.catalog_id = #{catalogId}
+        </if>
+        <if test="sku != null and sku != ''">
+            AND p.sku LIKE CONCAT('%',#{sku},'%')
+        </if>
+        <if test="supplierId != null">
+            AND p.supplier_id = #{supplierId}
+        </if>
+        <if test="supplierName != null and supplierName != ''">
+            AND p.supplier_name LIKE CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="protocolName != null and protocolName != ''">
+            AND p.protocol_name LIKE CONCAT('%',#{protocolName},'%')
+        </if>
+        <if test="notStaus != null">
+            AND p.status != #{notStaus}
+        </if>
+        <if test="commoditiesId != null">
+            AND p.commodities_id = #{commoditiesId}
+        </if>
+        <if test="is_car != null and is_car != '' and is_car == 'true' ">
+            AND p.car_type in(1,2)
+        </if>
+        <if test="is_car != null and is_car != '' and is_car == 'false' ">
+            AND p.car_type IS NULL
+        </if>
+        <if test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
+            <![CDATA[and p.updated_at <= #{compareEndDate} and p.updated_at >= #{compareStartDate}]]>
+        </if>
+        <choose>
+            <when test="compareStartDate != null and compareStartDate !='' and compareEndDate != null and compareEndDate != ''">
+                ORDER BY p.updated_at desc
+            </when>
+            <otherwise>
+                ORDER BY FIELD(p.status,0,2,1,4,3) asc, p.created_at desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 活动添加商品列表  -->
+    <select id="getActivityProductsList" resultType="www.tonghao.service.common.entity.Products"
+            parameterType="java.util.Map">
+        SELECT DISTINCT
+        t1.id,
+        t1.name,
+        t1.supplier_name as supplierName,
+        t1.sku,
+        t1.price,
+        t1.catalog_name as catalogName,
+        t1.catalog_id as catalogId,
+        t1.status
+        FROM
+        products t1
+        LEFT JOIN suppliers s ON t1.supplier_id = s.id
+        LEFT JOIN org_supplier os ON os.supplier_id = t1.supplier_id
+        <!-- LEFT JOIN platform_catalogs t2 ON t2.id= t1.catalog_id -->
+        WHERE
+        t1.is_delete = 0 and t1.status = 3
+        <if test="catalogName !=null and catalogName !=''">
+            and t1.name LIKE CONCAT('%',#{catalogName},'%')
+        </if>
+        <if test="supplierName !=null and supplierName !=''">
+            and t1.supplier_name LIKE CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="sku !=null and sku !=''">
+            and t1.sku = #{sku}
+        </if>
+        <if test="name !=null and name !=''">
+            and t1.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startPrice !=null">
+            and t1.price &gt;= #{startPrice}
+        </if>
+        <if test="endPrice !=null">
+            and t1.price &lt;= #{endPrice}
+        </if>
+        <if test="catalogIds !=null">
+            <foreach collection="catalogIds" item="catalogId" index="index" open="and t1.catalog_id in(" close=")"
+                     separator=",">
+                #{catalogId}
+            </foreach>
+        </if>
+        <if test="activityId !=null">
+            and not exists (select product_id from activity_product where t1.id = product_id and is_delete = 0 and
+            activity_id = #{activityId})
+        </if>
+        <if test="labelType != null">
+            and s.label_type = #{labelType}
+        </if>
+        <if test="activityType != null and activityType == 1">
+            and os.org_id in (
+            select DISTINCT org_id from activity_org where activity_id = #{activityId}
+            )
+        </if>
+    </select>
+
+    <!-- 根据活动查询所有符合条件的商品 -->
+    <select id="selectActivityProducts" parameterType="Map" resultMap="BaseResultMap">
+        SELECT DISTINCT
+        p.id, p.name, p.price, p.cover_url, p.status, p.brand_id, p.brand_name, p.model, p.catalog_id, p.supplier_id,
+        p.sku, p.sales
+        FROM
+        activity_product ap
+        LEFT JOIN products p ON ap.product_id = p.id
+        left join platform_catalogs pc ON pc.id = p.catalog_id
+        LEFT JOIN mall_catalogs mc ON pc.mall_catalog_id = mc.id
+        <if test="orgId != null">
+            LEFT JOIN org_supplier os on os.supplier_id = p.supplier_id
+        </if>
+        WHERE
+        ap.activity_id = #{activityId}
+        AND p.`status` = 3
+        AND p.is_delete = 0
+        <if test="productName != null and  productName != '' ">
+            AND p.name like CONCAT('%',#{productName},'%')
+        </if>
+        <if test="keywords != null and  keywords != '' ">
+            AND (
+            p.name like CONCAT('%',#{keywords},'%')
+            OR p.brand_name like CONCAT('%',#{keywords},'%')
+            OR p.catalog_name like CONCAT('%',#{keywords},'%')
+            OR p.supplier_name like CONCAT('%',#{keywords},'%')
+            OR p.model like CONCAT('%',#{keywords},'%')
+            )
+        </if>
+        <if test="mallCatalogsIds !=null and mallCatalogsIds.length>0">
+            AND mc.parent_id in
+            <foreach collection="mallCatalogsIds" separator="," open="(" close=")" item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inBrandIds !=null and inBrandIds.length>0">
+            and p.brand_id in
+            <foreach collection="inBrandIds" separator="," open="(" close=")" item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="inSupplierIds!=null and inSupplierIds.length>0">
+            and p.supplier_id in
+            <foreach collection="inSupplierIds" separator="," open="(" close=")" item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="priceBegin != null">
+            <![CDATA[and p.price >= #{priceBegin}]]>
+        </if>
+        <if test="priceEnd != null">
+            <![CDATA[and p.price <= #{priceEnd}]]>
+        </if>
+        <if test="isDelete != null">
+            and ap.is_delete = #{isDelete}
+        </if>
+        <![CDATA[
 		AND (
 			SELECT
 				count(1)
@@ -644,145 +662,145 @@
 			AND s2.status=1
 		) > 0
   	]]>
-  	<if test="orgId != null">
-  		and os.org_id = #{orgId}
-  	</if>
-  	<if test="orderBy != null and orderBy != ''">
-  		ORDER BY ${orderBy}
-	</if>
-	<if test="floorOrderBy != null and floorOrderBy != ''">
-  		ORDER BY ${floorOrderBy}
-	</if>
-  	<if test="count != null">	
-  		limit #{count}
-  	</if>
-  </select>
-  
-  <!-- 修改点击量 -->
-  <update id="updateHits" parameterType="www.tonghao.service.common.entity.Products">
+        <if test="orgId != null">
+            and os.org_id = #{orgId}
+        </if>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="floorOrderBy != null and floorOrderBy != ''">
+            ORDER BY ${floorOrderBy}
+        </if>
+        <if test="count != null">
+            limit #{count}
+        </if>
+    </select>
+
+    <!-- 修改点击量 -->
+    <update id="updateHits" parameterType="www.tonghao.service.common.entity.Products">
   	update products set hits = #{hits} where id = #{id}
   </update>
-  
-  <select id="selectChangePrice" parameterType="Map" resultType="www.tonghao.service.common.entity.Products" >
-  select tab.* from (
-  SELECT
-    p.id,
-	p.NAME,
-	p.brand_name as brandName,
-	p.model,
-	p.market_price as marketPrice,
-	p.protocol_price as protocolPrice,
-	p.price,
-	p.catalog_name as catalogName,
-	p.catalog_Id as catalogId,
-	(p.price - p.protocol_price) AS increasePrice,
-	ROUND(
-		p.price/p.protocol_price,
-		3
-	) AS increaseThan,
-	ROUND(
-		p.protocol_price / p.market_price,
-		2
-	) AS oldDiscount,
-	ROUND(p.price / p.market_price, 2) AS newDiscount,
-	p.supplier_name as supplierName,
-	p.sku,
-	p.protocol_name as protocolName,
-	p.is_change_price as isChangePrice,
-	p.status
-	FROM
-		products p inner join protocol t on p.protocol_id=t.id 
-	where 
-	t.`status`=2 
-	and t.is_delete=0 
-	and p.is_delete=0 
-	
-	and (now() BETWEEN t.start_time and t.end_time)) as tab where 1=1
-	<if test="productName!=null and productName!=''">
-	 and tab.NAME like CONCAT('%',#{productName},'%')
-	</if>
-	<if test="brandName!=null and brandName!=''">
-	 and tab.brandName like CONCAT('%',#{brandName},'%')
-	</if>
-    <if test="model!=null and model!=''">
-	 and tab.model like CONCAT('%',#{model},'%')
-	</if>
-    <if test="supplierName!=null and supplierName!=''">
-	 and tab.supplierName like CONCAT('%',#{supplierName},'%')
-	</if>
-	<if test="protocolName!=null and protocolName!=''">
-	 and tab.protocolName like CONCAT('%',#{protocolName},'%')
-	</if>
-	<if test="sku!=null and sku!=''">
-	 and tab.sku like CONCAT('%',#{sku},'%')
-	</if>
-	<if test="catalogId!=null and catalogId!=''">
-	 and tab.catalogId=#{catalogId}
-	</if>
-	<if test="ischangePrice!=null and ischangePrice!=''">
-	 and tab.ischangePrice=#{ischangePrice}
-	</if>
-	<if test="beginOldDiscount!=null and endOldDiscount!=null">
-	 and tab.oldDiscount BETWEEN #{beginOldDiscount} and #{endOldDiscount}
-	</if>
-	<if test="beginNewDiscount!=null and endNewDiscount!=null">
-	 and tab.newDiscount BETWEEN #{beginNewDiscount} and #{endNewDiscount}
-	</if>
-	order by tab.oldDiscount asc
-  </select>
-  <select id="selectproductPutaway" parameterType="Map" resultType="www.tonghao.service.common.entity.Products" >
-  select tab.* from (
-  SELECT
-    p.id,
-	p.NAME,
-	p.brand_name as brandName,
-	p.model,
-	p.market_price as marketPrice,
-	p.protocol_price as protocolPrice,
-	p.price,
-	p.catalog_name as catalogName,
-	p.catalog_Id as catalogId,
-	p.supplier_name as supplierName,
-	p.sku,
-	p.protocol_name as protocolName,
-	p.status
-	FROM
-		products p left join protocol t on p.protocol_id=t.id 
-	where 
-	t.`status`=2 
-	and t.is_delete=0 
-	and p.is_change_price=1
-	and p.is_delete=0 
-	
-	and (now() BETWEEN t.start_time and t.end_time)) as tab where 1=1
-	<if test="productName!=null and productName!=''">
-	 and tab.NAME like CONCAT('%',#{productName},'%')
-	</if>
-	<if test="brandName!=null and brandName!=''">
-	 and tab.brandName like CONCAT('%',#{brandName},'%')
-	</if>
-    <if test="model!=null and model!=''">
-	 and tab.model like CONCAT('%',#{model},'%')
-	</if>
-    <if test="supplierName!=null and supplierName!=''">
-	 and tab.supplierName like CONCAT('%',#{supplierName},'%')
-	</if>
-	<if test="protocolName!=null and protocolName!=''">
-	 and tab.protocolName like CONCAT('%',#{protocolName},'%')
-	</if>
-	<if test="sku!=null and sku!=''">
-	 and tab.sku like CONCAT('%',#{sku},'%')
-	</if>
-	<if test="catalogId!=null and catalogId!=''">
-	 and tab.catalogId=#{catalogId}
-	</if>
-	<if test="status!=null and status!=''">
-	 and tab.status=#{status}
-	</if>
 
-  </select>
-  
-  <select id="productJdSku" resultType="www.tonghao.service.common.entity.Products">
+    <select id="selectChangePrice" parameterType="Map" resultType="www.tonghao.service.common.entity.Products">
+        select tab.* from (
+        SELECT
+        p.id,
+        p.NAME,
+        p.brand_name as brandName,
+        p.model,
+        p.market_price as marketPrice,
+        p.protocol_price as protocolPrice,
+        p.price,
+        p.catalog_name as catalogName,
+        p.catalog_Id as catalogId,
+        (p.price - p.protocol_price) AS increasePrice,
+        ROUND(
+        p.price/p.protocol_price,
+        3
+        ) AS increaseThan,
+        ROUND(
+        p.protocol_price / p.market_price,
+        2
+        ) AS oldDiscount,
+        ROUND(p.price / p.market_price, 2) AS newDiscount,
+        p.supplier_name as supplierName,
+        p.sku,
+        p.protocol_name as protocolName,
+        p.is_change_price as isChangePrice,
+        p.status
+        FROM
+        products p inner join protocol t on p.protocol_id=t.id
+        where
+        t.`status`=2
+        and t.is_delete=0
+        and p.is_delete=0
+
+        and (now() BETWEEN t.start_time and t.end_time)) as tab where 1=1
+        <if test="productName!=null and productName!=''">
+            and tab.NAME like CONCAT('%',#{productName},'%')
+        </if>
+        <if test="brandName!=null and brandName!=''">
+            and tab.brandName like CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model!=null and model!=''">
+            and tab.model like CONCAT('%',#{model},'%')
+        </if>
+        <if test="supplierName!=null and supplierName!=''">
+            and tab.supplierName like CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="protocolName!=null and protocolName!=''">
+            and tab.protocolName like CONCAT('%',#{protocolName},'%')
+        </if>
+        <if test="sku!=null and sku!=''">
+            and tab.sku like CONCAT('%',#{sku},'%')
+        </if>
+        <if test="catalogId!=null and catalogId!=''">
+            and tab.catalogId=#{catalogId}
+        </if>
+        <if test="ischangePrice!=null and ischangePrice!=''">
+            and tab.ischangePrice=#{ischangePrice}
+        </if>
+        <if test="beginOldDiscount!=null and endOldDiscount!=null">
+            and tab.oldDiscount BETWEEN #{beginOldDiscount} and #{endOldDiscount}
+        </if>
+        <if test="beginNewDiscount!=null and endNewDiscount!=null">
+            and tab.newDiscount BETWEEN #{beginNewDiscount} and #{endNewDiscount}
+        </if>
+        order by tab.oldDiscount asc
+    </select>
+    <select id="selectproductPutaway" parameterType="Map" resultType="www.tonghao.service.common.entity.Products">
+        select tab.* from (
+        SELECT
+        p.id,
+        p.NAME,
+        p.brand_name as brandName,
+        p.model,
+        p.market_price as marketPrice,
+        p.protocol_price as protocolPrice,
+        p.price,
+        p.catalog_name as catalogName,
+        p.catalog_Id as catalogId,
+        p.supplier_name as supplierName,
+        p.sku,
+        p.protocol_name as protocolName,
+        p.status
+        FROM
+        products p left join protocol t on p.protocol_id=t.id
+        where
+        t.`status`=2
+        and t.is_delete=0
+        and p.is_change_price=1
+        and p.is_delete=0
+
+        and (now() BETWEEN t.start_time and t.end_time)) as tab where 1=1
+        <if test="productName!=null and productName!=''">
+            and tab.NAME like CONCAT('%',#{productName},'%')
+        </if>
+        <if test="brandName!=null and brandName!=''">
+            and tab.brandName like CONCAT('%',#{brandName},'%')
+        </if>
+        <if test="model!=null and model!=''">
+            and tab.model like CONCAT('%',#{model},'%')
+        </if>
+        <if test="supplierName!=null and supplierName!=''">
+            and tab.supplierName like CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="protocolName!=null and protocolName!=''">
+            and tab.protocolName like CONCAT('%',#{protocolName},'%')
+        </if>
+        <if test="sku!=null and sku!=''">
+            and tab.sku like CONCAT('%',#{sku},'%')
+        </if>
+        <if test="catalogId!=null and catalogId!=''">
+            and tab.catalogId=#{catalogId}
+        </if>
+        <if test="status!=null and status!=''">
+            and tab.status=#{status}
+        </if>
+
+    </select>
+
+    <select id="productJdSku" resultType="www.tonghao.service.common.entity.Products">
   
   SELECT
 	 supplier_id as supplierId,
@@ -797,9 +815,9 @@
 	HAVING
 		count(*) > 1
   </select>
-  
-  
-  <select id="selectListByChildOrder" resultMap="BaseResultMap">
+
+
+    <select id="selectListByChildOrder" resultMap="BaseResultMap">
   	SELECT
 		p.*
 	FROM
@@ -809,27 +827,58 @@
 		p.is_delete = 0
 	AND osi.is_delete = 0
   </select>
-  
-  <select id="selectByMap" parameterType="Map" resultMap="BaseResultMap">
-  	select DISTINCT p.* from products p left join suppliers s on s.id = p.supplier_id
-  	left join org_supplier os on os.supplier_id = p.supplier_id
-  	where p.is_delete = 0 and s.is_delete = 0
-  	<if test="status">
-  		and p.status = #{status}
-  	</if>
-  	<if test="labelType != null">
-  		and s.label_type = #{labelType}
-  	</if>
-  	<if test="catalogId != null">
-  		and p.catalog_id = #{catalogId}
-  	</if>
-  	<if test="supplierId != null">
-  		and p.supplier_id = #{supplierId}
-  	</if>
-  	<if test="activityType != null and activityType == 1">
-		and os.org_id in (
-			select DISTINCT org_id from activity_org where activity_id = #{activityId}
-		)
-	</if>
-  </select>
+
+    <select id="selectByMap" parameterType="Map" resultMap="BaseResultMap">
+        select DISTINCT p.* from products p left join suppliers s on s.id = p.supplier_id
+        left join org_supplier os on os.supplier_id = p.supplier_id
+        where p.is_delete = 0 and s.is_delete = 0
+        <if test="status">
+            and p.status = #{status}
+        </if>
+        <if test="labelType != null">
+            and s.label_type = #{labelType}
+        </if>
+        <if test="catalogId != null">
+            and p.catalog_id = #{catalogId}
+        </if>
+        <if test="supplierId != null">
+            and p.supplier_id = #{supplierId}
+        </if>
+        <if test="activityType != null and activityType == 1">
+            and os.org_id in (
+            select DISTINCT org_id from activity_org where activity_id = #{activityId}
+            )
+        </if>
+    </select>
+
+    <!-- 根据品目查询sku -->
+    <select id="selectSkuByCatalogId" parameterType="Long" resultType="String">
+		select sku from products where is_delete = 0 and status = 3 and catalog_id = #{catalogId}
+	</select>
+
+    <!-- 根据sku查询 -->
+    <select id="selectBySku" parameterType="String" resultMap="BaseResultMap">
+        select * from products where is_delete = 0 and sku = #{sku}
+    </select>
+
+    <!-- 根据sku批量查询 -->
+    <select id="selectBySkus" resultType="www.tonghao.service.common.entity.Products">
+        SELECT
+            id,
+            sku,
+            price,
+            market_price AS marketPrice,
+            stock,
+            status,
+            protocol_price AS protocolPrice
+        FROM
+            products
+        WHERE
+            is_delete = 0
+            AND sku IN
+            <foreach collection="skus" separator="," item="item" open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
 </mapper>

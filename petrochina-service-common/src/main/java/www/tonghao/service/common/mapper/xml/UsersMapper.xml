@@ -77,7 +77,7 @@
   </select>
   
   <select id="findByLoginName" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List" /> from users as tb where tb.login_name = #{loginName} and tb.type = #{type} and tb.is_delete = 0
+  	select <include refid="Base_Column_List" /> from users as tb where tb.login_name = #{loginName} and tb.type = #{type} and tb.is_delete = 0 limit 1
   </select>
   <select id="findDeptIdByType" parameterType="int" resultType="java.lang.Long">
   	select DISTINCT(dep_id) from users as tb where tb.type = #{type}

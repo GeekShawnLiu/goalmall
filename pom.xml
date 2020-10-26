@@ -225,19 +225,20 @@
   
   
 	<modules>
-	   <module>petrochina-common</module>
-       <module>petrochina-service-common</module>
-       <module>petrochina-platform-service</module>
-       <module>petrochina-platform-web</module>
-    <module>petrochina-gateway</module>
-    <module>petrochina-registry</module>
-    <module>petrochina-mall-service</module>
-    <module>petrochina-mall-web</module>
-    <module>petrochina-mall-api</module>
-    <module>petrochina-search-web</module>
-    <module>petrochina-login-service</module>
-    <module>petrochina-login-web</module>
-    <module>petrochina-mall-job</module>
-    <module>petrochina-sms-web</module>
+		<module>petrochina-common</module>
+		<module>petrochina-service-common</module>
+		<module>petrochina-platform-service</module>
+		<module>petrochina-platform-web</module>
+		<module>petrochina-gateway</module>
+		<module>petrochina-registry</module>
+		<module>petrochina-mall-service</module>
+		<module>petrochina-mall-web</module>
+		<module>petrochina-mall-api</module>
+		<module>petrochina-search-web</module>
+		<module>petrochina-login-service</module>
+		<module>petrochina-login-web</module>
+		<module>petrochina-mall-job</module>
+		<module>petrochina-sms-web</module>
+		<module>petrochina-open-api</module>
 	</modules>
 </project>
