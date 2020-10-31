@@ -20,6 +20,6 @@
     </select>
 
     <select id="getMaxPosition" resultType="Integer">
-        select max(t.position)  from portal_product t
+        select IFNULL(max(t.position),0)  from portal_product t
     </select>
 </mapper>

@@ -282,7 +282,25 @@ public class SupplierProductsController {
 			return ResultUtil.resultMessage(result, "未登录");
 		}
 	}
-	
+
+	/**
+	 * 商品上架
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/applyUp",method=RequestMethod.POST)
+	public Map<String, Object> applyUp(Long id, HttpServletRequest request){
+		int result = 0;
+		Users user = UserUtil.getUser(request);
+		if (user != null) {
+			result = productsService.updateStatus(id, 3, user.getId());
+		}else {
+			return ResultUtil.resultMessage(result, "未登录");
+		}
+		return ResultUtil.resultMessage(result, "");
+	}
+
 	/**  
 	 * <p>Title: applyDown</p>  
 	 * <p>Description: </p>  
@@ -538,4 +556,6 @@ public class SupplierProductsController {
 		List<Suppliers> list = suppliersService.findListByEntity(entity);
 		return list;
 	}
+
+
 }

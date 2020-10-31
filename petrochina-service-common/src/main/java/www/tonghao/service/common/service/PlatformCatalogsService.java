@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import www.tonghao.common.warpper.TreeNode;
 import www.tonghao.service.common.base.BaseService;
 import www.tonghao.service.common.entity.PlatformCatalogs;
 
@@ -97,4 +98,10 @@ public interface PlatformCatalogsService extends BaseService<PlatformCatalogs> {
 	 * @return
 	 */
 	List<PlatformCatalogs> selectShopCatalogs(Long shopId);
+
+	/**
+	 * 获取首页品目
+	 * @return
+	 */
+	List<TreeNode> getPortalCatalogs();
 }

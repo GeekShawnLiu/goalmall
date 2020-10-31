@@ -389,8 +389,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				case 3:
 					//上架
 					upperLowerHistory.setType(3);
-					upperLowerHistory.setReason("管理员审核通过商品上架");
-					upperLowerHistory.setStatus(1);
+					upperLowerHistory.setReason("商品本地上架");
+					upperLowerHistory.setStatus(3);
 					upperLowerHistoryMapper.insertSelective(upperLowerHistory);
 					break;
 				case 333:
@@ -403,7 +403,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				case 4:
 					//下架
 					upperLowerHistory.setType(4);
-					upperLowerHistory.setReason("商品下架");
+					upperLowerHistory.setReason("商品本地下架");
+					upperLowerHistory.setStatus(4);
 					upperLowerHistoryMapper.insertSelective(upperLowerHistory);
 					break;
 				}

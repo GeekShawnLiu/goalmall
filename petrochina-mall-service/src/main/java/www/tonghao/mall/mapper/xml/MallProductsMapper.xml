@@ -154,97 +154,178 @@
   </select>
   
   <!-- 商品列表查询 -->
-  <select id="findSupplierProtocolListByEntity" parameterType="www.tonghao.service.common.entity.Products" resultMap="RelationResultMap">
-  	select <include refid="ListQuery_Colums_List" />
-  			,s.code as 'supplier.code',s.name as 'supplier.name',s.nick_name as 'supplier.nickName' from products as tb 
-			INNER JOIN suppliers as s ON tb.supplier_id = s.id 
-			INNER JOIN platform_catalogs as pc ON tb.catalog_id = pc.id
-			<if test="queryfilter!=null and queryfilter['orgId'] != null">
-				LEFT JOIN org_supplier os on os.supplier_id = tb.supplier_id
+  <!--<select id="findSupplierProtocolListByEntity" parameterType="www.tonghao.service.common.entity.Products" resultMap="RelationResultMap">-->
+  	<!--select <include refid="ListQuery_Colums_List" />-->
+  			<!--,s.code as 'supplier.code',s.name as 'supplier.name',s.nick_name as 'supplier.nickName' from products as tb -->
+			<!--INNER JOIN suppliers as s ON tb.supplier_id = s.id -->
+			<!--INNER JOIN platform_catalogs as pc ON tb.catalog_id = pc.id-->
+			<!--<if test="queryfilter!=null and queryfilter['orgId'] != null">-->
+				<!--LEFT JOIN org_supplier os on os.supplier_id = tb.supplier_id-->
+			<!--</if>-->
+			<!--where tb.`status` = 3 and tb.is_delete=0 and s.is_delete = 0 and s.`status`  = 1 -->
+			<!--<![CDATA[-->
+			<!--and (-->
+			  <!--select count(1) from suppliers as s2 -->
+				<!--INNER JOIN supplier_protocol as sp ON s2.id = sp.supplier_id -->
+				<!--INNER JOIN protocol as p ON sp.protocol_id = p.id -->
+				<!--WHERE sp.`status` = 1 and p.is_delete = 0 and p.`status` = 2-->
+				<!--and NOW()>=p.start_time and NOW()<=p.end_time and s2.id = s.id-->
+			<!--)>0-->
+			<!--]]>-->
+			<!--<if test="isBatch!=null">-->
+				<!--and tb.is_batch = #{isBatch}-->
+			<!--</if>-->
+			<!--<if test="queryfilter!=null">-->
+				<!--&lt;!&ndash; tds 树层级标识 0:末级 否则非末级 末级用等于 否则like &ndash;&gt;-->
+				<!--<if test="queryfilter['mcid']!=null and queryfilter['andCidEq']!=null">-->
+					<!--and pc.id = #{queryfilter.mcid}-->
+				<!--</if>-->
+				<!--<if test="queryfilter['mcid']!=null and queryfilter['andCidLike']!=null">-->
+					<!--<if test="queryfilter['tds']!=null and queryfilter['tds'] == 1">-->
+						<!--and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT('_', pc.tree_ids)) &gt; 0-->
+					<!--</if>-->
+					<!--<if test="queryfilter['tds']!=null and queryfilter['tds'] == 2">-->
+						<!--and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT(pc.tree_ids, '_')) &gt; 0-->
+					<!--</if>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['inBrandIds']!=null and queryfilter['inBrandIds'].length>0">-->
+					<!--and tb.brand_id in -->
+					<!--<foreach collection="queryfilter['inBrandIds']" separator="," open="(" close=")" item="item">-->
+						<!--#{item}-->
+					<!--</foreach>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['inSupplierIds']!=null and queryfilter['inSupplierIds'].length>0">-->
+					<!--and tb.supplier_id in -->
+					<!--<foreach collection="queryfilter['inSupplierIds']" separator="," open="(" close=")" item="item">-->
+						<!--#{item}-->
+					<!--</foreach>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['priceBegin']!=null">-->
+					<!--<![CDATA[and tb.price >= #{queryfilter.priceBegin}]]>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['priceEnd']!=null">-->
+					<!--<![CDATA[and tb.price <= #{queryfilter.priceEnd}]]>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['productParameters']!=null and queryfilter['productParameters'].size>0">-->
+					<!--<foreach collection="queryfilter['productParameters']" item="item">-->
+					<!--and (-->
+						<!--select count(1) from product_parameter as pp-->
+						<!--where pp.product_id = tb.id and pp.stand_value_id in-->
+						<!--<foreach collection="item.standValueIds" separator="," open="(" close=")" item="item2">-->
+							<!--#{item2}-->
+						<!--</foreach>-->
+					<!--)>0-->
+					<!--</foreach>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['fromFlag']!=null and queryfilter['fromFlag']!=''">-->
+					<!--<choose>-->
+						<!--<when test="queryfilter['fromFlag'] == 'bid'">-->
+						   <!--and tb.sku is null-->
+						<!--</when>-->
+						<!--<otherwise>-->
+						   <!--and tb.sku is not null-->
+						<!--</otherwise>-->
+					<!--</choose>-->
+				<!--</if>-->
+				<!--<if test="queryfilter['orgId'] != null">-->
+					<!--and os.org_id = #{queryfilter.orgId}-->
+				<!--</if>-->
+				<!--<if test="queryfilter['supplierId'] != null">-->
+					<!--and tb.supplier_id = #{queryfilter.supplierId}-->
+				<!--</if>-->
+				<!--<if test="queryfilter['groupByCondition']!=null and queryfilter['groupByCondition']!=''">-->
+					<!--group by ${queryfilter.groupByCondition}-->
+				<!--</if>-->
+				<!--<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">-->
+					<!--order by ${queryfilter.orderByCondition}-->
+				<!--</if>-->
+				<!--<if test="queryfilter['limitNum']!=null">-->
+					<!--limit #{queryfilter.limitNum}-->
+				<!--</if>-->
+			<!--</if>-->
+  <!--</select>-->
+
+	<select id="findSupplierProtocolListByEntity" parameterType="www.tonghao.service.common.entity.Products" resultMap="RelationResultMap">
+		select <include refid="ListQuery_Colums_List" />
+		 from products as tb
+		INNER JOIN platform_catalogs as pc ON tb.catalog_id = pc.id
+		<if test="queryfilter!=null and queryfilter['orgId'] != null">
+			LEFT JOIN org_supplier os on os.supplier_id = tb.supplier_id
+		</if>
+		where tb.`status` = 3 and tb.is_delete=0
+		<if test="isBatch!=null">
+			and tb.is_batch = #{isBatch}
+		</if>
+		<if test="queryfilter!=null">
+			<!-- tds 树层级标识 0:末级 否则非末级 末级用等于 否则like -->
+			<if test="queryfilter['mcid']!=null and queryfilter['andCidEq']!=null">
+				and pc.id = #{queryfilter.mcid}
 			</if>
-			where tb.`status` = 3 and tb.is_delete=0 and s.is_delete = 0 and s.`status`  = 1 
-			<![CDATA[
-			and (
-			  select count(1) from suppliers as s2 
-				INNER JOIN supplier_protocol as sp ON s2.id = sp.supplier_id 
-				INNER JOIN protocol as p ON sp.protocol_id = p.id 
-				WHERE sp.`status` = 1 and p.is_delete = 0 and p.`status` = 2
-				and NOW()>=p.start_time and NOW()<=p.end_time and s2.id = s.id
-			)>0
-			]]>
-			<if test="isBatch!=null">
-				and tb.is_batch = #{isBatch}
+			<if test="queryfilter['mcid']!=null and queryfilter['andCidLike']!=null">
+				<if test="queryfilter['tds']!=null and queryfilter['tds'] == 1">
+					and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT('_', pc.tree_ids)) &gt; 0
+				</if>
+				<if test="queryfilter['tds']!=null and queryfilter['tds'] == 2">
+					and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT(pc.tree_ids, '_')) &gt; 0
+				</if>
 			</if>
-			<if test="queryfilter!=null">
-				<!-- tds 树层级标识 0:末级 否则非末级 末级用等于 否则like -->
-				<if test="queryfilter['mcid']!=null and queryfilter['andCidEq']!=null">
-					and pc.id = #{queryfilter.mcid}
-				</if>
-				<if test="queryfilter['mcid']!=null and queryfilter['andCidLike']!=null">
-					<if test="queryfilter['tds']!=null and queryfilter['tds'] == 1">
-						and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT('_', pc.tree_ids)) &gt; 0
-					</if>
-					<if test="queryfilter['tds']!=null and queryfilter['tds'] == 2">
-						and locate(CONCAT('_',#{queryfilter.mcid},'_'), CONCAT(pc.tree_ids, '_')) &gt; 0
-					</if>
-				</if>
-				<if test="queryfilter['inBrandIds']!=null and queryfilter['inBrandIds'].length>0">
-					and tb.brand_id in 
-					<foreach collection="queryfilter['inBrandIds']" separator="," open="(" close=")" item="item">
-						#{item}
-					</foreach>
-				</if>
-				<if test="queryfilter['inSupplierIds']!=null and queryfilter['inSupplierIds'].length>0">
-					and tb.supplier_id in 
-					<foreach collection="queryfilter['inSupplierIds']" separator="," open="(" close=")" item="item">
-						#{item}
-					</foreach>
-				</if>
-				<if test="queryfilter['priceBegin']!=null">
-					<![CDATA[and tb.price >= #{queryfilter.priceBegin}]]>
-				</if>
-				<if test="queryfilter['priceEnd']!=null">
-					<![CDATA[and tb.price <= #{queryfilter.priceEnd}]]>
-				</if>
-				<if test="queryfilter['productParameters']!=null and queryfilter['productParameters'].size>0">
-					<foreach collection="queryfilter['productParameters']" item="item">
+			<if test="queryfilter['inBrandIds']!=null and queryfilter['inBrandIds'].length>0">
+				and tb.brand_id in
+				<foreach collection="queryfilter['inBrandIds']" separator="," open="(" close=")" item="item">
+					#{item}
+				</foreach>
+			</if>
+			<if test="queryfilter['inSupplierIds']!=null and queryfilter['inSupplierIds'].length>0">
+				and tb.supplier_id in
+				<foreach collection="queryfilter['inSupplierIds']" separator="," open="(" close=")" item="item">
+					#{item}
+				</foreach>
+			</if>
+			<if test="queryfilter['priceBegin']!=null">
+				<![CDATA[and tb.price >= #{queryfilter.priceBegin}]]>
+			</if>
+			<if test="queryfilter['priceEnd']!=null">
+				<![CDATA[and tb.price <= #{queryfilter.priceEnd}]]>
+			</if>
+			<if test="queryfilter['productParameters']!=null and queryfilter['productParameters'].size>0">
+				<foreach collection="queryfilter['productParameters']" item="item">
 					and (
-						select count(1) from product_parameter as pp
-						where pp.product_id = tb.id and pp.stand_value_id in
-						<foreach collection="item.standValueIds" separator="," open="(" close=")" item="item2">
-							#{item2}
-						</foreach>
-					)>0
+					select count(1) from product_parameter as pp
+					where pp.product_id = tb.id and pp.stand_value_id in
+					<foreach collection="item.standValueIds" separator="," open="(" close=")" item="item2">
+						#{item2}
 					</foreach>
-				</if>
-				<if test="queryfilter['fromFlag']!=null and queryfilter['fromFlag']!=''">
-					<choose>
-						<when test="queryfilter['fromFlag'] == 'bid'">
-						   and tb.sku is null
-						</when>
-						<otherwise>
-						   and tb.sku is not null
-						</otherwise>
-					</choose>
-				</if>
-				<if test="queryfilter['orgId'] != null">
-					and os.org_id = #{queryfilter.orgId}
-				</if>
-				<if test="queryfilter['supplierId'] != null">
-					and tb.supplier_id = #{queryfilter.supplierId}
-				</if>
-				<if test="queryfilter['groupByCondition']!=null and queryfilter['groupByCondition']!=''">
-					group by ${queryfilter.groupByCondition}
-				</if>
-				<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
-					order by ${queryfilter.orderByCondition}
-				</if>
-				<if test="queryfilter['limitNum']!=null">
-					limit #{queryfilter.limitNum}
-				</if>
+					)>0
+				</foreach>
 			</if>
-  </select>
-  
+			<if test="queryfilter['fromFlag']!=null and queryfilter['fromFlag']!=''">
+				<choose>
+					<when test="queryfilter['fromFlag'] == 'bid'">
+						and tb.sku is null
+					</when>
+					<otherwise>
+						and tb.sku is not null
+					</otherwise>
+				</choose>
+			</if>
+			<if test="queryfilter['orgId'] != null">
+				and os.org_id = #{queryfilter.orgId}
+			</if>
+			<if test="queryfilter['supplierId'] != null">
+				and tb.supplier_id = #{queryfilter.supplierId}
+			</if>
+			<if test="queryfilter['groupByCondition']!=null and queryfilter['groupByCondition']!=''">
+				group by ${queryfilter.groupByCondition}
+			</if>
+			<if test="queryfilter['orderByCondition']!=null and queryfilter['orderByCondition']!=''">
+				order by ${queryfilter.orderByCondition}
+			</if>
+			<if test="queryfilter['limitNum']!=null">
+				limit #{queryfilter.limitNum}
+			</if>
+		</if>
+	</select>
+
   <!-- 特惠商品查询 -->
    <select id="findSupplierProtocolBenefitListByEntity" parameterType="www.tonghao.service.common.entity.Products" resultMap="BaseResultMap">
   	select convert((1-tb.price/tb.market_price),decimal(10,2)) as benefitRate

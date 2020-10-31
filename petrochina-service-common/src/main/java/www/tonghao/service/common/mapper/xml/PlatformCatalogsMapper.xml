@@ -204,4 +204,14 @@
 	WHERE
 		pc.is_delete = 0
   </select>
+
+	<select id="getByTreeDepth" parameterType="int" resultMap="BaseResultMap">
+		select * from platform_catalogs p where p.tree_depth = #{treeDepth}
+		and p.is_delete = 0 order by priority
+	</select>
+
+	<select id="getOneLevelChildren" parameterType="Long" resultMap="BaseResultMap">
+		select * from platform_catalogs p where p.parent_id = #{id}
+		and p.is_delete = 0 order by priority
+	</select>
 </mapper>

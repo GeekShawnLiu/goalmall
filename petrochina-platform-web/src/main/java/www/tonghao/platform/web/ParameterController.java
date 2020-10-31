@@ -111,7 +111,7 @@ public class ParameterController {
 	@RequestMapping(value="/getParameterJoinByPlatformCatalogId",method=RequestMethod.GET)
 	public List<Parameter> getParameterJoinByPlatformCatalogId(Long platformCatalogId){
 		PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(platformCatalogId);
-		if (platformCatalog != null && platformCatalog.getCatalogId() != null) {
+		if (platformCatalog != null) {
 			//平台品目对应财政品目id
 			List<Parameter> list = parameterService.getByCatalogId(platformCatalogId);
 //			List<Parameter> collect = parameters.stream().filter(e->!"品牌".equals(e.getName()) && !"型号".equals(e.getName()) ).collect(Collectors.toList());
