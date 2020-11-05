@@ -39,6 +39,9 @@ public class ProductApiServiceImpl implements ProductApiService {
     @Autowired
     private ProductQuotationMapper productQuotationMapper;
 
+    @Autowired
+    private ThirdPlatformCatalogsMapper thirdPlatformCatalogsMapper;
+
     @Override
     public String getPools(String platformCode) {
         try {
@@ -46,7 +49,7 @@ public class ProductApiServiceImpl implements ProductApiService {
             if(platformInfo == null){
                 return ApiResultUtil.error("platformCode有误");
             }
-            List<String> strings = platformCatalogMappingMapper.selectByPlatformInfoCode(platformCode);
+            List<String> strings = thirdPlatformCatalogsMapper.selectByPlatformInfoCode(platformCode);
             return ApiResultUtil.success("", strings);
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +99,10 @@ public class ProductApiServiceImpl implements ProductApiService {
             Long catalogId = productQuotation.getCatalogId();
             PlatformCatalogMapping platformCatalogMapping = platformCatalogMappingMapper.selectByCatalogId(catalogId, platformCode);
             if(platformCatalogMapping != null){
-                productDto.setCategory(platformCatalogMapping.getPlatformCatalogId());
+                ThirdPlatformCatalogs thirdPlatformCatalogs = thirdPlatformCatalogsMapper.selectByPrimaryKey(platformCatalogMapping.getThirdPlatformCatalogId());
+                if(thirdPlatformCatalogs != null){
+                    productDto.setCategory(thirdPlatformCatalogs.getCatalogId());
+                }
             }
             productDto.setService(products.getAfterSaleService());
             productDto.setCode_69("");

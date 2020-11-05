@@ -43,6 +43,28 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
     private ProductsMapper productsMapper;
 
     @Override
+    public List<Protocol> selectByMap(Map<String, Object> map) {
+        List<Protocol> protocols = protocolMapper.selectByMap(map);
+        if(CollectionUtils.isNotEmpty(protocols)){
+            for(Protocol protocol : protocols){
+                Date now = new Date();
+                Date start = DateUtilEx.timeToDate(protocol.getStartTime());
+                Date end = DateUtilEx.timeToDate(protocol.getEndTime());
+                if(now.before(start)){
+                    protocol.setStatus(1);
+                }
+                if(now.after(end)){
+                    protocol.setStatus(3);
+                }
+                if(now.after(start) && now.before(end)){
+                    protocol.setStatus(2);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Map<String, Object> saveEntity(Protocol protocol) {
         if (protocol.getPlatformInfoId() == null) {
             return ResultUtil.error("请选择平台信息");
@@ -55,6 +77,23 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
         protocol.setCreatedAt(DateUtilEx.timeFormat(new Date()));
         protocol.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
         protocol.setPlatformInfoCode(platformInfo.getCode());
+        String startTime = protocol.getStartTime();
+        String endTime = protocol.getEndTime();
+        if(startTime == null || endTime == null){
+            return ResultUtil.error("起止时间不能为空");
+    }
+        Date start = DateUtilEx.timeToDate(startTime);
+        Date end = DateUtilEx.timeToDate(endTime);
+        if(start != null && end != null){
+            return ResultUtil.error("起止时间格式有误");
+        }
+        Date now = new Date();
+        if(now.after(start) && now.before(end)){
+            protocol.setStatus(2);
+        }
+        if(now.before(start)){
+            protocol.setStatus(1);
+        }
         int i = protocolMapper.insertSelective(protocol);
         return ResultUtil.resultMessage(i, "");
     }

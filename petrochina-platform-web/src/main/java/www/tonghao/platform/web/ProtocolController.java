@@ -5,32 +5,18 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.entity.Example.Criteria;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.PageBean;
-import www.tonghao.common.utils.ResultUtil;
-import www.tonghao.common.utils.criteria.CriteriaEqualsUtil;
-import www.tonghao.common.utils.criteria.CriteriaLikeUtil;
 import www.tonghao.service.common.entity.*;
 import www.tonghao.service.common.service.*;
-import www.tonghao.service.common.service.impl.PlatformInfoServiceImpl;
-import www.tonghao.utils.UserUtil;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -58,19 +44,14 @@ public class ProtocolController {
     })
     @RequestMapping(value = "/getPage", method = RequestMethod.GET)
     public PageInfo<Protocol> getPage(@ModelAttribute PageBean page, String name, String code, Integer status, String startTime, String endTime) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("code", code);
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        map.put("status", status);
         PageHelper.startPage(page.getPage(), page.getRows());
-        Example example = new Example(Protocol.class);
-        Criteria createCriteria = example.createCriteria();
-        Map<String, Object> maplike = new HashMap<String, Object>();
-        maplike.put("name", name);
-        maplike.put("code", code);
-        CriteriaLikeUtil.criteriaLike(createCriteria, maplike);
-        Map<String, Object> mapEq = new HashMap<String, Object>();
-        mapEq.put("status", status);
-        mapEq.put("isDelete", 0);
-        CriteriaEqualsUtil.criteriaEquals(createCriteria, mapEq);
-        CriteriaLikeUtil.criteriaBetwwen(createCriteria, "endTime", startTime, endTime);
-        List<Protocol> list = protocolService.selectByExample(example);
+        List<Protocol> list = protocolService.selectByMap(map);
         return new PageInfo<Protocol>(list);
     }
 
@@ -102,7 +83,24 @@ public class ProtocolController {
     })
     @RequestMapping(value = "/getById", method = RequestMethod.GET)
     public Protocol getById(@RequestParam("id") Long id) {
-        return protocolService.selectByKey(id);
+        Protocol protocol = protocolService.selectByKey(id);
+        if (protocol != null) {
+            Date now = new Date();
+            Date start = DateUtilEx.timeToDate(protocol.getStartTime());
+            Date end = DateUtilEx.timeToDate(protocol.getEndTime());
+            if (now.after(start) && now.before(end)) {
+                protocol.setStatus(2);
+            }
+            if (now.before(start)) {
+                protocol.setStatus(1);
+            }
+            if (now.after(end)) {
+                protocol.setStatus(3);
+            }
+            protocolService.updateNotNull(protocol);
+        }
+
+        return protocol;
     }
 
     @ApiOperation(value = "修改", notes = "修改api")
@@ -132,10 +130,6 @@ public class ProtocolController {
 
 
     @ApiOperation(value = "添加协议商品关联信息", notes = "添加协议商品关联信息api")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "协议id", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "productIds", value = "商品id集合", required = true, dataType = "Array", paramType = "query"),
-    })
     @RequestMapping(value = "/addProtocolProduct", method = RequestMethod.POST)
     public Map<String, Object> addProtocolProduct(@RequestBody Protocol protocol) {
         return protocolService.addProtocolProduct(protocol);

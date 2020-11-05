@@ -17,4 +17,39 @@
         <result column="platform_info_id" jdbcType="BIGINT" property="platformInfoId"/>
         <result column="platform_info_code" jdbcType="VARCHAR" property="platformInfoCode"/>
     </resultMap>
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            protocol
+        WHERE
+            is_delete = 0
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="code != null and code != ''">
+                AND code LIKE CONCAT('%',#{code},'%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND start_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND end_time &lt;= #{endTime}
+            </if>
+            <if test="status != null and status == 1">
+                AND now() &lt; start_time
+            </if>
+            <if test="status != null and status == 2">
+                AND now() &gt;= start_time
+                AND now() &lt;= end_time
+            </if>
+            <if test="status != null and status == 3">
+                AND now() &gt;= end_time
+            </if>
+            <if test="status != null and status == 4">
+                AND status = #{status}
+            </if>
+        ORDER BY id DESC
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package www.tonghao.service.common.service;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import www.tonghao.common.utils.PageBean;
 import www.tonghao.service.common.base.BaseService;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProtocolService extends BaseService<Protocol> {
+
+    List<Protocol> selectByMap(Map<String, Object> map);
 
     Map<String, Object> saveEntity(Protocol protocol);
 

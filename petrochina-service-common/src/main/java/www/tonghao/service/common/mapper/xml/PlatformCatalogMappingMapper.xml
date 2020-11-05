@@ -7,18 +7,11 @@
         -->
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="catalog_id" jdbcType="BIGINT" property="catalogId"/>
-        <result column="platform_catalog_id" jdbcType="VARCHAR" property="platformCatalogId"/>
-        <result column="platform_catalog_name" jdbcType="VARCHAR" property="platformCatalogName"/>
-        <result column="platform_catalog_tree_name" jdbcType="VARCHAR" property="platformCatalogTreeName"/>
+        <result column="third_platform_catalog_id" jdbcType="BIGINT" property="thirdPlatformCatalogId"/>
         <result column="platform_info_id" jdbcType="BIGINT" property="platformInfoId"/>
         <result column="platform_info_code" jdbcType="VARCHAR" property="platformInfoCode"/>
     </resultMap>
 
-
-    <select id="selectByPlatformInfoCode" parameterType="String" resultType="String">
-        select platform_catalog_id from platform_catalog_mapping where platform_info_code = #{platformInfoCode}
-    </select>
-    
     <select id="selectByCatalogId" resultMap="BaseResultMap">
         select * from platform_catalog_mapping where platform_info_code = #{platformInfoCode} and catalog_id = #{catalogId} order by id desc limit 1
     </select>

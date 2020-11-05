@@ -7,7 +7,7 @@ import www.tonghao.service.common.base.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-@ApiModel(value = "平台品目信息映射")
+@ApiModel(value = "对接第三方品目信息映射")
 @Table(name = "platform_catalog_mapping")
 public class PlatformCatalogMapping extends BaseEntity {
 
@@ -18,16 +18,8 @@ public class PlatformCatalogMapping extends BaseEntity {
     private Long catalogId;
 
     @ApiModelProperty(value = "平台品目id")
-    @Column(name = "platform_catalog_id")
-    private String platformCatalogId;
-
-    @ApiModelProperty(value = "平台品目名称")
-    @Column(name = "platform_catalog_name")
-    private String platformCatalogName;
-
-    @ApiModelProperty(value = "平台品目层级名称")
-    @Column(name = "platform_catalog_tree_name")
-    private String platformCatalogTreeName;
+    @Column(name = "third_platform_catalog_id")
+    private Long thirdPlatformCatalogId;
 
     @ApiModelProperty(value = "对接平台id")
     @Column(name = "platform_info_id")
@@ -43,22 +35,6 @@ public class PlatformCatalogMapping extends BaseEntity {
 
     public void setCatalogId(Long catalogId) {
         this.catalogId = catalogId;
-    }
-
-    public String getPlatformCatalogId() {
-        return platformCatalogId;
-    }
-
-    public void setPlatformCatalogId(String platformCatalogId) {
-        this.platformCatalogId = platformCatalogId;
-    }
-
-    public String getPlatformCatalogName() {
-        return platformCatalogName;
-    }
-
-    public void setPlatformCatalogName(String platformCatalogName) {
-        this.platformCatalogName = platformCatalogName;
     }
 
     public Long getPlatformInfoId() {
@@ -77,11 +53,11 @@ public class PlatformCatalogMapping extends BaseEntity {
         this.platformInfoCode = platformInfoCode;
     }
 
-    public String getPlatformCatalogTreeName() {
-        return platformCatalogTreeName;
+    public Long getThirdPlatformCatalogId() {
+        return thirdPlatformCatalogId;
     }
 
-    public void setPlatformCatalogTreeName(String platformCatalogTreeName) {
-        this.platformCatalogTreeName = platformCatalogTreeName;
+    public void setThirdPlatformCatalogId(Long thirdPlatformCatalogId) {
+        this.thirdPlatformCatalogId = thirdPlatformCatalogId;
     }
 }

@@ -46,7 +46,7 @@ public class Protocol extends BaseEntity {
     @Column(name = "is_delete")
     private Integer isDelete;
 
-    @ApiModelProperty(value = "状态 1暂存 2执行 3终止 4中止")
+    @ApiModelProperty(value = "状态 1待执行 2执行中 3已终止 4已中止")
     private Integer status;
 
     @ApiModelProperty(value = "对接平台id")
