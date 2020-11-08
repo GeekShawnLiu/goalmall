@@ -68,6 +68,12 @@
 </select>
 
   <select id="selectAllByOrder" resultMap="ExtResultMap">
-    SELECT * FROM `parameter`  ORDER BY position
+    SELECT * FROM `parameter` p
+    <where>
+      <if test="paramName != null">
+         and p.name like CONCAT(CONCAT('%', #{paramName}), '%')
+      </if>
+    </where>
+    ORDER BY p.position
   </select>
 </mapper>

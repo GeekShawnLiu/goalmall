@@ -133,7 +133,7 @@ public class ParameterServiceImpl extends BaseServiceImpl<Parameter> implements 
 	}
 
 	@Override
-	public List<Parameter> selectAllByOrder() {
-		return parameterMapper.selectAllByOrder();
+	public List<Parameter> selectAllByOrder(String paramName) {
+		return parameterMapper.selectAllByOrder(paramName);
 	}
 }

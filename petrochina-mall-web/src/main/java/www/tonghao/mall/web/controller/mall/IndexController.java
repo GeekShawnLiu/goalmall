@@ -124,11 +124,20 @@ public class IndexController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="type",value="类型：1:pc,2:手机,3:小程序      活动页轮播图 4:pc,5:手机,6:小程序",required=true,dataType="int",paramType="query"),
 	})
+//	@GetMapping(value = "/carouselPictrue")
+//    public List<CarouselPictrue> carouselPictrue(HttpServletRequest request, Integer type){
+//		Users user = UserUtil.getUser(request);
+//		PageHelper.startPage(1, 100);
+//		List<CarouselPictrue> list = carouselPictrueService.selectIndexPictrue(type, user);
+//		return list;
+//	}
+
 	@GetMapping(value = "/carouselPictrue")
-    public List<CarouselPictrue> carouselPictrue(HttpServletRequest request, Integer type){
-		Users user = UserUtil.getUser(request);
+	public List<CarouselPictrue> carouselPictrue(HttpServletRequest request, Integer type){
 		PageHelper.startPage(1, 100);
-		List<CarouselPictrue> list = carouselPictrueService.selectIndexPictrue(type, user);
+		Example example = new Example(CarouselPictrue.class);
+		example.setOrderByClause(" rank asc");
+		List<CarouselPictrue> list = carouselPictrueService.selectByExample(example);
 		return list;
 	}
 	

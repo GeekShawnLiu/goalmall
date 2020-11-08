@@ -25,7 +25,7 @@
 		SELECT 
 			p.* 
 		FROM product_parameter p 
-		WHERE p.product_id = #{productId}
+		WHERE p.product_id = #{productId} order by p.position
   </select>
   
    <select id="getRelationByProductId" parameterType="java.lang.Long" resultMap="BaseResultMap">

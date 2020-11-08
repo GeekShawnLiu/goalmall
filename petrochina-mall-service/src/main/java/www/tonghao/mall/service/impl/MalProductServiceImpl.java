@@ -143,12 +143,12 @@ public class MalProductServiceImpl extends BaseServiceImpl<MallProducts> impleme
 			}
 			
 			List<ProductParameter> productParameters = productParameterMapper.getByProductId(id);
-			productParameters.forEach(pp -> {
-				pp.setParameter(getParameters(pp.getStandParamId()));
-				pp.setParameterItems(getParameterItems(pp));
-			});
-			product.setProductParameters(productParameters.stream().filter(pp -> pp.getParameter()!=null).collect(Collectors.toList()));
-			
+//			productParameters.forEach(pp -> {
+//				pp.setParameter(getParameters(pp.getStandParamId()));
+//				pp.setParameterItems(getParameterItems(pp));
+//			});
+//			product.setProductParameters(productParameters.stream().filter(pp -> pp.getParameter()!=null).collect(Collectors.toList()));
+			product.setProductParameters(productParameters);
 			product.setAttributeModel(getProductAttributeModel(product));
 		}
 		return product;

@@ -61,7 +61,7 @@ public interface ParameterService extends BaseService<Parameter> {
 	 * 查询所有的参数
 	 * @return
 	 */
-	List<Parameter> selectAllByOrder();
+	List<Parameter> selectAllByOrder(String paramName);
 
 
 	

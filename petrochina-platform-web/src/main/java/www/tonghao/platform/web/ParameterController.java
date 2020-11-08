@@ -134,14 +134,14 @@ public class ParameterController {
 	}
 
 	@GetMapping(value = "/getAllParam")
-	public List<Parameter> getAll(){
-		return parameterService.selectAllByOrder();
+	public List<Parameter> getAll(String paramName){
+		return parameterService.selectAllByOrder(paramName);
 	}
 
 	@GetMapping(value = "/getParamByPage")
-	public List<Parameter> getParamByPage(@ModelAttribute PageBean page,String paramName){
+	public PageInfo<Parameter> getParamByPage(@ModelAttribute PageBean page,String paramName){
 		PageHelper.startPage(page.getPage(), page.getRows());
-
-		return null;
+		List<Parameter> list = parameterService.selectAllByOrder(paramName);
+		return new PageInfo<Parameter>(list);
 	}
 }

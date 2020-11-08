@@ -37,6 +37,6 @@ public interface ParameterMapper extends BaseMapper<Parameter> {
 
 	List<Parameter> getByCatalogId(@Param("catalogId") Long catalogId);
 
-	List<Parameter> selectAllByOrder();
+	List<Parameter> selectAllByOrder(@Param("paramName") String paramName);
 
 }
