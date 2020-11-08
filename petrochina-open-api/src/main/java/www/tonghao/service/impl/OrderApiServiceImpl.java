@@ -176,7 +176,7 @@ public class OrderApiServiceImpl implements OrderApiService {
                     orderItems = new OrderItems();
                     String sku = skuDto.getSku();
                     ProductQuotation productQuotation = productQuotationMapper.selectBySku(sku, platformCode);
-                    if(productQuotation != null){
+                    if (productQuotation != null) {
                         Products products = productsMapper.selectByPrimaryKey(productQuotation.getProductId());
                         if (products != null) {
                             orderItems.setCreatedAt(nowTimeFormat);
@@ -185,7 +185,7 @@ public class OrderApiServiceImpl implements OrderApiService {
                             orderItems.setPrice(skuDto.getPrice());
                             orderItems.setNum(skuDto.getNum());
                             orderItems.setCatalogName(products.getCatalogName());
-                            orderItems.setMarketPrice(products.getMarketPrice());
+                            orderItems.setMarketPrice(productQuotation.getPrice());
                             orderItems.setSn(sku);
                             orderItems.setProductId(products.getId());
                             orderItems.setOrderId(orders.getId());
@@ -193,10 +193,24 @@ public class OrderApiServiceImpl implements OrderApiService {
                             orderItems.setModel(products.getModel());
                             orderItems.setBrand(products.getBrandName());
                             orderItemsList.add(orderItems);
+                            // 预占库存
+                            ProductQuotation entity = new ProductQuotation();
+                            entity.setId(productQuotation.getId());
+                            Integer stock = productQuotation.getStock();
+                            entity.setStock(stock - skuDto.getNum());
+                            // 销量
+                            Integer sales = productQuotation.getSales();
+                            if (sales == null) {
+                                entity.setSales(skuDto.getNum());
+                            } else {
+                                entity.setSales(productQuotation.getSales() + skuDto.getNum());
+                            }
+                            productQuotationMapper.updateByPrimaryKeySelective(entity);
                         }
                     }
                 }
                 orderItemsMapper.insertList(orderItemsList);
+                ProductQuotation productQuotation = new ProductQuotation();
                 Map<String, Object> result = new HashMap<>();
                 result.put("mall_order_id", orders.getSn());
                 result.put("sku", skus);
@@ -219,6 +233,9 @@ public class OrderApiServiceImpl implements OrderApiService {
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
+        if (!orders.getPlatformCode().equals(platformCode)) {
+            return ApiResultUtil.error("订单不存在");
+        }
         orders.setOrdersState(OrderStatus.confirmed);
         orders.setUpdatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
         int i = ordersMapper.updateByPrimaryKeySelective(orders);
@@ -235,6 +252,9 @@ public class OrderApiServiceImpl implements OrderApiService {
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
+        if (!orders.getPlatformCode().equals(platformCode)) {
+            return ApiResultUtil.error("订单不存在");
+        }
         if (!orders.getOrdersState().equals(OrderStatus.commit)) {
             return ApiResultUtil.error("该订单状态无法取消");
         }
@@ -242,6 +262,33 @@ public class OrderApiServiceImpl implements OrderApiService {
         orders.setUpdatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
         int i = ordersMapper.updateByPrimaryKeySelective(orders);
         if (i > 0) {
+            List<OrderItems> listByOrderId = orderItemsMapper.findListByOrderId(orders.getId());
+            if (CollectionUtils.isNotEmpty(listByOrderId)) {
+                for (OrderItems orderItems : listByOrderId) {
+                    Example example = new Example(ProductQuotation.class);
+                    Example.Criteria criteria = example.createCriteria();
+                    criteria.andEqualTo("productId", orderItems.getProductId());
+                    criteria.andEqualTo("platformInfoCode", platformCode);
+                    List<ProductQuotation> productQuotationList = productQuotationMapper.selectByExample(example);
+                    if (CollectionUtils.isNotEmpty(productQuotationList)) {
+                        ProductQuotation productQuotation = productQuotationList.get(0);
+                        // 恢复库存
+                        ProductQuotation entity = new ProductQuotation();
+                        entity.setId(productQuotation.getId());
+                        Integer stock = productQuotation.getStock();
+                        entity.setStock(stock + orderItems.getNum());
+                        // 销量
+                        Integer sales = productQuotation.getSales();
+                        if (sales != null) {
+                            int i1 = productQuotation.getSales() - orderItems.getNum();
+                            if (i1 >= 0) {
+                                entity.setSales(i1);
+                            }
+                        }
+                        productQuotationMapper.updateByPrimaryKeySelective(entity);
+                    }
+                }
+            }
             return ApiResultUtil.success("取消订单成功");
         } else {
             return ApiResultUtil.error("取消订单失败");
@@ -423,6 +470,9 @@ public class OrderApiServiceImpl implements OrderApiService {
             }
             if (skuDto.getNum() == null) {
                 return ApiResultUtil.error("商品：" + skuDto.getSku() + " 数量为空");
+            }
+            if (productQuotation.getStock() == null) {
+                return ApiResultUtil.error("商品：" + skuDto.getSku() + " 库存不足");
             }
             if (productQuotation.getStock().compareTo(skuDto.getNum()) < 0) {
                 return ApiResultUtil.error("商品：" + skuDto.getSku() + " 库存不足");

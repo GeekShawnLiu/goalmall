@@ -91,6 +91,12 @@
             <if test="sku != null and sku != ''">
                 AND pq.sku = #{sku}
             </if>
+            <if test="catalogId != null">
+                AND p.catalog_id = #{catalogId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                AND p.brand_name LIKE CONCAT('%',#{brandName},'%')
+            </if>
             AND pq.protocol_id = #{protocolId}
         ORDER BY
             pq.id DESC
@@ -108,6 +114,12 @@
             </if>
             <if test="sku != null and sku != ''">
                 AND sku = #{sku}
+            </if>
+            <if test="catalogId != null and catalogId != ''">
+                AND catalog_id = #{catalogId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                AND brand_name LIKE CONCAT('%',#{brandName},'%')
             </if>
             AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId})
         ORDER BY

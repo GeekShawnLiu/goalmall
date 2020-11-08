@@ -58,7 +58,7 @@ public class Protocol extends BaseEntity {
     private String platformInfoCode;
 
     @Transient
-    private List<Long> productIds;
+    private List<ProductQuotation> productQuotations;
 
     public String getName() {
         return name;
@@ -140,11 +140,11 @@ public class Protocol extends BaseEntity {
         this.platformInfoCode = platformInfoCode;
     }
 
-    public List<Long> getProductIds() {
-        return productIds;
+    public List<ProductQuotation> getProductQuotations() {
+        return productQuotations;
     }
 
-    public void setProductIds(List<Long> productIds) {
-        this.productIds = productIds;
+    public void setProductQuotations(List<ProductQuotation> productQuotations) {
+        this.productQuotations = productQuotations;
     }
 }

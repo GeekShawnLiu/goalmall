@@ -6,6 +6,7 @@ import www.tonghao.service.common.entity.ProductQuotation;
 import www.tonghao.service.common.entity.Products;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductQuotationMapper extends BaseMapper<ProductQuotation> {
 
@@ -48,18 +49,16 @@ public interface ProductQuotationMapper extends BaseMapper<ProductQuotation> {
     /**
      * 查询协议关联商品
      *
-     * @param protocolId
+     * @param map
      * @return
      */
-    List<ProductQuotation> selectByProtocolId(@Param("protocolId") Long protocolId, @Param("productName") String productName, @Param("sku") String sku, @Param("status") Integer status);
+    List<ProductQuotation> selectByProtocolId(Map<String, Object> map);
 
     /**
      * 协议添加商品列表筛选
      *
-     * @param protocolId
-     * @param productName
-     * @param sku
+     * @param map
      * @return
      */
-    List<Products> selectAddProtocolProductList(@Param("protocolId") Long protocolId, @Param("productName") String productName, @Param("sku") String sku);
+    List<Products> selectAddProtocolProductList(Map<String, Object> map);
 }

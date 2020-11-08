@@ -114,44 +114,4 @@ public class ProtocolController {
     public Map<String, Object> updateStatus(@RequestBody Protocol protocol) {
         return protocolService.updateStatus(protocol);
     }
-
-    @ApiOperation(value = "获取商品列表", notes = "获取商品列表api")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "当前页", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "rows", value = "条数", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "productName", value = "商品名称", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "sku", value = "sku", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "protocolId", value = "协议id", required = true, dataType = "int", paramType = "query"),
-    })
-    @RequestMapping(value = "/getProductPage", method = RequestMethod.GET)
-    public PageInfo<Products> getProductPage(@ModelAttribute PageBean page, String productName, String sku, Long protocolId) {
-        return protocolService.getProductPage(page, productName, sku, protocolId);
-    }
-
-
-    @ApiOperation(value = "添加协议商品关联信息", notes = "添加协议商品关联信息api")
-    @RequestMapping(value = "/addProtocolProduct", method = RequestMethod.POST)
-    public Map<String, Object> addProtocolProduct(@RequestBody Protocol protocol) {
-        return protocolService.addProtocolProduct(protocol);
-    }
-
-    @ApiOperation(value = "查询协议关联的商品列表", notes = "获取商品列表api")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "当前页", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "rows", value = "条数", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "productName", value = "商品名称", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "sku", value = "sku", required = false, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "protocolId", value = "协议id", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "status", value = "状态 3上架  4下架", required = false, dataType = "int", paramType = "query"),
-    })
-    @RequestMapping(value = "/selectProtocolProductList", method = RequestMethod.GET)
-    public PageInfo<ProductQuotation> selectProtocolProductList(@ModelAttribute PageBean page, String productName, String sku, Long protocolId, Integer status) {
-        return protocolService.selectProtocolProductList(page, productName, sku, protocolId, status);
-    }
-
-    @ApiOperation(value = "修改协议商品信息", notes = "修改协议商品信息api")
-    @RequestMapping(value = "/updateProtocolProductInfo", method = RequestMethod.POST)
-    public Map<String, Object> updateProtocolProductInfo(@RequestBody ProductQuotation productQuotation) {
-        return protocolService.updateProtocolProductInfo(productQuotation);
-    }
 }
