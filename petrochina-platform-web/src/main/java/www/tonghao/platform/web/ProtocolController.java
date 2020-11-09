@@ -52,7 +52,7 @@ public class ProtocolController {
         map.put("status", status);
         PageHelper.startPage(page.getPage(), page.getRows());
         List<Protocol> list = protocolService.selectByMap(map);
-        return new PageInfo<Protocol>(list);
+        return new PageInfo<>(list);
     }
 
     @ApiOperation(value = "获取所有的平台信息", notes = "获取所有的平台信息api")
@@ -86,18 +86,20 @@ public class ProtocolController {
         Protocol protocol = protocolService.selectByKey(id);
         if (protocol != null) {
             Date now = new Date();
-            Date start = DateUtilEx.timeToDate(protocol.getStartTime());
-            Date end = DateUtilEx.timeToDate(protocol.getEndTime());
-            if (now.after(start) && now.before(end)) {
-                protocol.setStatus(2);
+            Date start = DateUtilEx.strToDate(protocol.getStartTime(), DateUtilEx.DATE_PATTERN);
+            Date end = DateUtilEx.strToDate(protocol.getEndTime(), DateUtilEx.DATE_PATTERN);
+            if(start != null && end != null){
+                if (now.after(start) && now.before(end)) {
+                    protocol.setStatus(2);
+                }
+                if (now.before(start)) {
+                    protocol.setStatus(1);
+                }
+                if (now.after(end)) {
+                    protocol.setStatus(3);
+                }
+                protocolService.updateNotNull(protocol);
             }
-            if (now.before(start)) {
-                protocol.setStatus(1);
-            }
-            if (now.after(end)) {
-                protocol.setStatus(3);
-            }
-            protocolService.updateNotNull(protocol);
         }
 
         return protocol;

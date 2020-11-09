@@ -1,25 +1,16 @@
 package www.tonghao.service.common.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import www.tonghao.common.utils.CollectionUtil;
 import www.tonghao.common.utils.DateUtilEx;
-import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
 import www.tonghao.service.common.base.impl.BaseServiceImpl;
 import www.tonghao.service.common.entity.PlatformInfo;
-import www.tonghao.service.common.entity.ProductQuotation;
-import www.tonghao.service.common.entity.Products;
 import www.tonghao.service.common.entity.Protocol;
 import www.tonghao.service.common.mapper.PlatformInfoMapper;
-import www.tonghao.service.common.mapper.ProductQuotationMapper;
-import www.tonghao.service.common.mapper.ProductsMapper;
 import www.tonghao.service.common.mapper.ProtocolMapper;
-import www.tonghao.service.common.service.ProductQuotationService;
 import www.tonghao.service.common.service.ProtocolService;
 
 import java.util.ArrayList;
@@ -36,32 +27,28 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
     @Autowired
     private PlatformInfoMapper platformInfoMapper;
 
-    @Autowired
-    private ProductQuotationMapper productQuotationMapper;
-
-    @Autowired
-    private ProductsMapper productsMapper;
-
     @Override
     public List<Protocol> selectByMap(Map<String, Object> map) {
         List<Protocol> protocols = protocolMapper.selectByMap(map);
         if (CollectionUtils.isNotEmpty(protocols)) {
             for (Protocol protocol : protocols) {
                 Date now = new Date();
-                Date start = DateUtilEx.timeToDate(protocol.getStartTime());
-                Date end = DateUtilEx.timeToDate(protocol.getEndTime());
-                if (now.before(start)) {
-                    protocol.setStatus(1);
-                }
-                if (now.after(end)) {
-                    protocol.setStatus(3);
-                }
-                if (now.after(start) && now.before(end)) {
-                    protocol.setStatus(2);
+                Date start = DateUtilEx.strToDate(protocol.getStartTime(), DateUtilEx.DATE_PATTERN);
+                Date end = DateUtilEx.strToDate(protocol.getEndTime(), DateUtilEx.DATE_PATTERN);
+                if(start != null && end != null){
+                    if (now.before(start)) {
+                        protocol.setStatus(1);
+                    }
+                    if (now.after(end)) {
+                        protocol.setStatus(3);
+                    }
+                    if (now.after(start) && now.before(end)) {
+                        protocol.setStatus(2);
+                    }
                 }
             }
         }
-        return null;
+        return protocols;
     }
 
     @Override
@@ -82,8 +69,8 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
         if (startTime == null || endTime == null) {
             return ResultUtil.error("起止时间不能为空");
         }
-        Date start = DateUtilEx.timeToDate(startTime);
-        Date end = DateUtilEx.timeToDate(endTime);
+        Date start = DateUtilEx.strToDate(startTime, DateUtilEx.DATE_PATTERN);
+        Date end = DateUtilEx.strToDate(endTime, DateUtilEx.DATE_PATTERN);
         if (start != null && end != null) {
             return ResultUtil.error("起止时间格式有误");
         }
