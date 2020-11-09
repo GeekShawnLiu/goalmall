@@ -24,8 +24,7 @@ public class PortalAreaController {
     private PortalAreaService portalAreaService;
 
     @GetMapping(value = "/list")
-    public PageInfo<PortalArea> getList(@ModelAttribute PageBean page,String areaName) {
-        PageHelper.startPage(page.getPage(),page.getRows());
+    public List<PortalArea> getList(String areaName) {
         Example example = new Example(PortalArea.class);
         example.setOrderByClause(" area_sort asc");
         if (StringUtil.strIsNotEmpty(areaName)) {
@@ -33,7 +32,7 @@ public class PortalAreaController {
             criteria.andLike("areaName","%"+areaName+"%");
         }
         List<PortalArea> list = portalAreaService.selectByExample(example);
-        return new PageInfo<PortalArea>(list);
+        return list;
     }
 
     @PostMapping("/saveOrUpdate")

@@ -31,6 +31,10 @@ public class PortalAreaServiceImpl extends BaseServiceImpl<PortalArea> implement
         if (portalArea.getId() != null) {
             edit = this.updateNotNull(portalArea);
         }else {
+            List<PortalArea> totalList = this.getAllBySort();
+            if (totalList != null && totalList.size() > 3) {
+                return ResultUtil.error("专区数量最多为4个");
+            }
             portalArea.setCreatedAt(DateUtilEx.timeFormat(new Date()));
             edit = this.save(portalArea);
         }
