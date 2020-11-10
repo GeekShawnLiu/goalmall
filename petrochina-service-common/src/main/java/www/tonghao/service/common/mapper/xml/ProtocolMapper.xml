@@ -39,13 +39,16 @@
             </if>
             <if test="status != null and status == 1">
                 AND now() &lt; start_time
+                AND status != 4
             </if>
             <if test="status != null and status == 2">
                 AND now() &gt;= start_time
                 AND now() &lt;= end_time
+                AND status != 4
             </if>
             <if test="status != null and status == 3">
                 AND now() &gt;= end_time
+                AND status != 4
             </if>
             <if test="status != null and status == 4">
                 AND status = #{status}

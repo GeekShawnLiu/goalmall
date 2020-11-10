@@ -113,7 +113,7 @@ public class ProtocolProductController {
             @ApiImplicitParam(name = "sku", value = "sku", required = false, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "catalogId", value = "品目id", required = false, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "protocolId", value = "协议id", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "brandName", value = "品牌信息", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "brandName", value = "品牌信息", required = false, dataType = "String", paramType = "query"),
     })
     @RequestMapping(value = "/getProductPage", method = RequestMethod.GET)
     public PageInfo<Products> getProductPage(@ModelAttribute PageBean page, String productName, String sku, Long protocolId, Long catalogId, String brandName) {

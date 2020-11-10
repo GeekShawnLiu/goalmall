@@ -57,7 +57,7 @@ public class ProtocolController {
 
     @ApiOperation(value = "获取所有的平台信息", notes = "获取所有的平台信息api")
     @RequestMapping(value = "/getAllPlatformInfo", method = RequestMethod.GET)
-    public List<PlatformInfo> getAllPlatformInfo(Long id) {
+    public List<PlatformInfo> getAllPlatformInfo() {
         List<PlatformInfo> platformInfos = platformInfoService.selectAllPlatformInfo();
         return platformInfos;
     }
@@ -88,7 +88,7 @@ public class ProtocolController {
             Date now = new Date();
             Date start = DateUtilEx.strToDate(protocol.getStartTime(), DateUtilEx.DATE_PATTERN);
             Date end = DateUtilEx.strToDate(protocol.getEndTime(), DateUtilEx.DATE_PATTERN);
-            if(start != null && end != null){
+            if(start != null && end != null && protocol.getStatus() != 4){
                 if (now.after(start) && now.before(end)) {
                     protocol.setStatus(2);
                 }

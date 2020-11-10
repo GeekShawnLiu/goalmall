@@ -5,9 +5,11 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
+import www.tonghao.mall.api.jd.entity.Sku;
 import www.tonghao.service.common.base.impl.BaseServiceImpl;
 import www.tonghao.service.common.entity.ProductQuotation;
 import www.tonghao.service.common.entity.Products;
@@ -42,17 +44,19 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
             if (check.get(ResultUtil.STATUS).toString().equals(ResultUtil.ERROR)) {
                 return check;
             }
-            ProductQuotation entity = new ProductQuotation();
-            entity.setId(productQuotation.getId());
-            entity.setStatus(productQuotation.getStatus());
-            int i = productQuotationMapper.updateByPrimaryKeySelective(entity);
-            if (i > 0) {
-                // 保存商品消息
-                messagePoolService.addProductMessage(entity.getId(), 4L, productQuotation.getStatus() == 3 ? 1 : 2);
-            }
-            return ResultUtil.resultMessage(i, "操作成功", "操作失败");
         }
-        return ResultUtil.error("参数错误");
+        ProductQuotation entity = new ProductQuotation();
+        entity.setId(productQuotation.getId());
+        entity.setStatus(productQuotation.getStatus());
+        int i = productQuotationMapper.updateByPrimaryKeySelective(entity);
+        if (i > 0) {
+            // 保存商品消息
+            if(productQuotation.getStatus() == 3){
+                messagePoolService.addProductMessage(entity.getId(), 6L, 1);
+            }
+            messagePoolService.addProductMessage(entity.getId(), 4L, productQuotation.getStatus() == 3 ? 1 : 2);
+        }
+        return ResultUtil.resultMessage(i, "操作成功", "操作失败");
     }
 
     @Override
@@ -88,6 +92,7 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
                         result = productQuotationMapper.updateByPrimaryKeySelective(entity);
                         if (result > 0) {
                             // 保存商品消息
+                            messagePoolService.addProductMessage(entity.getId(), 6L, 1);
                             messagePoolService.addProductMessage(entity.getId(), 4L, 1);
                         }
                     }
@@ -113,7 +118,7 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
     public Map<String, Object> productCheck(Long id) {
         ProductQuotation productQuotation = productQuotationMapper.selectByPrimaryKey(id);
         if (productQuotation == null) {
-            return ResultUtil.error(productQuotation.getSku() + ":商品不存在");
+            return ResultUtil.error("商品不存在");
         }
         Products products = productsMapper.selectByPrimaryKey(productQuotation.getProductId());
         if (products == null) {
@@ -203,7 +208,22 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
             productQuotation.setProtocolId(entity.getId());
             productQuotation.setCreatedAt(DateUtilEx.timeFormat(new Date()));
             productQuotation.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
-            int i = productQuotationMapper.insertSelective(productQuotation);
+            productQuotation.setPrice(products.getPrice());
+            productQuotation.setStatus(0);
+            productQuotation.setSales(0);
+            // 查询是否存在
+            int i = 0;
+            Example example = new Example(ProductQuotation.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("productId", productQuotation.getProductId());
+            criteria.andEqualTo("platformInfoId", entity.getPlatformInfoId());
+            List<ProductQuotation> productQuotationList = productQuotationMapper.selectByExample(example);
+            if(CollectionUtils.isNotEmpty(productQuotationList)){
+                productQuotation.setId(productQuotationList.get(0).getId());
+                i = productQuotationMapper.updateByPrimaryKey(productQuotation);
+            }else{
+                i = productQuotationMapper.insertSelective(productQuotation);
+            }
         }
         return ResultUtil.success("");
     }

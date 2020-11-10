@@ -35,7 +35,7 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
                 Date now = new Date();
                 Date start = DateUtilEx.strToDate(protocol.getStartTime(), DateUtilEx.DATE_PATTERN);
                 Date end = DateUtilEx.strToDate(protocol.getEndTime(), DateUtilEx.DATE_PATTERN);
-                if(start != null && end != null){
+                if(start != null && end != null && protocol.getStatus() != 4){
                     if (now.before(start)) {
                         protocol.setStatus(1);
                     }
@@ -71,7 +71,7 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
         }
         Date start = DateUtilEx.strToDate(startTime, DateUtilEx.DATE_PATTERN);
         Date end = DateUtilEx.strToDate(endTime, DateUtilEx.DATE_PATTERN);
-        if (start != null && end != null) {
+        if (start == null || end == null) {
             return ResultUtil.error("起止时间格式有误");
         }
         Date now = new Date();

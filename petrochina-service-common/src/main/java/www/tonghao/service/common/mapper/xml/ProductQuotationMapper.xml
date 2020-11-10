@@ -38,7 +38,7 @@
     </select>
 
     <select id="selectBySku" resultMap="BaseResultMap">
-        SELECT * FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND sku = #{sku}
+        SELECT * FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND sku = #{sku} LIMIT 1
     </select>
 
     <select id="selectBySkus" resultMap="BaseResultMap">
@@ -121,7 +121,7 @@
             <if test="brandName != null and brandName != ''">
                 AND brand_name LIKE CONCAT('%',#{brandName},'%')
             </if>
-            AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId})
+            AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId} AND is_delete = 0)
         ORDER BY
             id DESC
     </select>
