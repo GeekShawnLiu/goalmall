@@ -34,11 +34,24 @@ public class MessagePoolServiceImpl extends BaseServiceImpl<MessagePool> impleme
             messagePool.setState(state);
             messagePool.setType(type);
             messagePool.setTypeId(p.getId());
-            if(type == 2){
+            if (type == 2) {
                 messagePool.setPrice(p.getProtocolPrice());
                 messagePool.setMarketPrice(p.getPrice());
             }
             messagePoolMapper.insertSelective(messagePool);
         }
+    }
+
+    @Override
+    public void addOrderMessage(Long orderId, String orderSn, String platformInfoCode, Long type, Integer state) {
+        MessagePool messagePool = new MessagePool();
+        messagePool.setIsDelete(0);
+        messagePool.setCreatedAt(DateUtilEx.timeFormat(new Date()));
+        messagePool.setPlatformCode(platformInfoCode);
+        messagePool.setState(state);
+        messagePool.setOrderSn(orderSn);
+        messagePool.setType(type);
+        messagePool.setTypeId(orderId);
+        messagePoolMapper.insertSelective(messagePool);
     }
 }
