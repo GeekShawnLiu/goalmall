@@ -17,20 +17,27 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 import www.tonghao.common.enums.OrderStatus;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.PageBean;
+import www.tonghao.common.utils.ResultUtil;
+import www.tonghao.common.utils.StringUtil;
+import www.tonghao.mall.entity.OrderLogs;
 import www.tonghao.mall.entity.Orders;
+import www.tonghao.mall.service.OrderLogsService;
 import www.tonghao.mall.service.OrdersService;
+import www.tonghao.service.common.entity.OrderElectronicInvoice;
+import www.tonghao.service.common.entity.OrderTrack;
 import www.tonghao.service.common.entity.Users;
+import www.tonghao.service.common.mapper.OrderElectronicInvoiceMapper;
+import www.tonghao.service.common.mapper.OrderTrackMapper;
+import www.tonghao.service.common.service.MessagePoolService;
+import www.tonghao.service.common.service.OrderElectronicInvoiceService;
+import www.tonghao.service.common.service.OrderTrackService;
 import www.tonghao.utils.UserUtil;
 
 import com.github.pagehelper.PageHelper;
@@ -46,6 +53,18 @@ public class AdminOrderController {
 	
 	@Autowired
 	private OrdersService ordersService;
+
+	@Autowired
+	private MessagePoolService messagePoolService;
+
+	@Autowired
+	private OrderLogsService orderLogsService;
+
+	@Autowired
+	private OrderTrackService orderTrackService;
+
+	@Autowired
+	private OrderElectronicInvoiceService orderElectronicInvoiceService;
 	
 	
 	@ApiOperation(value="分页查询",notes="分页查询api")
@@ -242,5 +261,93 @@ public class AdminOrderController {
 			return ordersService.getchildOrderView(map);
 		}
 		return null;
+	}
+
+	/**
+	 * 订单确认发货
+	 * @return
+	 */
+	@PostMapping(value = "/sendConfirm")
+	public Map<String,Object> sendConfirm(Long orderId) {
+		Orders orders = ordersService.findById(orderId);
+		if (orders == null) {
+			return ResultUtil.error("订单不存在，请重新选择");
+		}
+		if (StringUtil.strIsEmpty(orders.getSn()) || StringUtil.strIsEmpty(orders.getPlatformCode())) {
+			return ResultUtil.error("订单信息缺失，操作失败");
+		}
+		//略简，待改进
+		messagePoolService.addOrderMessage(orderId,orders.getSn(),orders.getPlatformCode(),12L,null);
+		OrderLogs logs = new OrderLogs();
+		logs.setCreatedAt(DateUtilEx.timeFormat(new Date()));
+		logs.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
+		logs.setContent("确认发货");
+		logs.setOrderId(orderId);
+		logs.setOperator("管理员");
+		//0:已提交,1:已确认,2:已发货,3：已完成,4：已取消,5:已退货
+		logs.setType((byte)2);
+		orderLogsService.save(logs);
+		return ResultUtil.success("");
+	}
+
+	/**
+	 * 订单取消
+	 * @return
+	 */
+	@PostMapping(value = "/cancelConfirm")
+	public Map<String,Object> cancelConfirm(Long orderId) {
+		Orders orders = ordersService.findById(orderId);
+		if (orders == null) {
+			return ResultUtil.error("订单不存在，请重新选择");
+		}
+		if (StringUtil.strIsEmpty(orders.getSn()) || StringUtil.strIsEmpty(orders.getPlatformCode())) {
+			return ResultUtil.error("订单信息缺失，操作失败");
+		}
+		//略简，待改进
+		messagePoolService.addOrderMessage(orderId,orders.getSn(),orders.getPlatformCode(),10L,1);
+		OrderLogs logs = new OrderLogs();
+		logs.setCreatedAt(DateUtilEx.timeFormat(new Date()));
+		logs.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
+		logs.setContent("手动取消订单");
+		logs.setOrderId(orderId);
+		logs.setOperator("管理员");
+//		//0:已提交,1:已确认,2:已发货,3：已完成,4：已取消,5:已退货
+		logs.setType((byte)4);
+		orderLogsService.save(logs);
+		return ResultUtil.success("");
+	}
+
+	/**
+	 * 上传订单电子发票
+	 * @param list
+	 * @return
+	 */
+	@PostMapping(value = "/uploadInvoice")
+	public Map<String,Object> uploadInvoice(List<OrderElectronicInvoice> list) {
+		if (CollectionUtils.isNotEmpty(list)) {
+			list.stream().forEach(e->{
+				orderElectronicInvoiceService.saveSelective(e);
+			});
+			return ResultUtil.success("");
+		}else {
+			return ResultUtil.error("请填写物流信息");
+		}
+	}
+
+	/**
+	 * 上传订单物流信息
+	 * @param list
+	 * @return
+	 */
+	@PostMapping(value = "/saveOrderTrack")
+	public Map<String,Object> saveOrderTrack(List<OrderTrack> list) {
+		if (CollectionUtils.isNotEmpty(list)) {
+			list.stream().forEach(e->{
+				orderTrackService.saveSelective(e);
+			});
+			return ResultUtil.success("");
+		}else {
+			return ResultUtil.error("请填写物流信息");
+		}
 	}
 }
