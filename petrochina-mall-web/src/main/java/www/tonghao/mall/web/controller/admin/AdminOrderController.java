@@ -278,6 +278,8 @@ public class AdminOrderController {
 		}
 		//略简，待改进
 		messagePoolService.addOrderMessage(orderId,orders.getSn(),orders.getPlatformCode(),12L,null);
+		orders.setOrdersState(OrderStatus.receive);
+		ordersService.updateNotNull(orders);
 		OrderLogs logs = new OrderLogs();
 		logs.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 		logs.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
@@ -305,6 +307,8 @@ public class AdminOrderController {
 		}
 		//略简，待改进
 		messagePoolService.addOrderMessage(orderId,orders.getSn(),orders.getPlatformCode(),10L,1);
+		orders.setOrdersState(OrderStatus.cancelled);
+		ordersService.updateNotNull(orders);
 		OrderLogs logs = new OrderLogs();
 		logs.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 		logs.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
@@ -319,15 +323,13 @@ public class AdminOrderController {
 
 	/**
 	 * 上传订单电子发票
-	 * @param list
+	 * @param
 	 * @return
 	 */
 	@PostMapping(value = "/uploadInvoice")
-	public Map<String,Object> uploadInvoice(List<OrderElectronicInvoice> list) {
-		if (CollectionUtils.isNotEmpty(list)) {
-			list.stream().forEach(e->{
-				orderElectronicInvoiceService.saveSelective(e);
-			});
+	public Map<String,Object> uploadInvoice(@RequestBody OrderElectronicInvoice invoice) {
+		if (invoice != null) {
+			orderElectronicInvoiceService.saveSelective(invoice);
 			return ResultUtil.success("");
 		}else {
 			return ResultUtil.error("请填写物流信息");
@@ -336,15 +338,13 @@ public class AdminOrderController {
 
 	/**
 	 * 上传订单物流信息
-	 * @param list
+	 * @param
 	 * @return
 	 */
 	@PostMapping(value = "/saveOrderTrack")
-	public Map<String,Object> saveOrderTrack(List<OrderTrack> list) {
-		if (CollectionUtils.isNotEmpty(list)) {
-			list.stream().forEach(e->{
-				orderTrackService.saveSelective(e);
-			});
+	public Map<String,Object> saveOrderTrack(@RequestBody OrderTrack orderTrack) {
+		if (orderTrack != null) {
+			orderTrackService.saveSelective(orderTrack);
 			return ResultUtil.success("");
 		}else {
 			return ResultUtil.error("请填写物流信息");

@@ -135,7 +135,8 @@
   	tb.logistics_sn,
   	tb.receipt_at,
   	tb.is_receipt,
-  	tb.is_cancel
+  	tb.is_cancel,
+  	tb.platform_code
   </sql>
   <select id="findListByEntity" parameterType="www.tonghao.mall.entity.Orders" resultMap="ExtResultMap">
   	select <include refid="Base_Column_List" /> from orders as tb 
