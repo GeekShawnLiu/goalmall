@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.DateUtilEx;
+import www.tonghao.common.utils.JsonUtil;
 import www.tonghao.dto.ImageDto;
 import www.tonghao.dto.MessageDto;
 import www.tonghao.dto.ProductDto;
@@ -41,6 +42,9 @@ public class ProductApiServiceImpl implements ProductApiService {
 
     @Autowired
     private ThirdPlatformCatalogsMapper thirdPlatformCatalogsMapper;
+
+    @Autowired
+    private ProductParameterMapper productParameterMapper;
 
     @Override
     public String getPools(String platformCode) {
@@ -106,11 +110,28 @@ public class ProductApiServiceImpl implements ProductApiService {
             }
             productDto.setService(products.getAfterSaleService());
             productDto.setCode_69("");
-//                productDto.setAttributes();
             productDto.setIntroduction(products.getDetail());
-            productDto.setParam(products.getParam());
             productDto.setWare(products.getWare());
             productDto.setSale_actives(0);
+            // 查询商品参数
+            productDto.setParam(products.getParam());
+            List<Map<String,Object>> attributes = new ArrayList<>();
+            Map<String,Object> map = null;
+            Map<String,Object> paramMap = new HashMap<>();
+            List<ProductParameter> productParameters = productParameterMapper.getByProductId(products.getId());
+            if(CollectionUtils.isNotEmpty(productParameters)){
+                for(ProductParameter productParameter : productParameters){
+                    map = new HashMap<>();
+                    map.put("attributeID", productParameter.getParentParamId());
+                    map.put("attributeName", productParameter.getParentParamValue());
+                    map.put("valueID", productParameter.getParamId());
+                    map.put("value", productParameter.getParamValue());
+                    attributes.add(map);
+                    paramMap.put(productParameter.getParentParamValue(), productParameter.getParamValue());
+                }
+            }
+            productDto.setAttributes(JsonUtil.toJson(attributes));
+            productDto.setParam(JsonUtil.toJson(paramMap));
             return ApiResultUtil.success("操作成功", productDto);
         } catch (Exception e) {
             e.printStackTrace();
