@@ -136,6 +136,7 @@
   	tb.receipt_at,
   	tb.is_receipt,
   	tb.is_cancel,
+  	tb.logistics_type,
   	tb.platform_code
   </sql>
   <select id="findListByEntity" parameterType="www.tonghao.mall.entity.Orders" resultMap="ExtResultMap">

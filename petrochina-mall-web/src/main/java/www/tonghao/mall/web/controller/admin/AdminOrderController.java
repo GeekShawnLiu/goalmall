@@ -137,13 +137,15 @@ public class AdminOrderController {
 	@ApiOperation(value="根据编号查询",notes="查询单条api")
 	@GetMapping(value="/getBySn")
 	public Orders getBySn(String sn, HttpServletRequest request){
-		Users user = UserUtil.getUser(request);
+//		Users user = UserUtil.getUser(request);
 		Orders order = ordersService.findBySn(sn);
-		if(user!=null){
-			order.setTrackList(ordersService.getOrderTrackById(order.getId()));
+//		if(user!=null){
+			order.setOrderTrackList(orderTrackService.getByOrderId(order.getId()));
+			order.setElectronicInvoiceList(orderElectronicInvoiceService.getByOrderId(order.getId()));
 			return order;
-		}
-		return null;
+//		}
+
+//		return null;
 	}
 	@ApiOperation(value="查询供应商已完成订单",notes="查询供应商已完成订单api")
 	@GetMapping(value="/getSupplierOrder")
@@ -329,11 +331,26 @@ public class AdminOrderController {
 	@PostMapping(value = "/uploadInvoice")
 	public Map<String,Object> uploadInvoice(@RequestBody OrderElectronicInvoice invoice) {
 		if (invoice != null) {
-			orderElectronicInvoiceService.saveSelective(invoice);
+			if (invoice.getId() != null) {
+				orderElectronicInvoiceService.updateNotNull(invoice);
+			}else {
+				orderElectronicInvoiceService.saveSelective(invoice);
+			}
 			return ResultUtil.success("");
 		}else {
-			return ResultUtil.error("请填写物流信息");
+			return ResultUtil.error("请填写电子发票信息");
 		}
+	}
+
+	/**
+	 * 删除订单电子发票
+	 * @param
+	 * @return
+	 */
+	@DeleteMapping(value = "/deleteInvoice")
+	public Map<String,Object> deleteInvoice(Long id) {
+		int edit = orderElectronicInvoiceService.delete(id);
+		return ResultUtil.resultMessage(edit,"");
 	}
 
 	/**
@@ -344,10 +361,26 @@ public class AdminOrderController {
 	@PostMapping(value = "/saveOrderTrack")
 	public Map<String,Object> saveOrderTrack(@RequestBody OrderTrack orderTrack) {
 		if (orderTrack != null) {
-			orderTrackService.saveSelective(orderTrack);
+			if (orderTrack.getId() != null) {
+				orderTrackService.updateNotNull(orderTrack);
+			}else {
+				orderTrackService.saveSelective(orderTrack);
+			}
 			return ResultUtil.success("");
 		}else {
 			return ResultUtil.error("请填写物流信息");
 		}
 	}
+
+	/**
+	 * 删除订单物流信息
+	 * @param
+	 * @return
+	 */
+	@DeleteMapping(value = "/deleteOrderTrack")
+	public Map<String,Object> deleteOrderTrack(Long id) {
+		int edit = orderTrackService.delete(id);
+		return ResultUtil.resultMessage(edit,"");
+	}
+
 }
