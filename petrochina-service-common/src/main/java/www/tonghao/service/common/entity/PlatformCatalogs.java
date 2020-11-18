@@ -209,6 +209,20 @@ public class PlatformCatalogs extends BaseEntity{
     private String priceRange;
 
     /**
+     * 是否节能 0否 1是
+     */
+    @ApiModelProperty(value="是否节能 0否 1是")
+    @Column(name = "is_energy")
+    private Boolean isEnergy;
+
+    /**
+     * 是否环保 0否 1是
+     */
+    @ApiModelProperty(value="是否环保 0否 1是")
+    @Column(name = "is_environment")
+    private Boolean isEnvironment;
+
+    /**
      * 品目参数
      */
     @Transient
@@ -774,5 +788,21 @@ public class PlatformCatalogs extends BaseEntity{
 
     public void setParametersList(List<CatalogParameter> parametersList) {
         this.parametersList = parametersList;
+    }
+
+    public Boolean getIsEnergy() {
+        return isEnergy;
+    }
+
+    public void setIsEnergy(Boolean isEnergy) {
+        this.isEnergy = isEnergy;
+    }
+
+    public Boolean getIsEnvironment() {
+        return isEnvironment;
+    }
+
+    public void setIsEnvironment(Boolean isEnvironment) {
+        this.isEnvironment = isEnvironment;
     }
 }

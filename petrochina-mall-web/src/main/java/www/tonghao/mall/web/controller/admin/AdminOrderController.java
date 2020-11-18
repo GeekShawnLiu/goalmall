@@ -362,8 +362,10 @@ public class AdminOrderController {
 	public Map<String,Object> saveOrderTrack(@RequestBody OrderTrack orderTrack) {
 		if (orderTrack != null) {
 			if (orderTrack.getId() != null) {
+				orderTrack.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
 				orderTrackService.updateNotNull(orderTrack);
 			}else {
+				orderTrack.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 				orderTrackService.saveSelective(orderTrack);
 			}
 			return ResultUtil.success("");

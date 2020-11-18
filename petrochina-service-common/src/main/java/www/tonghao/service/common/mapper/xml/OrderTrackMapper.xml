@@ -10,6 +10,9 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="operate_time" jdbcType="VARCHAR" property="operateTime" />
         <result column="operator" jdbcType="VARCHAR" property="operator" />
+        <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+        <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+
     </resultMap>
 
 
