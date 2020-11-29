@@ -67,6 +67,8 @@
         <result column="is_environment" jdbcType="INTEGER" property="isEnvironment"/>
         <result column="environment_certNo" jdbcType="VARCHAR" property="environmentCertNo"/>
         <result column="environment_certImg" jdbcType="VARCHAR" property="environmentCertImg"/>
+        <result column="energy_save_cert_indate" jdbcType="VARCHAR" property="energySaveCertIndate"/>
+        <result column="environment_cert_indate" jdbcType="VARCHAR" property="environmentCertIndate"/>
     </resultMap>
 
     <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap">

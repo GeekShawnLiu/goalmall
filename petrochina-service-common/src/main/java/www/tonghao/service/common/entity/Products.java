@@ -455,6 +455,21 @@ public class Products  extends BaseEntity implements Serializable {
     @Column(name = "environment_certImg")
     @ApiModelProperty("环保证书图片路径")
     private String environmentCertImg;
+
+    /**
+     * 节能证书有效期
+     */
+    @Column(name = "energy_save_cert_indate")
+    @ApiModelProperty("节能证书有效期")
+    private String energySaveCertIndate;
+
+    /**
+     * 环保证书有效期
+     */
+    @Column(name = "environment_cert_indate")
+    @ApiModelProperty("环保证书有效期")
+    private String environmentCertIndate;
+
 	
 	@Transient
     private List<ProductParameter> productParameters;
@@ -1387,6 +1402,22 @@ public class Products  extends BaseEntity implements Serializable {
 
     public void setEnvironmentCertImg(String environmentCertImg) {
         this.environmentCertImg = environmentCertImg;
+    }
+
+    public String getEnergySaveCertIndate() {
+        return energySaveCertIndate;
+    }
+
+    public void setEnergySaveCertIndate(String energySaveCertIndate) {
+        this.energySaveCertIndate = energySaveCertIndate;
+    }
+
+    public String getEnvironmentCertIndate() {
+        return environmentCertIndate;
+    }
+
+    public void setEnvironmentCertIndate(String environmentCertIndate) {
+        this.environmentCertIndate = environmentCertIndate;
     }
 }
 
