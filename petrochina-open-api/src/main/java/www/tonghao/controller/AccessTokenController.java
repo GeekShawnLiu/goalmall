@@ -6,7 +6,7 @@ import www.tonghao.dto.AccessTokenDto;
 import www.tonghao.service.AccessTokenService;
 
 @RestController
-@RequestMapping("/api/auth2")
+@RequestMapping("/auth2")
 public class AccessTokenController {
 
     @Autowired

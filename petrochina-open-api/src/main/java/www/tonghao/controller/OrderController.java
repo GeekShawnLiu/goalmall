@@ -11,7 +11,7 @@ import www.tonghao.util.ApiResultUtil;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired

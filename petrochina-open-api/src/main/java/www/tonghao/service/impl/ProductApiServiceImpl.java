@@ -302,12 +302,28 @@ public class ProductApiServiceImpl implements ProductApiService {
         return ApiResultUtil.error("消息" + messageId + "删除失败");
     }
 
-
     @Override
     public String certificates(String skus, String platformCode) {
-        for(String sku : skus.split(",")){
-
+        List<ProductQuotation> productQuotations = productQuotationMapper.selectBySkus(skus.split(","), platformCode);
+        List<Map<String, Object>> result = new ArrayList<>();
+        Map<String, Object> map = null;
+        if (CollectionUtils.isNotEmpty(productQuotations)) {
+            for (ProductQuotation productQuotation : productQuotations) {
+                map = new HashMap<>();
+                map.put("sku", productQuotation.getSku());
+                Long productId = productQuotation.getProductId();
+                Products products = productsMapper.selectByPrimaryKey(productId);
+                if(products != null){
+                    map.put("save_energy_cert_no", products.getEnergySaveCertNo());
+                    map.put("save_energy_cert_image", products.getEnergySaveCertImg());
+                    map.put("save_energy_cert_indate", null);
+                    map.put("environment_protect_cert_no", products.getEnvironmentCertNo());
+                    map.put("environment_protect_cert_image", products.getEnvironmentCertImg());
+                    map.put("environment_protect_cert_indate", null);
+                }
+                result.add(map);
+            }
         }
-        return null;
+        return ApiResultUtil.success("操作成功", result);
     }
 }
