@@ -82,4 +82,10 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     }
 
 
+    public static void main(String[] args) {
+
+        String signMd5 = DigestUtils.md5Hex("cg_sd" + "0a4a25478c06473685ae3ec3bfa2dad0" + "2020-11-30 16:00:00" + "0a4a25478c06473685ae3ec3bfa2dad0");
+
+        System.out.println(signMd5);
+    }
 }

@@ -357,8 +357,7 @@ public class OrderApiServiceImpl implements OrderApiService {
 
     @Override
     public String getInvoiceList(String orderSn, String platformCode) {
-        List<Map<String, Object>> result = new ArrayList<>();
-        Map<String, Object> map = null;
+        Map<String, Object> map = new HashMap<>();
         for (String sn : orderSn.split(",")) {
             Orders orders = ordersMapper.findBySn(orderSn);
             if (orders == null) {
@@ -368,9 +367,7 @@ public class OrderApiServiceImpl implements OrderApiService {
             Example.Criteria criteria = example.createCriteria();
             Example.Criteria orderId = criteria.andEqualTo("orderId", orders.getId());
             List<OrderElectronicInvoice> orderElectronicInvoices = orderElectronicInvoiceMapper.selectByExample(example);
-            map = new HashMap<>();
             map.put(sn, orderElectronicInvoices);
-            result.add(map);
         }
         return ApiResultUtil.success("操作成功", map);
     }

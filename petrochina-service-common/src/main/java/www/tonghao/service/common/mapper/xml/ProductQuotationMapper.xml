@@ -27,7 +27,7 @@
             pq.sku
         FROM
             (
-                SELECT catalog_id FROM platform_catalog_mapping WHERE platform_info_code = #{platformCode} AND platform_catalog_id = #{catalogId}
+                SELECT catalog_id FROM platform_catalog_mapping WHERE platform_info_code = #{platformCode} AND third_platform_catalog_id = #{catalogId}
             ) pcm
         INNER JOIN
             (
