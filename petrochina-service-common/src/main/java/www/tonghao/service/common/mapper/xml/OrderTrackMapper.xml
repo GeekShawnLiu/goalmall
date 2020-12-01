@@ -17,7 +17,7 @@
 
 
     <select id="selectByOrderId" parameterType="Long" resultMap="BaseResultMap">
-        select * from order_track where orderId = #{orderId} order by operate_time
+        select * from order_track where order_id = #{orderId} order by operate_time
     </select>
 
 </mapper>

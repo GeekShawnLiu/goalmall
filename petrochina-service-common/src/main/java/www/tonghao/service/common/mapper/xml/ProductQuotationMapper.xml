@@ -48,7 +48,8 @@
             price,
             stock,
             status,
-            protocol_price
+            protocol_price,
+            product_id
         FROM
             product_quotation
         WHERE

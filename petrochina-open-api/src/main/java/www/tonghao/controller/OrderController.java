@@ -20,18 +20,17 @@ public class OrderController {
     /**
      * 预提交订单
      *
-     * @param orderDto
      * @param request
      * @return
      */
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    public String submit(@RequestAttribute OrderDto orderDto, HttpServletRequest request) {
+    public String submit(HttpServletRequest request) {
         String check = ApiParamCheckUtil.check(request, false, false);
         if (check != null) {
             return ApiResultUtil.error(check);
         }
         String platformCode = request.getParameter("platformCode");
-        return orderApiService.submit(orderDto, platformCode);
+        return orderApiService.submit(request, platformCode);
     }
 
     /**

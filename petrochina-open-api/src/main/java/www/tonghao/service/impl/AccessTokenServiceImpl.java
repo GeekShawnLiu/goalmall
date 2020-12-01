@@ -1,10 +1,12 @@
 package www.tonghao.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import www.tonghao.common.redis.RedisDao;
+import www.tonghao.common.utils.JsonUtil;
 import www.tonghao.dto.AccessTokenDto;
 import www.tonghao.service.AccessTokenService;
 import www.tonghao.service.common.entity.Users;
@@ -65,16 +67,24 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             if (!password.equals(users.getEncryptedPassword())) {
                 return ApiResultUtil.error("用户名或密码错误");
             }
+            Object value = redisDao.getValue(users.getId() + "");
+            if(value != null){
+                JsonNode jsonNode = JsonUtil.readTree(JsonUtil.toJson(value));
+                String token = jsonNode.path("access_token").asText();
+                String expirsAt = jsonNode.path("expires_at").asText();
+                return ApiResultUtil.resultToken(true, token, expirsAt);
+            }
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(nowDate);
             calendar.add(Calendar.HOUR, 12);
             String expires_at = dateFormat.format(calendar.getTime());
-            redisDao.setKey(token, users.getId() + "", 43200000L);
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("access_token", token);
             tokenMap.put("expires_at", expires_at);
-            return ApiResultUtil.success("success", tokenMap);
+            redisDao.setKey(token, users.getId() + "", 43200000L);
+            redisDao.setKey(users.getId() + "", tokenMap, 43200000L);
+            return ApiResultUtil.resultToken(true, token, expires_at);
         } catch (ParseException e) {
             e.printStackTrace();
             return ApiResultUtil.error("timestamp格式错误");

@@ -2,16 +2,18 @@ package www.tonghao.service;
 
 import www.tonghao.dto.OrderDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface OrderApiService {
 
     /**
      * 预下订单
      *
-     * @param orderDto
+     * @param request
      * @param platformCode
      * @return
      */
-    String submit(OrderDto orderDto, String platformCode);
+    String submit(HttpServletRequest request, String platformCode);
 
     /**
      * 订单确认

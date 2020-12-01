@@ -285,7 +285,7 @@ public class ProductApiServiceImpl implements ProductApiService {
                 result.add(messageDto);
             }
         }
-        return ApiResultUtil.success("暂无消息", result);
+        return ApiResultUtil.success("操作成功", result);
     }
 
     @Override

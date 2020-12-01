@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.enums.OrderStatus;
+import www.tonghao.common.redis.RedisDao;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.JsonUtil;
 import www.tonghao.dto.*;
@@ -26,6 +27,8 @@ import www.tonghao.service.common.mapper.*;
 import www.tonghao.service.common.service.SeqService;
 import www.tonghao.util.ApiResultUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service("orderApiService")
@@ -61,10 +64,14 @@ public class OrderApiServiceImpl implements OrderApiService {
     @Autowired
     private ProductQuotationMapper productQuotationMapper;
 
+    @Autowired
+    private RedisDao redisDao;
+
     @Override
     @Transactional
-    public String submit(OrderDto orderDto, String platformCode) {
+    public String submit(HttpServletRequest request, String platformCode) {
         try {
+            OrderDto orderDto = getOrderFromRequest(request);
             String orderCheck = orderCheck(orderDto, platformCode);
             if (StringUtils.isNotBlank(orderCheck)) {
                 return orderCheck;
@@ -72,6 +79,10 @@ public class OrderApiServiceImpl implements OrderApiService {
             String nowTimeFormat = DateUtilEx.timeFormat(new Date());
             List<SkuDto> skus = JsonUtil.toObject(orderDto.getSku(), new TypeReference<List<SkuDto>>() {
             });
+            Long userId = null;
+            if (redisDao.getValue(request.getParameter("token")) != null) {
+                userId = Long.parseLong(redisDao.getValue(request.getParameter("token")).toString());
+            }
             // 保存收货地址
             ReceiverAddresses receiverAddresses = new ReceiverAddresses();
             receiverAddresses.setConsigneeName(orderDto.getName());
@@ -85,6 +96,7 @@ public class OrderApiServiceImpl implements OrderApiService {
             receiverAddresses.setEmail(orderDto.getEmail());
             receiverAddresses.setCreatedAt(nowTimeFormat);
             receiverAddresses.setAlias(orderDto.getName());
+            receiverAddresses.setUserId(userId);
             int address = receiverAddressesMapper.insertSelective(receiverAddresses);
             // 保存发票信息
             Invoices invoice = new Invoices();
@@ -96,6 +108,7 @@ public class OrderApiServiceImpl implements OrderApiService {
             invoice.setIdCode(orderDto.getInvoice_org_code());
             invoice.setCompany(orderDto.getInvoice_title());
             invoice.setCreatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
+            invoice.setUserId(userId);
             int inv = invoicesMapper.insertSelective(invoice);
             // 保存订单信息
             Orders orders = new Orders();
@@ -167,6 +180,7 @@ public class OrderApiServiceImpl implements OrderApiService {
             orders.setPayway(payWay);
             orders.setBillStatus(0);
             orders.setPlatformCode(platformCode);
+            orders.setUserId(userId);
             int i = ordersMapper.insertSelective(orders);
             if (i > 0) {
                 // 保存订单商品信息
@@ -229,7 +243,7 @@ public class OrderApiServiceImpl implements OrderApiService {
 
     @Override
     public String confirm(String orderSn, String platformCode) {
-        Orders orders = ordersMapper.findBySn(orderSn);
+        Orders orders = findBySn(orderSn);
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
@@ -248,7 +262,7 @@ public class OrderApiServiceImpl implements OrderApiService {
 
     @Override
     public String cancel(String orderSn, String platformCode) {
-        Orders orders = ordersMapper.findBySn(orderSn);
+        Orders orders = findBySn(orderSn);
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
@@ -262,7 +276,7 @@ public class OrderApiServiceImpl implements OrderApiService {
         orders.setUpdatedAt(DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
         int i = ordersMapper.updateByPrimaryKeySelective(orders);
         if (i > 0) {
-            List<OrderItems> listByOrderId = orderItemsMapper.findListByOrderId(orders.getId());
+            List<OrderItems> listByOrderId = findListByOrderId(orders.getId());
             if (CollectionUtils.isNotEmpty(listByOrderId)) {
                 for (OrderItems orderItems : listByOrderId) {
                     Example example = new Example(ProductQuotation.class);
@@ -297,7 +311,7 @@ public class OrderApiServiceImpl implements OrderApiService {
 
     @Override
     public String select(String orderSn, String platformCode) {
-        Orders orders = ordersMapper.findBySn(orderSn);
+        Orders orders = findBySn(orderSn);
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
@@ -309,7 +323,7 @@ public class OrderApiServiceImpl implements OrderApiService {
         orderSelectDto.setTotal_price(orders.getTotal());
         // 订单商品信息
         List<SkuDto> skuDtoList = new ArrayList<>();
-        List<OrderItems> orderItemsList = orderItemsMapper.findListByOrderId(orders.getId());
+        List<OrderItems> orderItemsList = findListByOrderId(orders.getId());
         if (CollectionUtils.isNotEmpty(orderItemsList)) {
             SkuDto skuDto = null;
             for (OrderItems orderItems : orderItemsList) {
@@ -327,7 +341,7 @@ public class OrderApiServiceImpl implements OrderApiService {
 
     @Override
     public String track(String orderSn, String platformCode) {
-        Orders orders = ordersMapper.findBySn(orderSn);
+        Orders orders = findBySn(orderSn);
         if (orders == null) {
             return ApiResultUtil.error("订单不存在");
         }
@@ -359,7 +373,7 @@ public class OrderApiServiceImpl implements OrderApiService {
     public String getInvoiceList(String orderSn, String platformCode) {
         Map<String, Object> map = new HashMap<>();
         for (String sn : orderSn.split(",")) {
-            Orders orders = ordersMapper.findBySn(orderSn);
+            Orders orders = findBySn(orderSn);
             if (orders == null) {
                 return ApiResultUtil.error("订单不存在");
             }
@@ -476,5 +490,62 @@ public class OrderApiServiceImpl implements OrderApiService {
             }
         }
         return null;
+    }
+
+    /**
+     * request转orderDto
+     *
+     * @param request
+     * @return
+     */
+    public OrderDto getOrderFromRequest(HttpServletRequest request) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setYggc_order(request.getParameter("yggc_order"));
+        orderDto.setSku(request.getParameter("sku"));
+        orderDto.setName(request.getParameter("name"));
+        orderDto.setProvince(request.getParameter("province"));
+        orderDto.setCity(request.getParameter("city"));
+        orderDto.setCounty(request.getParameter("county"));
+        orderDto.setAddress(request.getParameter("address"));
+        orderDto.setZip(request.getParameter("zip"));
+        orderDto.setPhone(request.getParameter("phone"));
+        orderDto.setMobile(request.getParameter("mobile"));
+        orderDto.setEmail(request.getParameter("email"));
+        orderDto.setRemark(request.getParameter("remark"));
+        orderDto.setDep_name(request.getParameter("dep_name"));
+        orderDto.setInvoice_title(request.getParameter("invoice_title"));
+        orderDto.setInvoice_type(request.getParameter("invoice_type"));
+        orderDto.setInvoice_org_code(request.getParameter("invoice_org_code"));
+        orderDto.setInvoice_name(request.getParameter("invoice_name"));
+        orderDto.setInvoice_phone(request.getParameter("invoice_phone"));
+        orderDto.setInvoice_bank(request.getParameter("invoice_bank"));
+        orderDto.setInvoice_bank_code(request.getParameter("invoice_bank_code"));
+        orderDto.setInvoice_address(request.getParameter("invoice_address"));
+        orderDto.setInvoice_mobile(request.getParameter("invoice_mobile"));
+        orderDto.setInvoice_receipt_address(request.getParameter("invoice_receipt_address"));
+        orderDto.setPayment(request.getParameter("payment"));
+        orderDto.setOrder_price(new BigDecimal(request.getParameter("order_price") == null ? "0.00" : request.getParameter("order_price")));
+        orderDto.setFreight(new BigDecimal(request.getParameter("freight") == null ? "0.00" : request.getParameter("freight")));
+        orderDto.setMode(Integer.parseInt(request.getParameter("mode") == null ? "1" : request.getParameter("mode")));
+        return orderDto;
+    }
+
+    private Orders findBySn(String sn){
+        Example example = new Example(Orders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sn", sn);
+        criteria.andEqualTo("isDelete", 0);
+        List<Orders> orders = ordersMapper.selectByExample(example);
+        if(CollectionUtils.isNotEmpty(orders)){
+            return orders.get(0);
+        }
+        return null;
+    }
+
+    private List<OrderItems> findListByOrderId(Long orderId){
+        Example example = new Example(OrderItems.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("orderId", orderId);
+        return orderItemsMapper.selectByExample(example);
     }
 }
