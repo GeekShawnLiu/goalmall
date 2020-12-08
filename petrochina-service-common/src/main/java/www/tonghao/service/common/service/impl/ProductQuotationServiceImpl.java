@@ -9,7 +9,6 @@ import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
-import www.tonghao.mall.api.jd.entity.Sku;
 import www.tonghao.service.common.base.impl.BaseServiceImpl;
 import www.tonghao.service.common.entity.ProductQuotation;
 import www.tonghao.service.common.entity.Products;
@@ -222,6 +221,7 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
                 productQuotation.setId(productQuotationList.get(0).getId());
                 i = productQuotationMapper.updateByPrimaryKey(productQuotation);
             }else{
+                productQuotation.setId(null);
                 i = productQuotationMapper.insertSelective(productQuotation);
             }
         }
