@@ -3,6 +3,7 @@ package www.tonghao.service.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.DateUtilEx;
@@ -45,6 +46,9 @@ public class ProductApiServiceImpl implements ProductApiService {
 
     @Autowired
     private ProductParameterMapper productParameterMapper;
+
+    @Value("${product-view-url-prefix}")
+    private String productViewUrlPrefix;
 
     @Override
     public String getPools(String platformCode) {
@@ -90,7 +94,7 @@ public class ProductApiServiceImpl implements ProductApiService {
             }
             ProductDto productDto = new ProductDto();
             productDto.setSku(products.getSku());
-            productDto.setUrl(products.getUrl());
+            productDto.setUrl(productViewUrlPrefix + products.getId());
             productDto.setModel(products.getModel());
             productDto.setWeight(products.getWeight());
             productDto.setImage_path(products.getCoverUrl());

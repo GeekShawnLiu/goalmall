@@ -211,7 +211,6 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
             productQuotation.setStatus(0);
             productQuotation.setSales(0);
             // 查询是否存在
-            int i = 0;
             Example example = new Example(ProductQuotation.class);
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("productId", productQuotation.getProductId());
@@ -219,10 +218,10 @@ public class ProductQuotationServiceImpl extends BaseServiceImpl<ProductQuotatio
             List<ProductQuotation> productQuotationList = productQuotationMapper.selectByExample(example);
             if(CollectionUtils.isNotEmpty(productQuotationList)){
                 productQuotation.setId(productQuotationList.get(0).getId());
-                i = productQuotationMapper.updateByPrimaryKey(productQuotation);
+                productQuotationMapper.updateByPrimaryKey(productQuotation);
             }else{
                 productQuotation.setId(null);
-                i = productQuotationMapper.insertSelective(productQuotation);
+                productQuotationMapper.insertSelective(productQuotation);
             }
         }
         return ResultUtil.success("");
