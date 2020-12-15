@@ -67,23 +67,17 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             if (!password.equals(users.getEncryptedPassword())) {
                 return ApiResultUtil.error("用户名或密码错误");
             }
-            Object value = redisDao.getValue(users.getId() + "");
-            if(value != null){
-                JsonNode jsonNode = JsonUtil.readTree(JsonUtil.toJson(value));
-                String token = jsonNode.path("access_token").asText();
-                String expirsAt = jsonNode.path("expires_at").asText();
-                return ApiResultUtil.resultToken(true, token, expirsAt);
-            }
+            // 每次获取都返回新的token
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(nowDate);
             calendar.add(Calendar.HOUR, 12);
             String expires_at = dateFormat.format(calendar.getTime());
-            Map<String, String> tokenMap = new HashMap<>();
-            tokenMap.put("access_token", token);
-            tokenMap.put("expires_at", expires_at);
+//            Map<String, String> tokenMap = new HashMap<>();
+//            tokenMap.put("access_token", token);
+//            tokenMap.put("expires_at", expires_at);
+//            redisDao.setKey(users.getId() + "", tokenMap, 43200000L);
             redisDao.setKey(token, users.getId() + "", 43200000L);
-            redisDao.setKey(users.getId() + "", tokenMap, 43200000L);
             return ApiResultUtil.resultToken(true, token, expires_at);
         } catch (ParseException e) {
             e.printStackTrace();
