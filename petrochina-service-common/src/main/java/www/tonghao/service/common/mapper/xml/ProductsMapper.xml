@@ -106,7 +106,7 @@
 
     <select id="getBaseById" parameterType="java.lang.Long" resultMap="BaseResultMap">
 	select tb.id,tb.catalog_id,tb.sn,tb.sku,tb.brand_name,tb.model,sales,tb.month_sales,tb.month_sales_index,tb.price,tb.market_price,tb.stock,tb.`status`
-			,tb.is_marketable,tb.protocol_id,tb.supplier_name
+			,tb.is_marketable,tb.protocol_id,tb.supplier_name, tb.cover_url
 	from products tb where tb.id = #{id}
   </select>
 
