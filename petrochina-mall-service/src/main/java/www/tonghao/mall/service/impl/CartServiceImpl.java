@@ -237,7 +237,8 @@ public class CartServiceImpl extends BaseServiceImpl<Cart> implements CartServic
 					supplier_items_map.put(sup.getCode(), suppliersCartItemList);
 				}
 			}
-			
+
+			/*
 			//判断是否分配积分
 			if(activityflag && "success".equals(resultMap.get("status"))){
 				for (Long aid : activityIdSet) {
@@ -259,6 +260,7 @@ public class CartServiceImpl extends BaseServiceImpl<Cart> implements CartServic
 					}
 				}
 			}
+
 			//批量校验商品状态
 			if(ResultUtil.isSuccess(resultMap) && supplier_items_map != null){
 				for (Map.Entry<String, List<CartItems>> entry : supplier_items_map.entrySet()) {
@@ -279,6 +281,7 @@ public class CartServiceImpl extends BaseServiceImpl<Cart> implements CartServic
 					}
 		        }
 			}
+			*/
 		}else{
 			resultMap.put("status", "error");
 			resultMap.put("message", "请先选择商品后下单");

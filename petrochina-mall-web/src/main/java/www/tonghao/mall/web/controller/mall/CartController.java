@@ -224,8 +224,8 @@ public class CartController {
 		if (user == null) {
 			return ResultUtil.error("登录失效,请重新登录");
 		}
-		if (user.getType() == null || user.getType() != 1) {
-			return ResultUtil.error("非采购人用户不允许采购");
+		if (user.getType() == null || user.getType() != 1 || user.getType() !=6) {
+			return ResultUtil.error("非采购人或管理员用户不允许采购");
 		}
 		List<CartItems> cartItemsList = cartItemsService.selectCheckItemsByUser(user.getId());
 		return cartService.checkSkip(user, null, cartItemsList);
