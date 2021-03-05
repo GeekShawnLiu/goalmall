@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -67,6 +68,8 @@ public class OrderApiServiceImpl implements OrderApiService {
     @Autowired
     private RedisDao redisDao;
 
+    @Value("${order-sn-prefix}")
+    private String orderSnPrefix;
     @Override
     @Transactional
     public String submit(HttpServletRequest request, String platformCode) {
@@ -112,7 +115,7 @@ public class OrderApiServiceImpl implements OrderApiService {
             int inv = invoicesMapper.insertSelective(invoice);
             // 保存订单信息
             Orders orders = new Orders();
-            String orderSn = seqService.getSeqSn("O" + platformCode);
+            String orderSn = seqService.getSeqSn(orderSnPrefix + platformCode);
             orders.setSn(orderSn);
             orders.setCreatedAt(nowTimeFormat);
             orders.setUpdatedAt(nowTimeFormat);

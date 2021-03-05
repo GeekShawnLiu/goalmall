@@ -248,7 +248,7 @@ public class ProductApiServiceImpl implements ProductApiService {
         criteria.andEqualTo("type", type);
         criteria.andEqualTo("isDelete", 0);
         criteria.andEqualTo("platformCode", platformCode);
-        example.orderBy("createdAt");
+        example.orderBy("id");
         List<MessagePool> messagePools = messagePoolMapper.selectByExample(example);
         List<MessageDto> result = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(messagePools)) {
