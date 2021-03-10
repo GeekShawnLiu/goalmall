@@ -88,13 +88,13 @@ public class FloorServiceImpl extends BaseServiceImpl<Floor> implements FloorSer
 		//queryfilter.put("limitNum", 7);
 		queryfilter.put("orderByCondition", "tb.created_at desc");
 		//根据机构判断商品展示
-		if(user != null && user.getType() != null){
-			if(user.getType() == 1){
-				queryfilter.put("orgId", user.getDepId());
-			}else if(user.getType() == 4){
-				queryfilter.put("supplierId", user.getTypeId());
-			}
-		}
+//		if(user != null && user.getType() != null){
+//			if(user.getType() == 1){
+//				queryfilter.put("orgId", user.getDepId());
+//			}else if(user.getType() == 4){
+//				queryfilter.put("supplierId", user.getTypeId());
+//			}
+//		}
 		entity.setQueryfilter(queryfilter);
 		return mallProductService.findListByEntity(entity);
 	}
@@ -105,13 +105,13 @@ public class FloorServiceImpl extends BaseServiceImpl<Floor> implements FloorSer
 		queryfilter.put("inCatalogIds", catalogIds);
 		queryfilter.put("orderByCondition", "(1-tb.price/tb.market_price) desc");
 		//根据机构判断商品展示
-		if(user != null && user.getType() != null){
-			if(user.getType() == 1){
-				queryfilter.put("orgId", user.getDepId());
-			}else if(user.getType() == 4){
-				queryfilter.put("supplierId", user.getTypeId());
-			}
-		}
+//		if(user != null && user.getType() != null){
+//			if(user.getType() == 1){
+//				queryfilter.put("orgId", user.getDepId());
+//			}else if(user.getType() == 4){
+//				queryfilter.put("supplierId", user.getTypeId());
+//			}
+//		}
 		entity.setQueryfilter(queryfilter);
 		return mallProductService.findBenefitProductsByEntity(entity);
 	}
