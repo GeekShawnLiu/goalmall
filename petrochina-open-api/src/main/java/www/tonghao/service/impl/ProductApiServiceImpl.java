@@ -118,10 +118,9 @@ public class ProductApiServiceImpl implements ProductApiService {
             productDto.setWare(products.getWare());
             productDto.setSale_actives(0);
             // 查询商品参数
-            productDto.setParam(products.getParam());
+            productDto.setParam(getParamTable(products.getBrandName(), products.getName(), products.getModel(), products.getUnit()));
             List<Map<String, Object>> attributes = new ArrayList<>();
             Map<String, Object> map = null;
-            Map<String, Object> paramMap = new HashMap<>();
             List<ProductParameter> productParameters = productParameterMapper.getByProductId(products.getId());
             if (CollectionUtils.isNotEmpty(productParameters)) {
                 for (ProductParameter productParameter : productParameters) {
@@ -131,11 +130,9 @@ public class ProductApiServiceImpl implements ProductApiService {
                     map.put("valueID", productParameter.getParamId());
                     map.put("value", productParameter.getParamValue());
                     attributes.add(map);
-                    paramMap.put(productParameter.getParentParamValue(), productParameter.getParamValue());
                 }
             }
             productDto.setAttributes(JsonUtil.toJson(attributes));
-            productDto.setParam(JsonUtil.toJson(paramMap));
             return ApiResultUtil.success("操作成功", productDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -335,5 +332,41 @@ public class ProductApiServiceImpl implements ProductApiService {
             }
         }
         return ApiResultUtil.success("操作成功", result);
+    }
+
+
+    /**
+     * 获取规格参数列表
+     *
+     * @param brandName
+     * @param productName
+     * @param model
+     * @param unit
+     * @return
+     */
+    public String getParamTable(String brandName, String productName, String model, String unit) {
+        brandName = brandName == null ? "" : brandName;
+        productName = productName == null ? "" : productName;
+        model = model == null ? "" : model;
+        unit = unit == null ? "" : unit;
+        String paramTable = "<table class='Ptable'>" +
+                "<tr>" +
+                    "<td class='tdTitle'>品牌</td>" +
+                    "<td>" + brandName + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>商品名称</td>" +
+                    "<td>" + productName + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>型号</td>" +
+                    "<td>" + model + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>单位</td>" +
+                    "<td>" + unit + "</td>" +
+                "</tr>" +
+                "</table>";
+        return paramTable;
     }
 }
