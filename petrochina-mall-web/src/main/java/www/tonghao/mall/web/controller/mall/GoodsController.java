@@ -92,7 +92,7 @@ public class GoodsController {
 	/**
 	 * 品目商品列表
 	 * @param mc_id 商品平台品目ID 
-	 * @param tds 树层级标识 0:末级 否则非末级
+	 * @param tds 树层级标识 0:末级 否则非末级111
 	 * @return
 	 */
 	@ApiOperation(value="品目商品列表")
@@ -600,37 +600,39 @@ public class GoodsController {
 			result.put("message", "商品已下架");
 			return result;
 		}
+
+		//2020-11-09 去掉电商一系列校验
 		//电商上下架状态判断
-		mallProductService.vaProductPutawayStatus(product);
-		if(product.getStatus()==4){
-			result.put("message", "商品已下架");
-			return result;
-		}
+//		mallProductService.vaProductPutawayStatus(product);
+//		if(product.getStatus()==4){
+//			result.put("message", "商品已下架");
+//			return result;
+//		}
 		//电商价格校验接口
-		mallProductService.fillEmallUrlAndPriceAndRefreshState(product);
-		if(product.getStatus()==4){
-			result.put("message", "商品已下架");
-			return result;
-		}
+//		mallProductService.fillEmallUrlAndPriceAndRefreshState(product);
+//		if(product.getStatus()==4){
+//			result.put("message", "商品已下架");
+//			return result;
+//		}
 		result.put("emallUrl", product.getEmallUrl());
 		result.put("isPriceChange", poPrice!=null&&poPrice.compareTo(product.getPrice())==0?true:false);
 		result.put("price", product.getPrice());
 		result.put("marketPrice", product.getMarketPrice());
 		result.put("reduceAmount", product.getReduceAmount());
 		//电商库存校验接口
-		ProductStock stock = mallProductService.getProductStock(product,areaId,num);
-		if(stock.getState()==0){
-			result.put("message", "暂时无货");
-			return result;
-		}
+//		ProductStock stock = mallProductService.getProductStock(product,areaId,num);
+//		if(stock.getState()==0){
+//			result.put("message", "暂时无货");
+//			return result;
+//		}
 		//查询商品区域购买限制
-		Map<String, Object> checkAreaLimit = mallProductService.checkAreaLimit(product, areaId);
-		if(!ResultUtil.isSuccess(checkAreaLimit)){
-			return checkAreaLimit;
-		}
+//		Map<String, Object> checkAreaLimit = mallProductService.checkAreaLimit(product, areaId);
+//		if(!ResultUtil.isSuccess(checkAreaLimit)){
+//			return checkAreaLimit;
+//		}
 		result.put("status", "success");
-		result.put("stockState", stock.getState());
-		result.put("stockMsg", stock.getMsg());
+//		result.put("stockState", stock.getState());
+//		result.put("stockMsg", stock.getMsg());
 		return result;
 	}
 	

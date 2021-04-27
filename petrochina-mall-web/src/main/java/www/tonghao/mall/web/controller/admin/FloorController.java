@@ -60,6 +60,7 @@ import www.tonghao.service.common.service.FileService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
+import www.tonghao.service.common.service.PlatformCatalogsService;
 
 
 @Api(value="adminFloorController",description="楼层管理")
@@ -90,6 +91,9 @@ public class FloorController {
 	
 	@Autowired
 	private MallCatalogsService mallCatalogsService;
+
+	@Autowired
+	private PlatformCatalogsService platformCatalogsService;
 	
 	/**
 	 * 分页查询
@@ -120,11 +124,10 @@ public class FloorController {
 	})
 	@RequestMapping(value="/get",method=RequestMethod.GET)
 	public Floor findById(Long id){
-//	    List<PlatformCatalogs> cataList = mallPlatformCatalogsService.getPlatformCatalogs();
-	    List<TreeNode> mallCataList = mallCatalogsService.getTreeList(null, null);
-//	    System.out.println("转换前++++++++++"+JsonUtil.toJson(mallCataList));
+//	    List<TreeNode> mallCataList = mallCatalogsService.getTreeList(null, null);
+		List<TreeNode> catalogList = platformCatalogsService.getPortalCatalogs();
 	    TreeBuilder tb = new TreeBuilder();
-		List<TreeNode> mallCataLogList = tb.treeToList(mallCataList);
+		List<TreeNode> mallCataLogList = tb.treeToList(catalogList);
 //		System.out.println("转换后=========="+JsonUtil.toJson(mallCataLogList));
 	    Floor floor = floorService.findById(id);
 	    List<FloorPlatformCatalog> floorCataList = floor.getFloorPlatformCatalogs();
@@ -134,7 +137,10 @@ public class FloorController {
 	    		String catalogType = floorPlatformCatalog.getCatalogType();
 	    		String judge = catalogType+"-"+platFormCatalogid;
 	    		//平台品目和楼层品目对比，选中则设置sort为999
-	    		if (obj.getExtStr().equals(judge) || obj.getExtStr() == judge) {
+//	    		if (obj.getExtStr().equals(judge) || obj.getExtStr() == judge) {
+//					obj.setSort((float) 999);
+//				}
+				if (obj.getId().equals(floorPlatformCatalog.getPlatformCatalogId())) {
 					obj.setSort((float) 999);
 				}
 	    	}

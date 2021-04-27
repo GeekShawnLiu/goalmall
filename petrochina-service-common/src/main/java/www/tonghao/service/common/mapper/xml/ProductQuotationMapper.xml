@@ -27,7 +27,7 @@
             pq.sku
         FROM
             (
-                SELECT catalog_id FROM platform_catalog_mapping WHERE platform_info_code = #{platformCode} AND platform_catalog_id = #{catalogId}
+                SELECT catalog_id FROM platform_catalog_mapping WHERE platform_info_code = #{platformCode} AND third_platform_catalog_id = #{catalogId}
             ) pcm
         INNER JOIN
             (
@@ -38,7 +38,7 @@
     </select>
 
     <select id="selectBySku" resultMap="BaseResultMap">
-        SELECT * FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND sku = #{sku}
+        SELECT * FROM product_quotation WHERE is_delete = 0 AND platform_info_code = #{platformCode} AND sku = #{sku} LIMIT 1
     </select>
 
     <select id="selectBySkus" resultMap="BaseResultMap">
@@ -48,7 +48,8 @@
             price,
             stock,
             status,
-            protocol_price
+            protocol_price,
+            product_id
         FROM
             product_quotation
         WHERE
@@ -91,6 +92,12 @@
             <if test="sku != null and sku != ''">
                 AND pq.sku = #{sku}
             </if>
+            <if test="catalogId != null">
+                AND p.catalog_id = #{catalogId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                AND p.brand_name LIKE CONCAT('%',#{brandName},'%')
+            </if>
             AND pq.protocol_id = #{protocolId}
         ORDER BY
             pq.id DESC
@@ -109,7 +116,13 @@
             <if test="sku != null and sku != ''">
                 AND sku = #{sku}
             </if>
-            AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId})
+            <if test="catalogId != null and catalogId != ''">
+                AND catalog_id = #{catalogId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                AND brand_name LIKE CONCAT('%',#{brandName},'%')
+            </if>
+            AND id not in (select product_id AS id from product_quotation where protocol_id = #{protocolId} AND is_delete = 0)
         ORDER BY
             id DESC
     </select>

@@ -85,4 +85,8 @@ public interface PlatformCatalogsMapper extends BaseMapper<PlatformCatalogs> {
 	 * @return
 	 */
 	List<PlatformCatalogs> selectShopCatalogs(@Param("shopId") Long shopId);
+
+	List<PlatformCatalogs> getByTreeDepth(@Param("treeDepth") int treeDepth);
+
+	List<PlatformCatalogs> getOneLevelChildren(Long id);
 } 

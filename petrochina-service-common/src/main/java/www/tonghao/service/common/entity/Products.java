@@ -349,7 +349,14 @@ public class Products  extends BaseEntity implements Serializable {
     @Column(name = "energy_save_certNo")
     @ApiModelProperty("节能证书编号")
     private String energySaveCertNo;
-    
+
+    /**
+     * 节能证书图片路径
+     */
+    @Column(name = "energy_save_certImg")
+    @ApiModelProperty("节能证书图片路径")
+    private String energySaveCertImg;
+
     /** 
      * 产地类型1：国内  2：进口
      */  
@@ -428,7 +435,41 @@ public class Products  extends BaseEntity implements Serializable {
 	//是否厂商配送 1是 0否
 	@Column(name = "is_factory_ship")
 	private Integer isFactoryShip;
-	
+
+    /**
+     * 是否环保 0否 1是
+     */
+    @Column(name = "is_environment")
+    private Integer isEnvironment;
+
+    /**
+     * 环保证书编号
+     */
+    @Column(name = "environment_certNo")
+    @ApiModelProperty("环保证书编号")
+    private String environmentCertNo;
+
+    /**
+     * 环保证书图片路径
+     */
+    @Column(name = "environment_certImg")
+    @ApiModelProperty("环保证书图片路径")
+    private String environmentCertImg;
+
+    /**
+     * 节能证书有效期
+     */
+    @Column(name = "energy_save_cert_indate")
+    @ApiModelProperty("节能证书有效期")
+    private String energySaveCertIndate;
+
+    /**
+     * 环保证书有效期
+     */
+    @Column(name = "environment_cert_indate")
+    @ApiModelProperty("环保证书有效期")
+    private String environmentCertIndate;
+
 	
 	@Transient
     private List<ProductParameter> productParameters;
@@ -1330,7 +1371,53 @@ public class Products  extends BaseEntity implements Serializable {
 	public void setIsFactoryShip(Integer isFactoryShip) {
 		this.isFactoryShip = isFactoryShip;
 	}
-	
-	
+
+    public String getEnergySaveCertImg() {
+        return energySaveCertImg;
+    }
+
+    public void setEnergySaveCertImg(String energySaveCertImg) {
+        this.energySaveCertImg = energySaveCertImg;
+    }
+
+    public Integer getIsEnvironment() {
+        return isEnvironment;
+    }
+
+    public void setIsEnvironment(Integer isEnvironment) {
+        this.isEnvironment = isEnvironment;
+    }
+
+    public String getEnvironmentCertNo() {
+        return environmentCertNo;
+    }
+
+    public void setEnvironmentCertNo(String environmentCertNo) {
+        this.environmentCertNo = environmentCertNo;
+    }
+
+    public String getEnvironmentCertImg() {
+        return environmentCertImg;
+    }
+
+    public void setEnvironmentCertImg(String environmentCertImg) {
+        this.environmentCertImg = environmentCertImg;
+    }
+
+    public String getEnergySaveCertIndate() {
+        return energySaveCertIndate;
+    }
+
+    public void setEnergySaveCertIndate(String energySaveCertIndate) {
+        this.energySaveCertIndate = energySaveCertIndate;
+    }
+
+    public String getEnvironmentCertIndate() {
+        return environmentCertIndate;
+    }
+
+    public void setEnvironmentCertIndate(String environmentCertIndate) {
+        this.environmentCertIndate = environmentCertIndate;
+    }
 }
 

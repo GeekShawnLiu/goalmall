@@ -1,0 +1,25 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.PortalAreaMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.PortalArea">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="created_at" jdbcType="VARCHAR" property="createdAt" />
+        <result column="updated_at" jdbcType="VARCHAR" property="updatedAt" />
+        <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+        <result column="catalog_id" jdbcType="BIGINT" property="catalogId" />
+        <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+        <result column="cover_url" jdbcType="VARCHAR" property="coverUrl" />
+        <result column="area_sort" jdbcType="INTEGER" property="areaSort" />
+    </resultMap>
+
+
+    <select id="getAllByPosition"  resultMap="BaseResultMap">
+        select * from portal_area t order by t.area_sort
+    </select>
+
+    <select id="getMaxPosition" resultType="Integer">
+        select IFNULL(max(t.position),0)  from portal_product t
+    </select>
+</mapper>

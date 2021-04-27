@@ -44,7 +44,7 @@ public class ProductQuotation extends BaseEntity {
     @Column(name = "is_delete")
     private Integer isDelete;
 
-    @ApiModelProperty(value = "状态 3：上架，4：下架")
+    @ApiModelProperty(value = "状态 0:待上架 3：上架，4：下架")
     @Column(name = "status")
     private Integer status;
 

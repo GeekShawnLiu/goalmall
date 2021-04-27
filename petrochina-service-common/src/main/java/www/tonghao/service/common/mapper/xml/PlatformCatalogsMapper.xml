@@ -33,6 +33,8 @@
   	<result column="is_unified_parameter" jdbcType="TINYINT" property="isUnifiedParameter" />
   	<result column="is_marketable_unified_parameter" jdbcType="TINYINT" property="isMarketableUnifiedParameter" />
   	<result column="price_range" jdbcType="VARCHAR" property="priceRange" />
+	<result column="is_energy" jdbcType="TINYINT" property="isEnergy" />
+	<result column="is_environment" jdbcType="TINYINT" property="isEnvironment" />
   </resultMap>
   
   <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.PlatformCatalogs" extends="BaseResultMap" >
@@ -204,4 +206,14 @@
 	WHERE
 		pc.is_delete = 0
   </select>
+
+	<select id="getByTreeDepth" parameterType="int" resultMap="BaseResultMap">
+		select * from platform_catalogs p where p.tree_depth = #{treeDepth}
+		and p.is_delete = 0 order by priority
+	</select>
+
+	<select id="getOneLevelChildren" parameterType="Long" resultMap="BaseResultMap">
+		select * from platform_catalogs p where p.parent_id = #{id}
+		and p.is_delete = 0 order by priority
+	</select>
 </mapper>

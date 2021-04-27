@@ -77,24 +77,24 @@ public class ProductJdInitServiceImpl implements ProductJdInitService {
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("supplierId", supplier.getId());
 		map.put("types", 1);
-		List<Protocol> pro = protocolService.getProtocolBySupplier(map);
-		Protocol protocol=null;
-		if(!CollectionUtil.collectionIsEmpty(pro)) {
-			protocol=pro.get(0);
-		}
-		if(supplier!=null){
-			System.out.println(protocol);
-			System.out.println(protocol);
-			ProductPoolRes productPoolApi = JdUtilApi.ProductPoolApi();
-			if(productPoolApi.isSuccess()){
-				List<ProductPoolResultAttr> result = productPoolApi.getResult();
-				if(!CollectionUtil.collectionIsEmpty(result)){
-					for (ProductPoolResultAttr productPoolResultAttr : result) {
-						getSku(supplier, productPoolResultAttr.getPage_num(), protocol);
-					}
-				}
-			}
-		}
+//		List<Protocol> pro = protocolService.getProtocolBySupplier(map);
+//		Protocol protocol=null;
+//		if(!CollectionUtil.collectionIsEmpty(pro)) {
+//			protocol=pro.get(0);
+//		}
+//		if(supplier!=null){
+//			System.out.println(protocol);
+//			System.out.println(protocol);
+//			ProductPoolRes productPoolApi = JdUtilApi.ProductPoolApi();
+//			if(productPoolApi.isSuccess()){
+//				List<ProductPoolResultAttr> result = productPoolApi.getResult();
+//				if(!CollectionUtil.collectionIsEmpty(result)){
+//					for (ProductPoolResultAttr productPoolResultAttr : result) {
+//						getSku(supplier, productPoolResultAttr.getPage_num(), protocol);
+//					}
+//				}
+//			}
+//		}
 	}
 	public void getSku(Suppliers sup,String page_num,Protocol protocol){
 		List<String> skus = getSkus(page_num);

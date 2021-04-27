@@ -28,7 +28,7 @@ public class GatewayApplication  implements CommandLineRunner{
 	MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		if("pro".equals(active) || "test".equals(active)){
-			factory.setLocation("/tmp");
+			factory.setLocation("/data/tmp");
 		}else{
 			factory.setLocation("E:/tmp");
 		}

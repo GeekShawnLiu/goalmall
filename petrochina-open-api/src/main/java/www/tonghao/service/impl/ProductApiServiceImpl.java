@@ -3,9 +3,11 @@ package www.tonghao.service.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import www.tonghao.common.utils.DateUtilEx;
+import www.tonghao.common.utils.JsonUtil;
 import www.tonghao.dto.ImageDto;
 import www.tonghao.dto.MessageDto;
 import www.tonghao.dto.ProductDto;
@@ -39,14 +41,23 @@ public class ProductApiServiceImpl implements ProductApiService {
     @Autowired
     private ProductQuotationMapper productQuotationMapper;
 
+    @Autowired
+    private ThirdPlatformCatalogsMapper thirdPlatformCatalogsMapper;
+
+    @Autowired
+    private ProductParameterMapper productParameterMapper;
+
+    @Value("${product-view-url-prefix}")
+    private String productViewUrlPrefix;
+
     @Override
     public String getPools(String platformCode) {
         try {
             PlatformInfo platformInfo = platformInfoMapper.selectByPlatformCode(platformCode);
-            if(platformInfo == null){
+            if (platformInfo == null) {
                 return ApiResultUtil.error("platformCode有误");
             }
-            List<String> strings = platformCatalogMappingMapper.selectByPlatformInfoCode(platformCode);
+            List<String> strings = thirdPlatformCatalogsMapper.selectByPlatformInfoCode(platformCode);
             return ApiResultUtil.success("", strings);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,16 +85,16 @@ public class ProductApiServiceImpl implements ProductApiService {
     public String detail(String sku, String productExtendAttributes, String platformCode) {
         try {
             ProductQuotation productQuotation = productQuotationMapper.selectBySku(sku, platformCode);
-            if(productQuotation == null){
+            if (productQuotation == null) {
                 return ApiResultUtil.error("商品不存在");
             }
             Products products = productsMapper.selectByPrimaryKey(productQuotation.getProductId());
-            if(products == null){
+            if (products == null) {
                 return ApiResultUtil.error("商品不存在");
             }
             ProductDto productDto = new ProductDto();
             productDto.setSku(products.getSku());
-            productDto.setUrl(products.getUrl());
+            productDto.setUrl(productViewUrlPrefix + products.getId());
             productDto.setModel(products.getModel());
             productDto.setWeight(products.getWeight());
             productDto.setImage_path(products.getCoverUrl());
@@ -95,16 +106,33 @@ public class ProductApiServiceImpl implements ProductApiService {
             productDto.setUnit(products.getUnit());
             Long catalogId = productQuotation.getCatalogId();
             PlatformCatalogMapping platformCatalogMapping = platformCatalogMappingMapper.selectByCatalogId(catalogId, platformCode);
-            if(platformCatalogMapping != null){
-                productDto.setCategory(platformCatalogMapping.getPlatformCatalogId());
+            if (platformCatalogMapping != null) {
+                ThirdPlatformCatalogs thirdPlatformCatalogs = thirdPlatformCatalogsMapper.selectByPrimaryKey(platformCatalogMapping.getThirdPlatformCatalogId());
+                if (thirdPlatformCatalogs != null) {
+                    productDto.setCategory(thirdPlatformCatalogs.getCatalogId());
+                }
             }
             productDto.setService(products.getAfterSaleService());
             productDto.setCode_69("");
-//                productDto.setAttributes();
             productDto.setIntroduction(products.getDetail());
-            productDto.setParam(products.getParam());
             productDto.setWare(products.getWare());
             productDto.setSale_actives(0);
+            // 查询商品参数
+            productDto.setParam(getParamTable(products.getBrandName(), products.getName(), products.getModel(), products.getUnit()));
+            List<Map<String, Object>> attributes = new ArrayList<>();
+            Map<String, Object> map = null;
+            List<ProductParameter> productParameters = productParameterMapper.getByProductId(products.getId());
+            if (CollectionUtils.isNotEmpty(productParameters)) {
+                for (ProductParameter productParameter : productParameters) {
+                    map = new HashMap<>();
+                    map.put("attributeID", productParameter.getParentParamId());
+                    map.put("attributeName", productParameter.getParentParamValue());
+                    map.put("valueID", productParameter.getParamId());
+                    map.put("value", productParameter.getParamValue());
+                    attributes.add(map);
+                }
+            }
+            productDto.setAttributes(JsonUtil.toJson(attributes));
             return ApiResultUtil.success("操作成功", productDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,18 +245,18 @@ public class ProductApiServiceImpl implements ProductApiService {
         criteria.andEqualTo("type", type);
         criteria.andEqualTo("isDelete", 0);
         criteria.andEqualTo("platformCode", platformCode);
-        example.orderBy("createdAt");
+        example.orderBy("id");
         List<MessagePool> messagePools = messagePoolMapper.selectByExample(example);
         List<MessageDto> result = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(messagePools)){
+        if (CollectionUtils.isNotEmpty(messagePools)) {
             MessageDto messageDto = null;
-            for (MessagePool messagePool : messagePools){
+            for (MessagePool messagePool : messagePools) {
                 messageDto = new MessageDto();
-                messageDto.setId(messagePool.getId()+"");
+                messageDto.setId(messagePool.getId() + "");
                 messageDto.setTime(messagePool.getCreatedAt());
                 messageDto.setType(Integer.parseInt(type));
                 Map<String, Object> map = new HashMap<>();
-                switch (type){
+                switch (type) {
                     case "2": // 商品价格变更
                         map.put("skuId", messagePool.getSku());
                         map.put("state", messagePool.getState());
@@ -258,7 +286,7 @@ public class ProductApiServiceImpl implements ProductApiService {
                 result.add(messageDto);
             }
         }
-        return ApiResultUtil.success("暂无消息", result);
+        return ApiResultUtil.success("操作成功", result);
     }
 
     @Override
@@ -275,12 +303,70 @@ public class ProductApiServiceImpl implements ProductApiService {
         return ApiResultUtil.error("消息" + messageId + "删除失败");
     }
 
-
     @Override
     public String certificates(String skus, String platformCode) {
-        for(String sku : skus.split(",")){
-
+        List<ProductQuotation> productQuotations = productQuotationMapper.selectBySkus(skus.split(","), platformCode);
+        List<Map<String, Object>> result = new ArrayList<>();
+        Map<String, Object> map = null;
+        if (CollectionUtils.isNotEmpty(productQuotations)) {
+            for (ProductQuotation productQuotation : productQuotations) {
+                map = new HashMap<>();
+                map.put("sku", productQuotation.getSku());
+                Long productId = productQuotation.getProductId();
+                Products products = productsMapper.selectByPrimaryKey(productId);
+                if (products != null) {
+                    map.put("save_energy_cert_no", products.getEnergySaveCertNo());
+                    map.put("save_energy_cert_image", products.getEnergySaveCertImg());
+                    if (StringUtils.isNotBlank(products.getEnergySaveCertIndate())) {
+                        Date energySaveCertIndate = DateUtilEx.strToDate(products.getEnergySaveCertIndate(), DateUtilEx.DATE_PATTERN);
+                        map.put("save_energy_cert_indate", energySaveCertIndate);
+                    }
+                    map.put("environment_protect_cert_no", products.getEnvironmentCertNo());
+                    map.put("environment_protect_cert_image", products.getEnvironmentCertImg());
+                    if (StringUtils.isNotBlank(products.getEnvironmentCertIndate())) {
+                        Date environmentCertIndate = DateUtilEx.strToDate(products.getEnvironmentCertIndate(), DateUtilEx.DATE_PATTERN);
+                        map.put("environment_protect_cert_indate", environmentCertIndate);
+                    }
+                }
+                result.add(map);
+            }
         }
-        return null;
+        return ApiResultUtil.success("操作成功", result);
+    }
+
+
+    /**
+     * 获取规格参数列表
+     *
+     * @param brandName
+     * @param productName
+     * @param model
+     * @param unit
+     * @return
+     */
+    public String getParamTable(String brandName, String productName, String model, String unit) {
+        brandName = brandName == null ? "" : brandName;
+        productName = productName == null ? "" : productName;
+        model = model == null ? "" : model;
+        unit = unit == null ? "" : unit;
+        String paramTable = "<table class='Ptable'>" +
+                "<tr>" +
+                    "<td class='tdTitle'>品牌</td>" +
+                    "<td>" + brandName + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>商品名称</td>" +
+                    "<td>" + productName + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>型号</td>" +
+                    "<td>" + model + "</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td class='tdTitle'>单位</td>" +
+                    "<td>" + unit + "</td>" +
+                "</tr>" +
+                "</table>";
+        return paramTable;
     }
 }

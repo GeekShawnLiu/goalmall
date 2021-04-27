@@ -57,7 +57,26 @@ public class ProductParameter extends BaseEntity{
      * 排序越小越靠前
      */
     @ApiModelProperty(value="排序越小越靠前")
+    @Column(name = "position")
     private Float position;
+
+    /**
+     * 父级参数id
+     */
+    @Column(name = "parent_param_id")
+    private Long parentParamId;
+
+    /**
+     * 父级参数名称
+     */
+    @Column(name = "parent_param_value")
+    private String parentParamValue;
+
+    /**
+     * 参数项id
+     */
+    @Column(name = "param_id")
+    private Long paramId;
     
     
     @Transient
@@ -248,5 +267,29 @@ public class ProductParameter extends BaseEntity{
     		return true;
     	}
     	return false;
+    }
+
+    public Long getParentParamId() {
+        return parentParamId;
+    }
+
+    public void setParentParamId(Long parentParamId) {
+        this.parentParamId = parentParamId;
+    }
+
+    public String getParentParamValue() {
+        return parentParamValue;
+    }
+
+    public void setParentParamValue(String parentParamValue) {
+        this.parentParamValue = parentParamValue;
+    }
+
+    public Long getParamId() {
+        return paramId;
+    }
+
+    public void setParamId(Long paramId) {
+        this.paramId = paramId;
     }
 }

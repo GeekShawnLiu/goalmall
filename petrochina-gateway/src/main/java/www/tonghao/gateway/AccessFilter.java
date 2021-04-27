@@ -37,7 +37,9 @@ public class AccessFilter extends ZuulFilter {
 		if (!StringUtils.isBlank(pathName) && !pathName.endsWith("login") && !pathName.contains("upload") && !pathName.contains("mallweb") 
 				&& !pathName.contains("login/sendMobileCode")&& !pathName.contains("login/djApp") && !pathName.contains("login/ruixin") && !pathName.contains("/getActive") && !pathName.contains("searchweb/search") 
 				&& !pathName.contains("/exportExcel") && !pathName.contains("/download") && !pathName.endsWith("ruixin") && !pathName.contains("userRegister")
-				&& !pathName.contains("/supplierRegister")&& !pathName.contains("/orderPayPrice")) {
+				&& !pathName.contains("/supplierRegister")&& !pathName.contains("/orderPayPrice") && !pathName.contains("platform/portal") && !pathName.contains("platform/portalProduct")
+				&& !pathName.contains("/api") && !pathName.contains("systemSetting/view") && !pathName.contains("carouselPictrue/list")  && !pathName.contains("mall/floor")
+				&& !pathName.contains("/mall/index")) {
 			if (StringUtils.isBlank(token)) {
 				ctx.getResponse().setContentType("text/html;charset=UTF-8");
 				ctx.setSendZuulResponse(false);

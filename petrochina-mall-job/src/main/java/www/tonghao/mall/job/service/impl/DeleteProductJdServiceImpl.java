@@ -113,25 +113,25 @@ public class DeleteProductJdServiceImpl implements DeleteProductJdService {
 					Map<String, Object> map=new HashMap<String, Object>();
 					map.put("supplierId", products.getSupplierId());
 					map.put("types", 1);
-					List<Protocol> pro = protocolService.getProtocolBySupplier(map);
-					Protocol protocol=null;
-					if(!CollectionUtil.collectionIsEmpty(pro)) {
-						protocol=pro.get(0);
-					}
-					Suppliers supers = suppliersService.selectByKey(products.getSupplierId());
-					int saveProduct = saveProduct(supers, protocol, products.getSku());
-					if(saveProduct>0){
-						//获取价格，获取图片
-						int savePrice = savePrice(products.getSku(),supers);
-						if(savePrice>0){
-							saveImages(products.getSku(),supers);
-							if(supers.getIsPrice()==0){
-								productState(products.getSku(),supers);
-								check(products.getSku(), supers.getId());
-							}
-						}
-						
-					}
+//					List<Protocol> pro = protocolService.getProtocolBySupplier(map);
+//					Protocol protocol=null;
+//					if(!CollectionUtil.collectionIsEmpty(pro)) {
+//						protocol=pro.get(0);
+//					}
+//					Suppliers supers = suppliersService.selectByKey(products.getSupplierId());
+//					int saveProduct = saveProduct(supers, protocol, products.getSku());
+//					if(saveProduct>0){
+//						//获取价格，获取图片
+//						int savePrice = savePrice(products.getSku(),supers);
+//						if(savePrice>0){
+//							saveImages(products.getSku(),supers);
+//							if(supers.getIsPrice()==0){
+//								productState(products.getSku(),supers);
+//								check(products.getSku(), supers.getId());
+//							}
+//						}
+//
+//					}
 				}
 			}
 		}

@@ -85,14 +85,7 @@ public class SupplierProductsController {
 	@Autowired
 	private EmallCatalogsService emallCatalogsService;
 
-	/**  
-	 * <p>Title: list</p>  
-	 * <p>Description: </p>  
-	 * @author Yml  
-	 * @param products
-	 * @param page
-	 * @return  
-	 */  
+
 	@ApiOperation(value="分页查询普通商品列表",notes="获取普通商品列表数据api")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="page",value="当前页",required=true,dataType="int",paramType="query"),
@@ -103,7 +96,7 @@ public class SupplierProductsController {
 			String catalogName, String brandName, Integer status, String model, String protocolName,
 			Long catalogId, String supplierName, HttpServletRequest request){
 		Users user = UserUtil.getUser(request);
-		if (user != null && user.getType() != null && user.getType() == 4 && user.getTypeId() != null) {
+		if (user != null && user.getType() != null && user.getTypeId() != null) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("supplierId", user.getTypeId());
 			map.put("is_car", "false");
@@ -179,7 +172,7 @@ public class SupplierProductsController {
 		}
 		
 		Users user = UserUtil.getUser(request);
-		if (user.getType() != null && user.getType() == 4 && user.getTypeId() != null) {
+		if (user.getType() != null  && user.getTypeId() != null) {
 			product.setUserId(user.getId());//设置当前操作用户id
 			Suppliers supplier = suppliersService.selectByKey(user.getTypeId());
 			if (supplier != null) {
@@ -187,30 +180,32 @@ public class SupplierProductsController {
 				product.setSupplierId(supplier.getId());//设置供应商id
 				product.setSupplierName(supplier.getName());//设置供应商名称
 				//product.setProtocolPrice(product.getPrice());
-				product.setPrice(product.getProtocolPrice());
+//				product.setPrice(product.getProtocolPrice());
 				//价格对比
 				BigDecimal price = product.getPrice();
 				//第三方供应商新增商品  协议价=售价
-				product.setProtocolPrice(price);
+//				product.setProtocolPrice(price);
 				log.info("price:"+product.getPrice());
-				if (price != null) {
-					//对比平台品目通用资源配置价格
-					PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(product.getCatalogId());
-					if (platformCatalog != null && platformCatalog.getNormalPrice() != null) {
-						if (price.compareTo(platformCatalog.getNormalPrice()) == 1) {
-							return ResultUtil.resultMessage(0, "协议价不能高于平台品目通用资源配置价格");
-						}
-					}
-				}
+				//2020-09-07 注释掉商品保存价格限制
+//				if (price != null) {
+//					//对比平台品目通用资源配置价格
+//					PlatformCatalogs platformCatalog = platformCatalogsService.selectByKey(product.getCatalogId());
+//					if (platformCatalog != null && platformCatalog.getNormalPrice() != null) {
+//						if (price.compareTo(platformCatalog.getNormalPrice()) == 1) {
+//							return ResultUtil.resultMessage(0, "协议价不能高于平台品目通用资源配置价格");
+//						}
+//					}
+//				}
 				HashMap<String, Object> map = productsService.saveOrUpdate(product);
 				int status = 0;
 				status = (int) map.get("status");
 				String msg = (String) map.get("message");
 				log.info("商品保存结束-"+ map.toString() +"-end------------------------------------");
-				if (status > 0) {
-					//异步执行商品聚合
-					productsService.asynPolymerization(product.getId());
-				}
+				//注释掉商品聚合
+//				if (status > 0) {
+//					//异步执行商品聚合
+//					productsService.asynPolymerization(product.getId());
+//				}
 				return ResultUtil.resultMessage(status, msg);
 			}
 		}
@@ -287,7 +282,25 @@ public class SupplierProductsController {
 			return ResultUtil.resultMessage(result, "未登录");
 		}
 	}
-	
+
+	/**
+	 * 商品上架
+	 * @param id
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/applyUp",method=RequestMethod.POST)
+	public Map<String, Object> applyUp(Long id, HttpServletRequest request){
+		int result = 0;
+		Users user = UserUtil.getUser(request);
+		if (user != null) {
+			result = productsService.updateStatus(id, 3, user.getId());
+		}else {
+			return ResultUtil.resultMessage(result, "未登录");
+		}
+		return ResultUtil.resultMessage(result, "");
+	}
+
 	/**  
 	 * <p>Title: applyDown</p>  
 	 * <p>Description: </p>  
@@ -543,4 +556,6 @@ public class SupplierProductsController {
 		List<Suppliers> list = suppliersService.findListByEntity(entity);
 		return list;
 	}
+
+
 }

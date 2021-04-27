@@ -209,6 +209,26 @@ public class PlatformCatalogs extends BaseEntity{
     private String priceRange;
 
     /**
+     * 是否节能 0否 1是
+     */
+    @ApiModelProperty(value="是否节能 0否 1是")
+    @Column(name = "is_energy")
+    private Boolean isEnergy;
+
+    /**
+     * 是否环保 0否 1是
+     */
+    @ApiModelProperty(value="是否环保 0否 1是")
+    @Column(name = "is_environment")
+    private Boolean isEnvironment;
+
+    /**
+     * 品目参数
+     */
+    @Transient
+    private List<CatalogParameter> parametersList;
+
+    /**
      * 获取创建时间
      *
      * @return created_at - 创建时间
@@ -761,5 +781,28 @@ public class PlatformCatalogs extends BaseEntity{
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-    
+
+    public List<CatalogParameter> getParametersList() {
+        return parametersList;
+    }
+
+    public void setParametersList(List<CatalogParameter> parametersList) {
+        this.parametersList = parametersList;
+    }
+
+    public Boolean getIsEnergy() {
+        return isEnergy;
+    }
+
+    public void setIsEnergy(Boolean isEnergy) {
+        this.isEnergy = isEnergy;
+    }
+
+    public Boolean getIsEnvironment() {
+        return isEnvironment;
+    }
+
+    public void setIsEnvironment(Boolean isEnvironment) {
+        this.isEnvironment = isEnvironment;
+    }
 }

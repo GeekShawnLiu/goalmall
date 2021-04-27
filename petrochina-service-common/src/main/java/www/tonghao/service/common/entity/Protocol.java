@@ -46,7 +46,7 @@ public class Protocol extends BaseEntity {
     @Column(name = "is_delete")
     private Integer isDelete;
 
-    @ApiModelProperty(value = "状态 1暂存 2执行 3终止 4中止")
+    @ApiModelProperty(value = "状态 1待执行 2执行中 3已终止 4已中止")
     private Integer status;
 
     @ApiModelProperty(value = "对接平台id")
@@ -58,7 +58,7 @@ public class Protocol extends BaseEntity {
     private String platformInfoCode;
 
     @Transient
-    private List<Long> productIds;
+    private List<ProductQuotation> productQuotations;
 
     public String getName() {
         return name;
@@ -140,11 +140,11 @@ public class Protocol extends BaseEntity {
         this.platformInfoCode = platformInfoCode;
     }
 
-    public List<Long> getProductIds() {
-        return productIds;
+    public List<ProductQuotation> getProductQuotations() {
+        return productQuotations;
     }
 
-    public void setProductIds(List<Long> productIds) {
-        this.productIds = productIds;
+    public void setProductQuotations(List<ProductQuotation> productQuotations) {
+        this.productQuotations = productQuotations;
     }
 }

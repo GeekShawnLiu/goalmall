@@ -55,6 +55,7 @@
         <result column="is_energy_saving" jdbcType="INTEGER" property="isEnergySaving"/>
         <result column="car_type" jdbcType="INTEGER" property="carType"/>
         <result column="energy_save_certNo" jdbcType="VARCHAR" property="energySaveCertNo"/>
+        <result column="energy_save_certImg" jdbcType="VARCHAR" property="energySaveCertImg"/>
         <result column="product_area_type" jdbcType="INTEGER" property="productAreaType"/>
         <result column="protocol_price" jdbcType="DECIMAL" property="protocolPrice"/>
         <result column="is_change_price" jdbcType="INTEGER" property="isChangePrice"/>
@@ -63,6 +64,11 @@
         <result column="wxintroduction" jdbcType="VARCHAR" property="wxintroduction"/>
         <result column="appintroduce" jdbcType="VARCHAR" property="appintroduce"/>
         <result column="is_factory_ship" jdbcType="INTEGER" property="isFactoryShip"/>
+        <result column="is_environment" jdbcType="INTEGER" property="isEnvironment"/>
+        <result column="environment_certNo" jdbcType="VARCHAR" property="environmentCertNo"/>
+        <result column="environment_certImg" jdbcType="VARCHAR" property="environmentCertImg"/>
+        <result column="energy_save_cert_indate" jdbcType="VARCHAR" property="energySaveCertIndate"/>
+        <result column="environment_cert_indate" jdbcType="VARCHAR" property="environmentCertIndate"/>
     </resultMap>
 
     <resultMap id="RelationResultMap" type="www.tonghao.service.common.entity.Products" extends="BaseResultMap">
@@ -100,7 +106,7 @@
 
     <select id="getBaseById" parameterType="java.lang.Long" resultMap="BaseResultMap">
 	select tb.id,tb.catalog_id,tb.sn,tb.sku,tb.brand_name,tb.model,sales,tb.month_sales,tb.month_sales_index,tb.price,tb.market_price,tb.stock,tb.`status`
-			,tb.is_marketable,tb.protocol_id,tb.supplier_name
+			,tb.is_marketable,tb.protocol_id,tb.supplier_name, tb.cover_url
 	from products tb where tb.id = #{id}
   </select>
 

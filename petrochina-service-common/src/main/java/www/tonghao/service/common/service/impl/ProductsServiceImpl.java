@@ -182,37 +182,37 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 		Long platformCatalogId = product.getCatalogId();
 		if (platformCatalogId != null) {
 			PlatformCatalogs platformCatalog = platformCatalogsMapper.selectByPrimaryKey(platformCatalogId);
-			if (platformCatalog != null) {
-				govCatalogId = platformCatalog.getCatalogId();
-				catalog = catalogsMapper.selectByPrimaryKey(govCatalogId);
-				/**------------是否批量-start----------------------*/
-				if (StringUtils.isNotBlank(platformCatalog.getSystems()) && platformCatalog.getSystems().contains("central")) {
-					product.setIsBatch(1);
-				}else {
-					product.setIsBatch(0);
-				}
-				/**------------是否批量-end----------------------*/
-			}else {
-				resultMap.put("status", 0);
-				resultMap.put("message", "请选择归属品目");
-				return resultMap;
-			}
+//			if (platformCatalog != null) {
+//				govCatalogId = platformCatalog.getCatalogId();
+//				catalog = catalogsMapper.selectByPrimaryKey(govCatalogId);
+//				/**------------是否批量-start----------------------*/
+//				if (StringUtils.isNotBlank(platformCatalog.getSystems()) && platformCatalog.getSystems().contains("central")) {
+//					product.setIsBatch(1);
+//				}else {
+//					product.setIsBatch(0);
+//				}
+//				/**------------是否批量-end----------------------*/
+//			}else {
+//				resultMap.put("status", 0);
+//				resultMap.put("message", "请选择归属品目");
+//				return resultMap;
+//			}
 		}else {
 			resultMap.put("status", 0);
 			resultMap.put("message", "请选择归属品目");
 			return resultMap;
 		}
-		/*if (govCatalogId == null || catalog == null) {
-			resultMap.put("status", 0);
-			resultMap.put("message", "归属品目未映射标准品目参数");
-			return resultMap;
-		}*/
+//		if (govCatalogId == null || catalog == null) {
+//			resultMap.put("status", 0);
+//			resultMap.put("message", "归属品目未映射标准品目参数");
+//			return resultMap;
+//		}
 		//设置财政品目id
 		product.setGovCatalogId(govCatalogId);
 		/** ---------品目相关---end----------  */
 		
 		/**-----------产品关键参数校验不为空---start-------------------*/
-		if (govCatalogId != null) {
+		/*if (govCatalogId != null) {
 			//获取财政品目对应参数
 			List<Parameter> parameters = parameterMapper.getParameterJoinByCatalogId(govCatalogId);
 			String parameterMsg = "";
@@ -240,7 +240,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				resultMap.put("message", "请录入" + parameterMsg + "参数信息");
 				return resultMap;
 			}
-		}
+		}*/
 		/**-----------产品参数校验---end-------------------*/
 		
 		if (product.getId() != null) {
@@ -305,9 +305,9 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 			result = saveSelective(product);
 			
 			Suppliers supplier = suppliersMapper.selectByPrimaryKey(product.getSupplierId());
-			if(supplier != null && supplier.getCode() != null){
-				product.setSku(supplier.getCode() + product.getId());
-			}
+//			if(supplier != null && supplier.getCode() != null){
+//				product.setSku(supplier.getCode() + product.getId());
+//			}
 			result = updateNotNull(product);
 			/*---保存图片----*/
 			if (result > 0 && !CollectionUtils.isEmpty(product.getPics())) {
@@ -389,8 +389,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				case 3:
 					//上架
 					upperLowerHistory.setType(3);
-					upperLowerHistory.setReason("管理员审核通过商品上架");
-					upperLowerHistory.setStatus(1);
+					upperLowerHistory.setReason("商品本地上架");
+					upperLowerHistory.setStatus(3);
 					upperLowerHistoryMapper.insertSelective(upperLowerHistory);
 					break;
 				case 333:
@@ -403,7 +403,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 				case 4:
 					//下架
 					upperLowerHistory.setType(4);
-					upperLowerHistory.setReason("商品下架");
+					upperLowerHistory.setReason("商品本地下架");
+					upperLowerHistory.setStatus(4);
 					upperLowerHistoryMapper.insertSelective(upperLowerHistory);
 					break;
 				}
@@ -1109,15 +1110,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol=null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol=protocols.get(0);
-							if(protocol != null){
-								product.setProtocolId(protocol.getId());
-								product.setProtocolName(protocol.getName());
-							}
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol=null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol=protocols.get(0);
+//							if(protocol != null){
+//								product.setProtocolId(protocol.getId());
+//								product.setProtocolName(protocol.getName());
+//							}
+//						}
 						product.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 						product.setIsDelete(0);
 						product.setSupplierId(supplier.getId());
@@ -1476,13 +1477,13 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol = null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol = protocols.get(0);
-							products.setProtocolId(protocol.getId());
-							products.setProtocolName(protocol.getName());
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol = null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol = protocols.get(0);
+//							products.setProtocolId(protocol.getId());
+//							products.setProtocolName(protocol.getName());
+//						}
 					}
 					products.setCatalogId(platformCatalog.getId());
 					products.setCatalogName(platformCatalog.getName());
@@ -1645,15 +1646,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol=null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol=protocols.get(0);
-							if(protocol != null){
-								product.setProtocolId(protocol.getId());
-								product.setProtocolName(protocol.getName());
-							}
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol=null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol=protocols.get(0);
+//							if(protocol != null){
+//								product.setProtocolId(protocol.getId());
+//								product.setProtocolName(protocol.getName());
+//							}
+//						}
 						product.setCreatedAt(DateUtilEx.timeFormat(new Date()));
 						product.setIsDelete(0);
 						product.setSupplierId(supplier.getId());
@@ -1905,11 +1906,11 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						map.put("supplierId", supplier.getId());
 						map.put("endTime", DateUtilEx.format(new Date(), DateUtilEx.TIME_PATTERN));
 						map.put("types", 1);
-						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
-						Protocol protocol = null;
-						if(!CollectionUtils.isEmpty(protocols)){
-							protocol = protocols.get(0);
-						}
+//						List<Protocol> protocols = protocolMapper.getProtocolBySupplier(map);
+//						Protocol protocol = null;
+//						if(!CollectionUtils.isEmpty(protocols)){
+//							protocol = protocols.get(0);
+//						}
 						
 						product = new Products();
 						
@@ -1937,10 +1938,10 @@ public class ProductsServiceImpl extends BaseServiceImpl<Products> implements Pr
 						product.setCatalogId(platformCatalog.getId());
 						product.setCatalogName(platformCatalog.getName());
 						product.setGovCatalogId(platformCatalog.getCatalogId());
-						if(protocol != null){
-							product.setProtocolId(protocol.getId());
-							product.setProtocolName(protocol.getName());
-						}
+//						if(protocol != null){
+//							product.setProtocolId(protocol.getId());
+//							product.setProtocolName(protocol.getName());
+//						}
 						product.setCoverUrl(productDetail.getResult().getImage_path());
 						product.setDetail(productDetail.getResult().getIntroduction());
 						product.setWare(productDetail.getResult().getWare());

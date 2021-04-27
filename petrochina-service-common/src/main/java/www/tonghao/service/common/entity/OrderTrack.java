@@ -20,6 +20,12 @@ public class OrderTrack extends BaseEntity {
     @Column(name = "operator")
     private String operator;
 
+    @Column(name = "created_at")
+    private String createdAt;
+
+    @Column(name = "updated_at")
+    private String updatedAt;
+
     public Long getOrderId() {
         return orderId;
     }
@@ -50,5 +56,21 @@ public class OrderTrack extends BaseEntity {
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

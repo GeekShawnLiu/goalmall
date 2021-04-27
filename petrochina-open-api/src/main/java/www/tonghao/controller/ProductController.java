@@ -12,7 +12,7 @@ import www.tonghao.util.ApiParamCheckUtil;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired

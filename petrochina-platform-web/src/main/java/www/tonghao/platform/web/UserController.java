@@ -122,7 +122,7 @@ public class UserController {
 		CriteriaLikeUtil.criteriaLike(criteria, map);
 		example.setOrderByClause("created_at desc");
 		criteria.andEqualTo("isDelete", 0);
-		criteria.andEqualTo("type", 6);
+//		criteria.andEqualTo("type", 6);
 		List<Users> list = usersService.selectByExample(example);
 		return new PageInfo<Users>(list);
 	}

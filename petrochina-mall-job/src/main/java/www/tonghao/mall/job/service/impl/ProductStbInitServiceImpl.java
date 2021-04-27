@@ -83,20 +83,20 @@ public class ProductStbInitServiceImpl implements ProductStbInitService {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("supplierId", supplier.getId());
 			map.put("types", 1);
-			List<Protocol> pro = protocolService.getProtocolBySupplier(map);
-			Protocol protocol=null;
-			if(!CollectionUtil.collectionIsEmpty(pro)) {
-				protocol=pro.get(0);
-			}
-			ProductPoolRes productPoolApi = StbUtilApi.ProductPoolApi();//获取商品池
-			if(productPoolApi.isSuccess()) {
-				List<ProductPoolAttr> productPoolAttrs = productPoolApi.getProductPoolAttrs();
-				if(!CollectionUtil.collectionIsEmpty(productPoolAttrs)) {
-					for (ProductPoolAttr productPoolAttr : productPoolAttrs) {
-						pool(productPoolAttr.getId(),supplier,protocol);
-					}
-				}
-			}
+//			List<Protocol> pro = protocolService.getProtocolBySupplier(map);
+//			Protocol protocol=null;
+//			if(!CollectionUtil.collectionIsEmpty(pro)) {
+//				protocol=pro.get(0);
+//			}
+//			ProductPoolRes productPoolApi = StbUtilApi.ProductPoolApi();//获取商品池
+//			if(productPoolApi.isSuccess()) {
+//				List<ProductPoolAttr> productPoolAttrs = productPoolApi.getProductPoolAttrs();
+//				if(!CollectionUtil.collectionIsEmpty(productPoolAttrs)) {
+//					for (ProductPoolAttr productPoolAttr : productPoolAttrs) {
+//						pool(productPoolAttr.getId(),supplier,protocol);
+//					}
+//				}
+//			}
 		}
 	}
 

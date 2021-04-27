@@ -1,25 +1,16 @@
 package www.tonghao.service.common.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import www.tonghao.common.utils.CollectionUtil;
 import www.tonghao.common.utils.DateUtilEx;
-import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
 import www.tonghao.service.common.base.impl.BaseServiceImpl;
 import www.tonghao.service.common.entity.PlatformInfo;
-import www.tonghao.service.common.entity.ProductQuotation;
-import www.tonghao.service.common.entity.Products;
 import www.tonghao.service.common.entity.Protocol;
 import www.tonghao.service.common.mapper.PlatformInfoMapper;
-import www.tonghao.service.common.mapper.ProductQuotationMapper;
-import www.tonghao.service.common.mapper.ProductsMapper;
 import www.tonghao.service.common.mapper.ProtocolMapper;
-import www.tonghao.service.common.service.ProductQuotationService;
 import www.tonghao.service.common.service.ProtocolService;
 
 import java.util.ArrayList;
@@ -36,11 +27,29 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
     @Autowired
     private PlatformInfoMapper platformInfoMapper;
 
-    @Autowired
-    private ProductQuotationMapper productQuotationMapper;
-
-    @Autowired
-    private ProductsMapper productsMapper;
+    @Override
+    public List<Protocol> selectByMap(Map<String, Object> map) {
+        List<Protocol> protocols = protocolMapper.selectByMap(map);
+        if (CollectionUtils.isNotEmpty(protocols)) {
+            for (Protocol protocol : protocols) {
+                Date now = new Date();
+                Date start = DateUtilEx.strToDate(protocol.getStartTime(), DateUtilEx.DATE_PATTERN);
+                Date end = DateUtilEx.strToDate(protocol.getEndTime(), DateUtilEx.DATE_PATTERN);
+                if(start != null && end != null && protocol.getStatus() != 4){
+                    if (now.before(start)) {
+                        protocol.setStatus(1);
+                    }
+                    if (now.after(end)) {
+                        protocol.setStatus(3);
+                    }
+                    if (now.after(start) && now.before(end)) {
+                        protocol.setStatus(2);
+                    }
+                }
+            }
+        }
+        return protocols;
+    }
 
     @Override
     public Map<String, Object> saveEntity(Protocol protocol) {
@@ -55,6 +64,23 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
         protocol.setCreatedAt(DateUtilEx.timeFormat(new Date()));
         protocol.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
         protocol.setPlatformInfoCode(platformInfo.getCode());
+        String startTime = protocol.getStartTime();
+        String endTime = protocol.getEndTime();
+        if (startTime == null || endTime == null) {
+            return ResultUtil.error("起止时间不能为空");
+        }
+        Date start = DateUtilEx.strToDate(startTime, DateUtilEx.DATE_PATTERN);
+        Date end = DateUtilEx.strToDate(endTime, DateUtilEx.DATE_PATTERN);
+        if (start == null || end == null) {
+            return ResultUtil.error("起止时间格式有误");
+        }
+        Date now = new Date();
+        if (now.after(start) && now.before(end)) {
+            protocol.setStatus(2);
+        }
+        if (now.before(start)) {
+            protocol.setStatus(1);
+        }
         int i = protocolMapper.insertSelective(protocol);
         return ResultUtil.resultMessage(i, "");
     }
@@ -88,63 +114,5 @@ public class ProtocolServiceImpl extends BaseServiceImpl<Protocol> implements Pr
             result = protocolMapper.updateByPrimaryKeySelective(protocol);
         }
         return ResultUtil.resultMessage(result, "");
-    }
-
-    @Override
-    public PageInfo<Products> getProductPage(PageBean page, String productName, String sku, Long protocolId) {
-        PageHelper.startPage(page.getPage(), page.getRows());
-        List<Products> productsList = productQuotationMapper.selectAddProtocolProductList(protocolId, productName, sku);
-        return new PageInfo<Products>(productsList);
-    }
-
-    @Override
-    public Map<String, Object> addProtocolProduct(Protocol protocol) {
-        List<Long> productIds = protocol.getProductIds();
-        if (CollectionUtils.isEmpty(productIds)) {
-            return ResultUtil.error("请选择商品");
-        }
-        Protocol entity = protocolMapper.selectByPrimaryKey(protocol.getId());
-        if (entity == null) {
-            return ResultUtil.error("未查询到协议信息");
-        }
-        ProductQuotation productQuotation = null;
-        for (Long productId : productIds) {
-            productQuotation = new ProductQuotation();
-            productQuotation.setProductId(productId);
-            Products products = productsMapper.selectByPrimaryKey(productId);
-            if (products == null) {
-                return ResultUtil.error("未查询到商品信息");
-            }
-            productQuotation.setCatalogId(products.getCatalogId());
-            productQuotation.setSku(products.getSku());
-            productQuotation.setIsDelete(0);
-            productQuotation.setPlatformInfoCode(entity.getPlatformInfoCode());
-            productQuotation.setPlatformInfoId(entity.getPlatformInfoId());
-            productQuotation.setProtocolId(entity.getId());
-            productQuotation.setCreatedAt(DateUtilEx.timeFormat(new Date()));
-            productQuotation.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
-            productQuotationMapper.insertSelective(productQuotation);
-        }
-        return ResultUtil.success("");
-    }
-
-    @Override
-    public PageInfo<ProductQuotation> selectProtocolProductList(PageBean page, String productName, String sku, Long protocolId, Integer status) {
-        PageHelper.startPage(page.getPage(), page.getRows());
-        List<ProductQuotation> productQuotationList = productQuotationMapper.selectByProtocolId(protocolId, productName, sku, status);
-        if (CollectionUtils.isNotEmpty(productQuotationList)) {
-            for (ProductQuotation productQuotation : productQuotationList) {
-                Products products = productsMapper.selectByPrimaryKey(productQuotation.getProductId());
-                productQuotation.setProducts(products);
-            }
-        }
-        return new PageInfo<ProductQuotation>(productQuotationList);
-    }
-
-    @Override
-    public Map<String, Object> updateProtocolProductInfo(ProductQuotation productQuotation) {
-        productQuotation.setUpdatedAt(DateUtilEx.timeFormat(new Date()));
-        int i = productQuotationMapper.updateByPrimaryKeySelective(productQuotation);
-        return ResultUtil.resultMessage(i, "");
     }
 }

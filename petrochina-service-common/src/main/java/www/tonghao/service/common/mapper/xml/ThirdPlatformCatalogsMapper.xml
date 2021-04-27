@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.service.common.mapper.ThirdPlatformCatalogsMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.service.common.entity.ThirdPlatformCatalogs">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+        <result column="tree_names" jdbcType="VARCHAR" property="treeNames" />
+        <result column="platform_info_id" jdbcType="BIGINT" property="platformInfoId" />
+        <result column="platform_info_code" jdbcType="VARCHAR" property="platformInfoCode" />
+    </resultMap>
+
+    <select id="selectByPlatformInfoCode" parameterType="String" resultType="String">
+        select catalog_id from third_platform_catalogs where platform_info_code = #{platformInfoCode}
+    </select>
+</mapper>

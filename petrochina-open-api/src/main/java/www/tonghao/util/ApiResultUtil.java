@@ -26,4 +26,12 @@ public class ApiResultUtil {
         resultMap.put("result", result);
         return JsonUtil.toJson(resultMap);
     }
+
+    public static String resultToken(boolean success, String accessToken, String expiresAt) {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("success", success);
+        resultMap.put("access_token", accessToken);
+        resultMap.put("expires_at", expiresAt);
+        return JsonUtil.toJson(resultMap);
+    }
 }

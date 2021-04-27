@@ -70,24 +70,24 @@ public class ProductStandardInitServiceImpl implements ProductStandardInitServic
 		Map<String, Object> map=new HashMap<String, Object>();
 		map.put("supplierId", supplier.getId());
 		map.put("types", 1);
-		List<Protocol> pro = protocolService.getProtocolBySupplier(map);
-		Protocol protocol=null;
-		if(!CollectionUtil.collectionIsEmpty(pro)) {
-			protocol=pro.get(0);
-		}
-		if(supplier!=null){
-			Example example=new Example(EmallCatalogs.class);
-			Criteria createCriteria = example.createCriteria();
-			createCriteria.andEqualTo("emallCode", supplier.getCode());
-			createCriteria.andEqualTo("emallId", supplier.getId());
-			createCriteria.andIsNotNull("catalogsId");
-			List<EmallCatalogs> ec = emallCatalogsMapper.selectByExample(example);
-			if(!CollectionUtil.collectionIsEmpty(ec)){
-				for (EmallCatalogs emallCatalogs : ec) {
-					getSku(supplier,emallCatalogs,protocol);
-				}
-			}
-		}
+//		List<Protocol> pro = protocolService.getProtocolBySupplier(map);
+//		Protocol protocol=null;
+//		if(!CollectionUtil.collectionIsEmpty(pro)) {
+//			protocol=pro.get(0);
+//		}
+//		if(supplier!=null){
+//			Example example=new Example(EmallCatalogs.class);
+//			Criteria createCriteria = example.createCriteria();
+//			createCriteria.andEqualTo("emallCode", supplier.getCode());
+//			createCriteria.andEqualTo("emallId", supplier.getId());
+//			createCriteria.andIsNotNull("catalogsId");
+//			List<EmallCatalogs> ec = emallCatalogsMapper.selectByExample(example);
+//			if(!CollectionUtil.collectionIsEmpty(ec)){
+//				for (EmallCatalogs emallCatalogs : ec) {
+//					getSku(supplier,emallCatalogs,protocol);
+//				}
+//			}
+//		}
 	}
 	public void getSku(Suppliers supplier,EmallCatalogs emallCatalogs,Protocol protocol){
 		if(emallCatalogs.getCatalogsId()!=null){

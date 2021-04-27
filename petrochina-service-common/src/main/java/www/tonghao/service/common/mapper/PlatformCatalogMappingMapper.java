@@ -9,14 +9,6 @@ import java.util.List;
 public interface PlatformCatalogMappingMapper extends BaseMapper<PlatformCatalogMapping> {
 
     /**
-     * 根据平台code获取品目信息
-     *
-     * @param platformInfoCode
-     * @return
-     */
-    List<String> selectByPlatformInfoCode(@Param("platformInfoCode") String platformInfoCode);
-
-    /**
      * 查询品目映射信息
      *
      * @param catalogId

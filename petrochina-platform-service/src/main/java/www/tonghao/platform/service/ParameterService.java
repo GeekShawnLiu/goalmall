@@ -1,6 +1,7 @@
 package www.tonghao.platform.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -33,6 +34,36 @@ public interface ParameterService extends BaseService<Parameter> {
 	 * @return
 	 */
 	public Parameter getOneByStandParamId(@Param("standParamId")String standParamId);
+
+	/**
+	 * 校验参数名是否重复
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	long validateName(Long id,String name);
+
+	/**
+	 * 新增或修改
+	 * @param parameter
+	 * @return
+	 */
+	Map<String, Object> saveOrUpdate(Parameter parameter);
+
+	/**
+	 * 根据平台品目查询
+	 * @param catalogId
+	 * @return
+	 */
+	List<Parameter> getByCatalogId(Long catalogId);
+
+	/**
+	 * 查询所有的参数
+	 * @return
+	 */
+	List<Parameter> selectAllByOrder(String paramName);
+
+
 	
 	
 }

@@ -85,8 +85,8 @@ public class ProtocolAgentController {
 		  }
 		}
 		map.put("protocolAgent", selectByExample);
-		Protocol protocol = protocolService.getProtocolById(protocolId);
-		map.put("protocol", protocol);
+//		Protocol protocol = protocolService.getProtocolById(protocolId);
+//		map.put("protocol", protocol);
 		return map;
 	}
 	

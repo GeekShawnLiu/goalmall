@@ -11,11 +11,7 @@ import javax.persistence.Transient;
 
 import www.tonghao.common.enums.OrderStatus;
 import www.tonghao.service.common.base.BaseEntity;
-import www.tonghao.service.common.entity.Activity;
-import www.tonghao.service.common.entity.IntegralUser;
-import www.tonghao.service.common.entity.OrderInvoice;
-import www.tonghao.service.common.entity.Suppliers;
-import www.tonghao.service.common.entity.Users;
+import www.tonghao.service.common.entity.*;
 
 @ApiModel(value = "订单")
 public class Orders extends BaseEntity {
@@ -470,6 +466,11 @@ public class Orders extends BaseEntity {
     @Column(name = "platform_code")
     private String platformCode; // 下单平台code
 
+    @Transient
+    private List<OrderTrack> orderTrackList;
+
+    @Transient
+    private List<OrderElectronicInvoice> electronicInvoiceList;
     /**
      * @return created_at
      */
@@ -1504,5 +1505,21 @@ public class Orders extends BaseEntity {
 
     public void setPlatformCode(String platformCode) {
         this.platformCode = platformCode;
+    }
+
+    public List<OrderTrack> getOrderTrackList() {
+        return orderTrackList;
+    }
+
+    public void setOrderTrackList(List<OrderTrack> orderTrackList) {
+        this.orderTrackList = orderTrackList;
+    }
+
+    public List<OrderElectronicInvoice> getElectronicInvoiceList() {
+        return electronicInvoiceList;
+    }
+
+    public void setElectronicInvoiceList(List<OrderElectronicInvoice> electronicInvoiceList) {
+        this.electronicInvoiceList = electronicInvoiceList;
     }
 }

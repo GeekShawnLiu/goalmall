@@ -93,22 +93,22 @@ public class ProductMessageStandardServiceImpl implements ProductMessageStandard
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("supplierId", supplier.getId());
 			map.put("types", 1);
-			List<Protocol> pro = protocolService.getProtocolBySupplier(map);
-			Protocol protocol = null;
-			if (!CollectionUtil.collectionIsEmpty(pro)) {
-				protocol = pro.get(0);
-			}
-			
-			// 添加消息
-			messageSave(supplier, protocol);
-			// 修改消息
-			messageUpdate(supplier, protocol);
-			// 删除消息
-			messageDelete(supplier);
-			// 上下架状态消息
-			messageState(supplier, protocol);
-			// 价格消息
-			messagePrice(supplier, protocol);
+//			List<Protocol> pro = protocolService.getProtocolBySupplier(map);
+//			Protocol protocol = null;
+//			if (!CollectionUtil.collectionIsEmpty(pro)) {
+//				protocol = pro.get(0);
+//			}
+//
+//			// 添加消息
+//			messageSave(supplier, protocol);
+//			// 修改消息
+//			messageUpdate(supplier, protocol);
+//			// 删除消息
+//			messageDelete(supplier);
+//			// 上下架状态消息
+//			messageState(supplier, protocol);
+//			// 价格消息
+//			messagePrice(supplier, protocol);
 			
 			
 		}

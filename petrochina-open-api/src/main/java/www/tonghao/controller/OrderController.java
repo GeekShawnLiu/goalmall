@@ -2,10 +2,7 @@ package www.tonghao.controller;
 
 import com.zaxxer.hikari.util.FastList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import www.tonghao.dto.OrderDto;
 import www.tonghao.service.OrderApiService;
 import www.tonghao.util.ApiParamCheckUtil;
@@ -14,7 +11,7 @@ import www.tonghao.util.ApiResultUtil;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired
@@ -23,18 +20,17 @@ public class OrderController {
     /**
      * 预提交订单
      *
-     * @param orderDto
      * @param request
      * @return
      */
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    public String submit(@RequestBody OrderDto orderDto, HttpServletRequest request) {
+    public String submit(HttpServletRequest request) {
         String check = ApiParamCheckUtil.check(request, false, false);
         if (check != null) {
             return ApiResultUtil.error(check);
         }
         String platformCode = request.getParameter("platformCode");
-        return orderApiService.submit(orderDto, platformCode);
+        return orderApiService.submit(request, platformCode);
     }
 
     /**
