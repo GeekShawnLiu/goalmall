@@ -384,12 +384,6 @@ public class OrderApiServiceImpl implements OrderApiService {
             if (StringUtils.isBlank(orderDto.getInvoice_address())) {
                 return ApiResultUtil.error("注册地址为空");
             }
-            if (StringUtils.isBlank(orderDto.getInvoice_mobile())) {
-                return ApiResultUtil.error("收票联系电话为空");
-            }
-            if (StringUtils.isBlank(orderDto.getInvoice_receipt_address())) {
-                return ApiResultUtil.error("收票地址为空");
-            }
         }
         if (orderDto.getPayment() == null) {
             return ApiResultUtil.error("支付方式为空");
