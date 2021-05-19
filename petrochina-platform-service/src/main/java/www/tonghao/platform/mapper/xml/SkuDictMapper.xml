@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.tonghao.platform.mapper.SkuDictMapper">
+    <resultMap id="BaseResultMap" type="www.tonghao.platform.entity.SkuDict">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="prefix" jdbcType="VARCHAR" property="prefix" />
+        <result column="serial_num" jdbcType="INTEGER" property="serialNum" />
+    </resultMap>
+
+    <update id="updateSerialNum">
+      update sku_dict t set t.serial_num = t.serial_num + 1 where id = 1;
+    </update>
+</mapper>

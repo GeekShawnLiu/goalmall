@@ -31,6 +31,8 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 import www.tonghao.common.utils.DateUtilEx;
 import www.tonghao.common.utils.PageBean;
 import www.tonghao.common.utils.ResultUtil;
+import www.tonghao.platform.entity.SkuDict;
+import www.tonghao.platform.service.SkuDictService;
 import www.tonghao.platform.service.UpperLowerHistoryService;
 import www.tonghao.service.common.entity.EmallCatalogs;
 import www.tonghao.service.common.entity.PlatformCatalogs;
@@ -85,6 +87,8 @@ public class SupplierProductsController {
 	@Autowired
 	private EmallCatalogsService emallCatalogsService;
 
+	@Autowired
+	private SkuDictService skuDictService;
 
 	@ApiOperation(value="分页查询普通商品列表",notes="获取普通商品列表数据api")
 	@ApiImplicitParams({
@@ -557,5 +561,22 @@ public class SupplierProductsController {
 		return list;
 	}
 
+	/**
+	 * 获取随机sku
+	 * @return
+	 */
+	@GetMapping("/getRandomSku")
+	public String getRandomSku() {
+		String resultMsg = "获取sku失败，请稍后再试";
+		SkuDict skuDict = skuDictService.selectByKey(1L);
+		if (skuDict != null) {
+			int serialNum = skuDict.getSerialNum();
+			int flag = skuDictService.updateSerialNum();
+			if (flag > 0) {
+				return  skuDict.getPrefix()+String.valueOf(serialNum);
+			}
+		}
+		return resultMsg;
+	}
 
 }
